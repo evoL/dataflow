@@ -130,7 +130,14 @@ bool Dll_loader::construct_type(const std::string& type_name, const std::string&
 		return false;
 	}
 
-	return (*res->second)(data.c_str(), out);
+	bool succeeded = (*res->second)(data.c_str(), out);
+	if (!succeeded)
+	{
+		error = "Runtime error: constructor '" + type_name + "'";
+		return false;
+	}
+
+	return true;
 }
 
 bool Dll_loader::execute(const std::string& operation_name, const std::vector<void *>& in, const std::vector<void *>& out)
@@ -142,7 +149,14 @@ bool Dll_loader::execute(const std::string& operation_name, const std::vector<vo
 		return false;
 	}
 
-	return (*res->second)(in.data(), out.data());
+	bool succeeded = (*res->second)(in.data(), out.data());
+	if (!succeeded)
+	{
+		error = "Runtime error: operation '" + operation_name + "'";
+		return false;
+	}
+
+	return true;
 }
 
 bool Dll_loader::get_type(const char* type_name)
