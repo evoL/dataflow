@@ -4,6 +4,7 @@
 #include "mainwindow.h"
 
 #include <QtWidgets>
+#include <iostream>
 
 
 MainWindow::MainWindow()
@@ -12,7 +13,7 @@ MainWindow::MainWindow()
     createModulesList();
     createMenus();
 
-    scene = new DiagramScene(itemMenu, this);
+    scene = new DiagramScene(modulesListModel, modulesView, itemMenu, this);
     scene->setSceneRect(QRectF(0, 0, 5000, 5000));
     connect(scene, SIGNAL(itemInserted()), this, SLOT(itemInserted()));
     createToolbars();
@@ -76,13 +77,13 @@ void MainWindow::about()
 
 void MainWindow::createModulesList()
 {
-    // to do:
-    // Implement model as subclass of QAbstractListModel.
-    // Now, all blocks visible in the scene looks the same.
-    modulesListModel = new QStringListModel();
-    QStringList list;
-    list << "Module1" << "Module2" << "Module3";
-    modulesListModel->setStringList(list);
+    modulesListModel = new ModulesListModel();
+
+    // Adding some "operations" to the model.
+    // Need to be removed when modules importing is implemented.
+    modulesListModel->append(Module("Module 1", QSize(100, 50)));
+    modulesListModel->append(Module("Module 2", QSize(80, 80)));
+    modulesListModel->append(Module("Module 3", QSize(120, 120)));
 
     modulesView = new QListView();
     modulesView->setModel(modulesListModel);

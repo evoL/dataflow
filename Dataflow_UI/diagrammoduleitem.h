@@ -4,6 +4,7 @@
 #include <QGraphicsRectItem>
 #include <QGraphicsPixmapItem>
 #include <QList>
+#include "module.h"
 
 QT_BEGIN_NAMESPACE
 class QPixmap;
@@ -24,7 +25,7 @@ class DiagramModuleItem : public QGraphicsRectItem
 public:
     enum { Type = UserType + 30 };
     DiagramModuleItem() {}
-    DiagramModuleItem(QMenu *contextMenu, QGraphicsItem *parent = 0);
+    DiagramModuleItem(const Module *module, QMenu *contextMenu, QGraphicsItem *parent = 0);
 
     void addArrow(Arrow *arrow);
     void removeArrow(Arrow *arrow);
@@ -38,6 +39,8 @@ protected:
 private:
     QMenu *myContextMenu;
     QList<Arrow *> arrows;
+
+    const Module *modulePtr;
 };
 
 #endif // DIAGRAMMODULEITEM_H

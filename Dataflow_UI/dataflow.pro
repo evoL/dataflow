@@ -3,15 +3,18 @@ QT += widgets
 HEADERS	    =   mainwindow.h \
 		diagramscene.h \
 		arrow.h \
-    diagrammoduleitem.h
+    diagrammoduleitem.h \
+    moduleslistmodel.h \
+    module.h
 SOURCES	    =   mainwindow.cpp \
 		main.cpp \
 		arrow.cpp \
 		diagramscene.cpp \
-    diagrammoduleitem.cpp
-RESOURCES   =	diagramscene.qrc
+    diagrammoduleitem.cpp \
+    moduleslistmodel.cpp \
+    module.cpp
+RESOURCES   = \
+    diagramscene.qrc
 
 
-# install
-target.path = $$[QT_INSTALL_EXAMPLES]/widgets/graphicsview/diagramscene
-INSTALLS += target
+

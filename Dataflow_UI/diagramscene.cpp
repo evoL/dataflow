@@ -4,11 +4,14 @@
 #include <QTextCursor>
 #include <QGraphicsSceneMouseEvent>
 
+#include <iostream>
 
-DiagramScene::DiagramScene(QMenu *itemMenu, QObject *parent)
+DiagramScene::DiagramScene(ModulesListModel *modulesListModel, QListView *modulesView, QMenu *itemMenu, QObject *parent)
     : QGraphicsScene(parent)
 {
     myItemMenu = itemMenu;
+    this->modulesView = modulesView;
+    this->modulesListModel = modulesListModel;
     myMode = MoveItem;
     line = 0;
     myItemColor = Qt::white;
@@ -27,9 +30,11 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         return;
 
     DiagramModuleItem *item;
+    const Module *selectedModulePtr;
     switch (myMode) {
         case InsertItem:
-            item = new DiagramModuleItem(myItemMenu);
+            selectedModulePtr = &modulesListModel->at( modulesView->currentIndex().row() );
+            item = new DiagramModuleItem(selectedModulePtr, myItemMenu);
             item->setBrush(myItemColor);
             addItem(item);
             item->setPos(mouseEvent->scenePos());

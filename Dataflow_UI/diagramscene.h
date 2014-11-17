@@ -2,8 +2,10 @@
 #define DIAGRAMSCENE_H
 
 #include "diagrammoduleitem.h"
+#include "moduleslistmodel.h"
 
 #include <QGraphicsScene>
+#include <QListView>
 
 QT_BEGIN_NAMESPACE
 class QGraphicsSceneMouseEvent;
@@ -11,6 +13,7 @@ class QMenu;
 class QPointF;
 class QGraphicsLineItem;
 class QColor;
+//class QListView;
 QT_END_NAMESPACE
 
 class DiagramScene : public QGraphicsScene
@@ -20,7 +23,7 @@ class DiagramScene : public QGraphicsScene
 public:
     enum Mode { InsertItem, InsertLine, MoveItem };
 
-    explicit DiagramScene(QMenu *itemMenu, QObject *parent = 0);
+    explicit DiagramScene(ModulesListModel *modulesListModel, QListView *modulesView, QMenu *itemMenu, QObject *parent = 0);
 
 public slots:
     void setMode(Mode mode);
@@ -36,6 +39,8 @@ protected:
 
 private:
     QMenu *myItemMenu;
+    QListView *modulesView;
+    ModulesListModel *modulesListModel;
     Mode myMode;
     QPointF startPoint;
     QGraphicsLineItem *line;

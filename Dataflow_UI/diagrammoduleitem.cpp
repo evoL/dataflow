@@ -6,12 +6,16 @@
 #include <QMenu>
 #include <QPainter>
 
-DiagramModuleItem::DiagramModuleItem(QMenu *contextMenu, QGraphicsItem *parent) :
-    QGraphicsRectItem(parent)
+DiagramModuleItem::DiagramModuleItem(const Module *module, QMenu *contextMenu, QGraphicsItem *parent) :
+    QGraphicsRectItem(parent), modulePtr(module)
 {
     myContextMenu = contextMenu;
 
-    setRect(-50, -25, 100, 50);
+    setRect(    -modulePtr->size().width()/2,
+                -modulePtr->size().height()/2,
+                modulePtr->size().width(),
+                modulePtr->size().height());
+
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);

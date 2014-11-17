@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include "diagrammoduleitem.h"
+#include "moduleslistmodel.h"
 
 #include <QMainWindow>
 
@@ -54,7 +55,7 @@ private:
     QToolBar *editToolBar;
     QToolBar *pointerToolbar;
 
-    QStringListModel *modulesListModel;
+    ModulesListModel *modulesListModel;
     QListView *modulesView;
 
     QButtonGroup *pointerTypeGroup;
