@@ -3,3 +3,5 @@
 **/ipch
 *.sdf
 *.suo
+*.opensdf
+*.dtd

@@ -10,7 +10,7 @@ Dll_loader::Dll_loader()
 
 bool Dll_loader::load(const std::string module_name)
 {
-	HINSTANCE dll_id = LoadLibrary((module_name + ".dll").c_str());
+	dll_id = LoadLibrary((module_name + ".dll").c_str());
 
 	if (!dll_id)
 	{
@@ -39,7 +39,7 @@ bool Dll_loader::load(const std::string module_name)
 	}
 	const char * types_data = (*types_fun)();
 	
-	while (!*types_data)
+	while (*types_data)
 	{
 		if (!get_type(types_data))
 			return false;
@@ -58,7 +58,7 @@ bool Dll_loader::load(const std::string module_name)
 	}
 	const char * operations_data = (*operations_fun)();
 
-	while (!*operations_data)
+	while (*operations_data)
 	{
 		if (!get_operation(operations_data))
 			return false;
@@ -186,6 +186,7 @@ bool Dll_loader::get_type(const char* type_name)
 		return false;
 	}
 
+	types.push_back(type_name);
 	type_sizes[type_name_str] = size;
 	constructors[type_name_str] = construct_fun;
 
@@ -210,7 +211,7 @@ bool Dll_loader::get_operation(const char* operation_name)
 	const char * inputs_data = (*inputs_fun)();
 
 	std::vector<std::string> inputs_temp;
-	while (!*inputs_data)
+	while (*inputs_data)
 	{
 		inputs_temp.push_back(inputs_data);
 		inputs_data += strlen(inputs_data) + 1;
@@ -229,7 +230,7 @@ bool Dll_loader::get_operation(const char* operation_name)
 	const char * outputs_data = (*outputs_fun)();
 
 	std::vector<std::string> outputs_temp;
-	while (!*outputs_data)
+	while (*outputs_data)
 	{
 		outputs_temp.push_back(outputs_data);
 		outputs_data += strlen(outputs_data) + 1;
@@ -246,6 +247,7 @@ bool Dll_loader::get_operation(const char* operation_name)
 		return false;
 	}
 
+	operations.push_back(operation_name);
 	inputs[operation_name_str] = inputs_temp;
 	outputs[operation_name_str] = outputs_temp;
 	executes[operation_name_str] = execute_fun;
