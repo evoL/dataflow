@@ -1,5 +1,5 @@
-#include "diagrammoduleitem.h"
-#include "arrow.h"
+#include "DiagramModuleItem.h"
+#include "Arrow.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsSceneContextMenuEvent>

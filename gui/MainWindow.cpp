@@ -1,7 +1,7 @@
-#include "arrow.h"
-#include "diagramscene.h"
-#include "diagrammoduleitem.h"
-#include "mainwindow.h"
+#include "Arrow.h"
+#include "DiagramScene.h"
+#include "DiagramModuleItem.h"
+#include "MainWindow.h"
 
 #include <QtWidgets>
 #include <iostream>

@@ -2,7 +2,7 @@
 #define ARROW_H
 
 #include <QGraphicsLineItem>
-#include "diagramModuleItem.h"
+#include "DiagramModuleItem.h"
 
 QT_BEGIN_NAMESPACE
 class QGraphicsPolygonItem;

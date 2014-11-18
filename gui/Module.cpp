@@ -1,4 +1,4 @@
-#include "module.h"
+#include "Module.h"
 
 Module::Module(QString name, QSize size)
 {

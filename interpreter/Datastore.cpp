@@ -1,23 +1,23 @@
-#include "Data_repository.h"
+#include "Datastore.h"
 
-bool DataRepository::is_computed(std::string data_id)
+bool Datastore::is_computed(std::string data_id)
 {
 	return computed_results.count(data_id) && computed_results.at(data_id);
 }
 
-void * DataRepository::operator[](std::string data_id)
+void * Datastore::operator[](std::string data_id)
 {
 	if (computed_results.count(data_id) == 0)
 		return nullptr;
 	return computed_results.at(data_id).get();
 }
 
-flow_data_ptr * DataRepository::result_location(std::string data_id)
+stored_ptr * Datastore::result_location(std::string data_id)
 {
 	return &computed_results[data_id];
 }
 
-void DataRepository::reset()
+void Datastore::reset()
 {
 	computed_results.clear();
 }

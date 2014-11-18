@@ -1,4 +1,4 @@
-#include "moduleslistmodel.h"
+#include "ModulesListModel.h"
 #include <iostream>
 
 ModulesListModel::ModulesListModel()

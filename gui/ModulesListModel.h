@@ -3,8 +3,8 @@
 
 #include <QAbstractListModel>
 #include <QList>
-#include "diagrammoduleitem.h"
-#include "module.h"
+#include "DiagramModuleItem.h"
+#include "Module.h"
 
 class ModulesListModel : public QAbstractListModel
 {

@@ -1,14 +1,14 @@
-#include "Data_repository.h"
+#include "Datastore.h"
 #include <iostream>
 
-void input_block(int input, flow_data_ptr * result) {
-	*result = make_flow_data_ptr<int>(input);
+void input_block(int input, stored_ptr * result) {
+	*result = make_stored_ptr<int>(input);
 }
 
-void add(void * in_1, void * in_2, flow_data_ptr * result) {
+void add(void * in_1, void * in_2, stored_ptr * result) {
 	int first_number = *static_cast<int*>(in_1); 
 	int second_number = *static_cast<int*>(in_2);
-	*result = make_flow_data_ptr<int>(first_number + second_number);
+	*result = make_stored_ptr<int>(first_number + second_number);
 }
 
 void output_integer(void * input) {
@@ -17,7 +17,7 @@ void output_integer(void * input) {
 }
 
 void main() {
-	DataRepository repository;
+	Datastore repository;
 
 	input_block(3, repository.result_location("input_1"));
 	input_block(12, repository.result_location("input_2"));

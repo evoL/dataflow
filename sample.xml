@@ -1,24 +1,24 @@
 <dataflow projectname="Sum a b">
-	<imports>
-		<import module="Math" />
-		<import module="IO" />
-	</imports>
-	<schema>
-		<constructor module="Math" type="Int" pos_x="0" pos_y="0">
-			<output id="1" />
-			<data>123</data>
-		</constructor>
-		<constructor module="Math" type="Int" pos_x="0" pos_y="0">
-			<output id="2" />
-			<data>234</data>
-		</constructor>
-		<operation module="Math" name="Add" pos_x="0" pos_y="0">
-			<input id="4" output_id="1" />
-			<input id="5" output_id="2" />
-			<output id="3" />
-		</operation>
-		<operation module="IO" name="PrintInt" pos_x="0" pos_y="0">
-			<input id="6" output_id="3" />
-		</operation>
-	</schema>
+    <imports>
+        <import module="Math" />
+        <import module="IO" />
+    </imports>
+    <schema>
+        <constructor module="Math" type="Int" pos_x="0" pos_y="0">
+            <output id="1" />
+            <data>123</data>
+        </constructor>
+        <constructor module="Math" type="Int" pos_x="0" pos_y="0">
+            <output id="2" />
+            <data>234</data>
+        </constructor>
+        <operation module="Math" name="Add" pos_x="0" pos_y="0">
+            <input id="4" output_id="1" />
+            <input id="5" output_id="2" />
+            <output id="3" />
+        </operation>
+        <operation module="IO" name="PrintInt" pos_x="0" pos_y="0">
+            <input id="6" output_id="3" />
+        </operation>
+    </schema>
 </dataflow>

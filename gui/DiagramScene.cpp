@@ -1,5 +1,5 @@
-#include "diagramscene.h"
-#include "arrow.h"
+#include "DiagramScene.h"
+#include "Arrow.h"
 
 #include <QTextCursor>
 #include <QGraphicsSceneMouseEvent>
