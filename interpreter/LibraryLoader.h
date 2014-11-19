@@ -3,12 +3,18 @@
 
 #include "ModuleLoader.h"
 
-typedef const char * (__cdecl * fun_module_type)();
-typedef const char * (__cdecl * fun_types_type)();
-typedef const char * (__cdecl * fun_operations_type)();
-typedef bool (__cdecl * fun_constructor_type)(const char *, void *);
-typedef bool (__cdecl * fun_execute_type)(void * const *, void * const *);
-typedef unsigned int (__cdecl * fun_size_type)();
+#ifdef _MSC_VER
+#   define DATAFLOW_CALLING_CONVENTION __cdecl
+#else
+#   define DATAFLOW_CALLING_CONVENTION
+#endif
+
+typedef const char * (DATAFLOW_CALLING_CONVENTION * fun_module_type)();
+typedef const char * (DATAFLOW_CALLING_CONVENTION * fun_types_type)();
+typedef const char * (DATAFLOW_CALLING_CONVENTION * fun_operations_type)();
+typedef bool (DATAFLOW_CALLING_CONVENTION * fun_constructor_type)(const char *, void *);
+typedef bool (DATAFLOW_CALLING_CONVENTION * fun_execute_type)(void * const *, void * const *);
+typedef unsigned int (DATAFLOW_CALLING_CONVENTION * fun_size_type)();
 
 class LibraryLoader : public ModuleLoader
 {
