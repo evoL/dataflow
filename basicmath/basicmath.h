@@ -1,3 +1,6 @@
+#ifndef BASICMATH_H
+#define BASICMATH_H
+
 #ifdef BASIC_MATH_EXPORTS
 #define BASIC_MATH_API __declspec(dllexport)
 #else
@@ -19,3 +22,5 @@ extern "C"
 	BASIC_MATH_API bool AddIntegers_execute(void * const * inputs, void * const * outputs);
 	BASIC_MATH_API bool AddReals_execute(void * const * inputs, void * const * outputs);
 }
+
+#endif

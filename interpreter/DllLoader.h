@@ -1,3 +1,6 @@
+#ifndef DLLLOADER_H
+#define DLLLOADER_H
+
 #include "ModuleLoader.h"
 #include <Windows.h>
 
@@ -44,3 +47,5 @@ private:
 	bool																get_type(const char * type_name);
 	bool																get_operation(const char * operation_name);
 };
+
+#endif

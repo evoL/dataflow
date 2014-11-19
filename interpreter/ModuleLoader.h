@@ -1,3 +1,6 @@
+#ifndef MODULELOADER_H
+#define MODULELOADER_H
+
 #include <string>
 #include <vector>
 #include <unordered_map>
@@ -19,3 +22,5 @@ public:
 	virtual bool																construct_type(const std::string& type_name, const std::string& data, void * out) = 0;
 	virtual bool																execute(const std::string& operation_name, const std::vector<void *>& inputs, const std::vector<void *>& outputs) = 0;
 };
+
+#endif

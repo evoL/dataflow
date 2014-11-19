@@ -1,4 +1,6 @@
-#pragma once
+#ifndef DATASTORE_H
+#define DATASTORE_H
+
 #include <string>
 #include <unordered_map>
 #include "stored_ptr.h"
@@ -14,3 +16,5 @@ public:
 private:
 	std::unordered_map<std::string, stored_ptr> computed_results;
 };
+
+#endif
