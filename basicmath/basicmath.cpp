@@ -3,59 +3,59 @@
 
 extern "C"
 {
-    BASIC_MATH_API const char * __cdecl module()
+    BASIC_MATH_API const char * DATAFLOW_MODULE module()
     {
         return "basicmath";
     }
 
-    BASIC_MATH_API const char * __cdecl types()
+    BASIC_MATH_API const char * DATAFLOW_MODULE types()
     {
         return "Integer\0Real\0";
     }
 
-    BASIC_MATH_API const char * __cdecl operations()
+    BASIC_MATH_API const char * DATAFLOW_MODULE operations()
     {
         return "AddIntegers\0AddReals\0";
     }
 
-    BASIC_MATH_API unsigned int __cdecl Integer_size()
+    BASIC_MATH_API unsigned int DATAFLOW_MODULE Integer_size()
     {
         return sizeof(int);
     }
 
-    BASIC_MATH_API unsigned int __cdecl Real_size()
+    BASIC_MATH_API unsigned int DATAFLOW_MODULE Real_size()
     {
         return sizeof(double);
     }
 
-    BASIC_MATH_API bool __cdecl Integer_construct(const char * data, void * output)
+    BASIC_MATH_API bool DATAFLOW_MODULE Integer_construct(const char * data, void * output)
     {
         *(int *)output = atoi(data);
         return true;
     }
 
-    BASIC_MATH_API bool __cdecl Real_construct(const char * data, void * output)
+    BASIC_MATH_API bool DATAFLOW_MODULE Real_construct(const char * data, void * output)
     {
         *(double *)output = atof(data);
         return true;
     }
 
-    BASIC_MATH_API const char * __cdecl AddIntegers_inputs()
+    BASIC_MATH_API const char * DATAFLOW_MODULE AddIntegers_inputs()
     {
         return "basicmath.Integer\0basicmath.Integer\0";
     }
 
-    BASIC_MATH_API const char * __cdecl AddReals_inputs()
+    BASIC_MATH_API const char * DATAFLOW_MODULE AddReals_inputs()
     {
         return "basicmath.Real\0basicmath.Real\0";
     }
 
-    BASIC_MATH_API const char * __cdecl AddIntegers_outputs()
+    BASIC_MATH_API const char * DATAFLOW_MODULE AddIntegers_outputs()
     {
         return "basicmath.Integer\0";
     }
 
-    BASIC_MATH_API const char * __cdecl AddReals_outputs()
+    BASIC_MATH_API const char * DATAFLOW_MODULE AddReals_outputs()
     {
         return "basicmath.Real\0";
     }

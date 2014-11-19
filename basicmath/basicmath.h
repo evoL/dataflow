@@ -11,16 +11,16 @@
 
 extern "C"
 {
-    BASIC_MATH_API const char * __cdecl module();
-    BASIC_MATH_API const char * __cdecl types();
-    BASIC_MATH_API const char * __cdecl operations();
-    BASIC_MATH_API unsigned int __cdecl Integer_size();
-    BASIC_MATH_API bool __cdecl Integer_construct(const char * data, void * output);
-    BASIC_MATH_API bool __cdecl Real_construct(const char * data, void * output);
-    BASIC_MATH_API const char * __cdecl AddIntegers_inputs();
-    BASIC_MATH_API const char * __cdecl AddReals_inputs();
-    BASIC_MATH_API const char * __cdecl AddIntegers_outputs();
-    BASIC_MATH_API const char * __cdecl AddReals_outputs();
+    BASIC_MATH_API const char * DATAFLOW_MODULE module();
+    BASIC_MATH_API const char * DATAFLOW_MODULE types();
+    BASIC_MATH_API const char * DATAFLOW_MODULE operations();
+    BASIC_MATH_API unsigned int DATAFLOW_MODULE Integer_size();
+    BASIC_MATH_API bool DATAFLOW_MODULE Integer_construct(const char * data, void * output);
+    BASIC_MATH_API bool DATAFLOW_MODULE Real_construct(const char * data, void * output);
+    BASIC_MATH_API const char * DATAFLOW_MODULE AddIntegers_inputs();
+    BASIC_MATH_API const char * DATAFLOW_MODULE AddReals_inputs();
+    BASIC_MATH_API const char * DATAFLOW_MODULE AddIntegers_outputs();
+    BASIC_MATH_API const char * DATAFLOW_MODULE AddReals_outputs();
     BASIC_MATH_API bool AddIntegers_execute(void * const * inputs, void * const * outputs);
     BASIC_MATH_API bool AddReals_execute(void * const * inputs, void * const * outputs);
 }
