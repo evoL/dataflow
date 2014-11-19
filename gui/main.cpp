@@ -4,7 +4,7 @@
 
 int main(int argv, char *args[])
 {
-    Q_INIT_RESOURCE(diagramscene);
+    Q_INIT_RESOURCE(DiagramScene);
 
     QApplication app(argv, args);
     MainWindow mainWindow;

@@ -1,8 +1,8 @@
 #ifndef DIAGRAMSCENE_H
 #define DIAGRAMSCENE_H
 
-#include "diagrammoduleitem.h"
-#include "moduleslistmodel.h"
+#include "DiagramModuleItem.h"
+#include "ModulesListModel.h"
 
 #include <QGraphicsScene>
 #include <QListView>
