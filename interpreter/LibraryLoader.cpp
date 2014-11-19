@@ -1,16 +1,23 @@
-#include "DllLoader.h"
-#include <cstring>
+#include "LibraryLoader.h"
 
-DllLoader::DllLoader()
+#include <cstring>
+#include "library_loading.h"
+
+LibraryLoader::LibraryLoader()
 : loaded(false)
 , dll_id(0)
 {
 
 }
 
-bool DllLoader::load(const std::string module_name)
+LibraryLoader::~LibraryLoader()
 {
-    dll_id = LoadLibrary((module_name + ".dll").c_str());
+    if (dll_id) dataflow::library_free(dll_id);
+}
+
+bool LibraryLoader::load(const std::string module_name)
+{
+    dll_id = dataflow::library_load(module_name);
 
     if (!dll_id)
     {
@@ -20,7 +27,7 @@ bool DllLoader::load(const std::string module_name)
 
     // Module name
 
-    fun_module_type module_fun = (fun_module_type)GetProcAddress(dll_id, "module");
+    fun_module_type module_fun = (fun_module_type)dataflow::library_procedure(dll_id, "module");
     if (!module_fun)
     {
         error = "Function 'module' not found";
@@ -31,7 +38,7 @@ bool DllLoader::load(const std::string module_name)
     
     // Types
     
-    fun_types_type types_fun = (fun_types_type)GetProcAddress(dll_id, "types");
+    fun_types_type types_fun = (fun_types_type)dataflow::library_procedure(dll_id, "types");
     if (!types_fun)
     {
         error = "Function 'types' not found";
@@ -50,7 +57,7 @@ bool DllLoader::load(const std::string module_name)
 
     // Operations
 
-    fun_operations_type operations_fun = (fun_operations_type)GetProcAddress(dll_id, "operations");
+    fun_operations_type operations_fun = (fun_operations_type)dataflow::library_procedure(dll_id, "operations");
     if (!operations_fun)
     {
         error = "Function 'operations' not found";
@@ -71,8 +78,10 @@ bool DllLoader::load(const std::string module_name)
     return true;
 }
 
-void DllLoader::clear()
+void LibraryLoader::clear()
 {
+    if (dll_id) dataflow::library_free(dll_id);
+
     loaded = false;
     dll_id = 0;
     name.clear();
@@ -86,42 +95,42 @@ void DllLoader::clear()
     executes.clear();
 }
 
-const std::string& DllLoader::get_last_error()
+const std::string& LibraryLoader::get_last_error()
 {
     return error;
 }
 
-const std::string& DllLoader::get_name()
+const std::string& LibraryLoader::get_name()
 {
     return name;
 }
 
-const std::vector<std::string>& DllLoader::get_types()
+const std::vector<std::string>& LibraryLoader::get_types()
 {
     return types;
 }
 
-const std::vector<std::string>& DllLoader::get_operations()
+const std::vector<std::string>& LibraryLoader::get_operations()
 {
     return operations;
 }
 
-const std::unordered_map<std::string, unsigned int>& DllLoader::get_sizes()
+const std::unordered_map<std::string, unsigned int>& LibraryLoader::get_sizes()
 {
     return type_sizes;
 }
 
-const std::unordered_map<std::string, std::vector<std::string> >& DllLoader::get_inputs()
+const std::unordered_map<std::string, std::vector<std::string> >& LibraryLoader::get_inputs()
 {
     return inputs;
 }
 
-const std::unordered_map<std::string, std::vector<std::string> >& DllLoader::get_outputs()
+const std::unordered_map<std::string, std::vector<std::string> >& LibraryLoader::get_outputs()
 {
     return outputs;
 }
 
-bool DllLoader::construct_type(const std::string& type_name, const std::string& data, void * out)
+bool LibraryLoader::construct_type(const std::string& type_name, const std::string& data, void * out)
 {
     auto res = constructors.find(type_name);
     if (res == constructors.end())
@@ -140,7 +149,7 @@ bool DllLoader::construct_type(const std::string& type_name, const std::string& 
     return true;
 }
 
-bool DllLoader::execute(const std::string& operation_name, const std::vector<void *>& in, const std::vector<void *>& out)
+bool LibraryLoader::execute(const std::string& operation_name, const std::vector<void *>& in, const std::vector<void *>& out)
 {
     auto res = executes.find(operation_name);
     if (res == executes.end())
@@ -159,7 +168,7 @@ bool DllLoader::execute(const std::string& operation_name, const std::vector<voi
     return true;
 }
 
-bool DllLoader::get_type(const char* type_name)
+bool LibraryLoader::get_type(const char* type_name)
 {   
     std::string type_name_str = type_name;
     if (type_sizes.find(type_name_str) != type_sizes.end())
@@ -168,7 +177,7 @@ bool DllLoader::get_type(const char* type_name)
     // type size
 
     std::string type_size_str = type_name_str + "_size";
-    fun_size_type size_fun = (fun_size_type)GetProcAddress(dll_id, type_size_str.c_str());
+    fun_size_type size_fun = (fun_size_type)dataflow::library_procedure(dll_id, type_size_str.c_str());
     if (!size_fun)
     {
         error = "Function '" + type_size_str + "' not found";
@@ -179,7 +188,7 @@ bool DllLoader::get_type(const char* type_name)
     // construct function
 
     std::string type_construct_str = type_name_str + "_construct";
-    fun_constructor_type construct_fun = (fun_constructor_type)GetProcAddress(dll_id, type_construct_str.c_str());
+    fun_constructor_type construct_fun = (fun_constructor_type)dataflow::library_procedure(dll_id, type_construct_str.c_str());
     if (!construct_fun)
     {
         error = "Function '" + type_construct_str + "' not found";
@@ -193,7 +202,7 @@ bool DllLoader::get_type(const char* type_name)
     return true;
 }
 
-bool DllLoader::get_operation(const char* operation_name)
+bool LibraryLoader::get_operation(const char* operation_name)
 {
     std::string operation_name_str = operation_name;
     if (inputs.find(operation_name_str) != inputs.end())
@@ -202,7 +211,7 @@ bool DllLoader::get_operation(const char* operation_name)
     // input arguments
 
     std::string operation_inputs_str = operation_name_str + "_inputs";
-    fun_types_type inputs_fun = (fun_types_type)GetProcAddress(dll_id, operation_inputs_str.c_str());
+    fun_types_type inputs_fun = (fun_types_type)dataflow::library_procedure(dll_id, operation_inputs_str.c_str());
     if (!inputs_fun)
     {
         error = "Function '" + operation_inputs_str + "' not found";
@@ -221,7 +230,7 @@ bool DllLoader::get_operation(const char* operation_name)
     // output arguments
 
     std::string operation_outputs_str = operation_name_str + "_outputs";
-    fun_types_type outputs_fun = (fun_types_type)GetProcAddress(dll_id, operation_outputs_str.c_str());
+    fun_types_type outputs_fun = (fun_types_type)dataflow::library_procedure(dll_id, operation_outputs_str.c_str());
     if (!outputs_fun)
     {
         error = "Function '" + operation_outputs_str + "' not found";
@@ -240,7 +249,7 @@ bool DllLoader::get_operation(const char* operation_name)
     // execute function
     
     std::string execute_str = operation_name_str + "_execute";
-    fun_execute_type execute_fun = (fun_execute_type)GetProcAddress(dll_id, execute_str.c_str());
+    fun_execute_type execute_fun = (fun_execute_type)dataflow::library_procedure(dll_id, execute_str.c_str());
     if (!execute_fun)
     {
         error = "Function '" + execute_str + "' not found";

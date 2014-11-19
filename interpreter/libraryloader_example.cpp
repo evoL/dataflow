@@ -1,11 +1,11 @@
-#include "DllLoader.h"
+#include "LibraryLoader.h"
 #include <iostream>
 #include <cstdlib>
 
 int main()
 {
-    DllLoader loader;
-    if (!loader.load("Basic_math"))
+    LibraryLoader loader;
+    if (!loader.load("basicmath"))
     {
         std::cout << loader.get_last_error() << std::endl;
     }
@@ -13,23 +13,23 @@ int main()
     {
         std::cout << "Module loaded: " << loader.get_name() << std::endl;
         std::cout << "Types [size]:" << std::endl;
-        for (auto& it = loader.get_types().begin(); it < loader.get_types().end(); it++)
+        for (auto it = loader.get_types().begin(); it < loader.get_types().end(); it++)
         {
             std::cout << " * " << *it << " [" << loader.get_sizes().at(*it) << "]" << std::endl;
         }
         
         std::cout << "Operations:" << std::endl;
-        for (auto& it = loader.get_operations().begin(); it < loader.get_operations().end(); it++)
+        for (auto it = loader.get_operations().begin(); it < loader.get_operations().end(); it++)
         {
             const std::vector<std::string>& inputs = loader.get_inputs().at(*it);
             const std::vector<std::string>& outputs = loader.get_outputs().at(*it);
             
             std::cout << " * " << *it << " [ ";
-            for (auto& it2 = inputs.begin(); it2 < inputs.end(); it2++)
+            for (auto it2 = inputs.begin(); it2 < inputs.end(); it2++)
                 std::cout << *it2 << " ";
 
             std::cout << "-> ";
-            for (auto& it2 = outputs.begin(); it2 < outputs.end(); it2++)
+            for (auto it2 = outputs.begin(); it2 < outputs.end(); it2++)
                 std::cout << *it2 << " ";
 
             std::cout << "]" << std::endl;
@@ -84,7 +84,7 @@ int main()
 
     }
 
-    system("PAUSE");
+    std::cin.get();
     
     return 0;
 }

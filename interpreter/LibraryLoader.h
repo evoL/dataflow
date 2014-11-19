@@ -1,8 +1,7 @@
-#ifndef DLLLOADER_H
-#define DLLLOADER_H
+#ifndef LIBRARYLOADER_H
+#define LIBRARYLOADER_H
 
 #include "ModuleLoader.h"
-#include <Windows.h>
 
 typedef const char * (__cdecl * fun_module_type)();
 typedef const char * (__cdecl * fun_types_type)();
@@ -11,11 +10,11 @@ typedef bool (__cdecl * fun_constructor_type)(const char *, void *);
 typedef bool (__cdecl * fun_execute_type)(void * const *, void * const *);
 typedef unsigned int (__cdecl * fun_size_type)();
 
-class DllLoader : public ModuleLoader
+class LibraryLoader : public ModuleLoader
 {
 private:
     bool                                                        loaded;
-    HINSTANCE                                                   dll_id;
+    void *                                                      dll_id;
     std::string                                                 name;
     std::vector<std::string>                                    types;
     std::vector<std::string>                                    operations;
@@ -27,7 +26,8 @@ private:
     std::unordered_map<std::string, fun_execute_type>           executes;
 
 public:
-    Dll_loader();
+    LibraryLoader();
+    ~LibraryLoader();
 
     bool                                                                load(const std::string module_name);
     void                                                                clear();
