@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 2.8.11 FATAL_ERROR)
-cmake_policy(SET CMP0042 NEW) # suppresses warning on OS X
+if(CMAKE_MAJOR_VERSION EQUAL 3)
+    cmake_policy(SET CMP0042 NEW) # suppresses warning on OS X
+endif()
 
 project(dataflow)
 
