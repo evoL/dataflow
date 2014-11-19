@@ -16,7 +16,7 @@ void output_integer(void * input) {
     std::cout << integer_to_output;
 }
 
-void main() {
+int main() {
     Datastore repository;
 
     input_block(3, repository.result_location("input_1"));
@@ -25,4 +25,6 @@ void main() {
     output_integer(repository["add_result"]);
 
     std::cin.get();
+
+    return 0;
 }
