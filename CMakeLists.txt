@@ -14,8 +14,11 @@ else()
     message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 endif()
 
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
 add_subdirectory(basicmath)
 add_subdirectory(interpreter)
+add_subdirectory(gui)
 
 source_group("Headers" "\\.h$")
 source_group("Sources" "\\.c(pp)?$")
