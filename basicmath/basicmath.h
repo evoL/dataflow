@@ -1,10 +1,12 @@
 #ifndef BASICMATH_H
 #define BASICMATH_H
 
+#include <dataflow.h>
+
 #ifdef BASIC_MATH_EXPORTS
-#define BASIC_MATH_API __declspec(dllexport)
+#   define BASIC_MATH_API DATAFLOW_MODULE_EXPORT
 #else
-#define BASIC_MATH_API __declspec(dllimport)
+#   define BASIC_MATH_API DATAFLOW_MODULE_IMPORT
 #endif
 
 extern "C"

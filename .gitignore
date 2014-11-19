@@ -1,6 +1,10 @@
-**/Debug
-**/Release
-**/ipch
+# Common
+build/
+
+# Visual Studio
+Debug/
+Release/
+ipch/
 *.sdf
 *.suo
 *.opensdf
