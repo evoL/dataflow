@@ -3,11 +3,18 @@
 
 #include <string>
 
+#ifdef _WIN32
+#   include <Windows.h>
+#   define DATAFLOW_LIBRARY HMODULE
+#else
+#   define DATAFLOW_LIBRARY void *
+#endif
+
 namespace dataflow
 {
-    void * library_load(const std::string& libraryName);
-    void * library_procedure(void * library, const std::string& name);
-    bool   library_free(void * library);
+    DATAFLOW_LIBRARY library_load(const std::string& libraryName);
+    void * library_procedure(DATAFLOW_LIBRARY library, const std::string& name);
+    bool   library_free(DATAFLOW_LIBRARY library);
 }
 
 #endif

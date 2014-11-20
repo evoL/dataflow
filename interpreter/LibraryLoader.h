@@ -2,6 +2,7 @@
 #define LIBRARYLOADER_H
 
 #include "ModuleLoader.h"
+#include "library_loading.h"
 
 #ifdef _MSC_VER
 #   define DATAFLOW_CALLING_CONVENTION __cdecl
@@ -20,7 +21,7 @@ class LibraryLoader : public ModuleLoader
 {
 private:
     bool                                                        loaded;
-    void *                                                      dll_id;
+    DATAFLOW_LIBRARY                                            dll_id;
     std::string                                                 name;
     std::vector<std::string>                                    types;
     std::vector<std::string>                                    operations;

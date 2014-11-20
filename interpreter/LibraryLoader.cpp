@@ -1,7 +1,6 @@
 #include "LibraryLoader.h"
 
 #include <cstring>
-#include "library_loading.h"
 
 LibraryLoader::LibraryLoader()
 : loaded(false)
