@@ -17,3 +17,5 @@ add_executable(libraryloader_example
 if(UNIX)
     target_link_libraries(libraryloader_example dl)
 endif()
+
+add_dependencies(libraryloader_example basicmath)
