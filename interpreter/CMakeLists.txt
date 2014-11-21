@@ -1,5 +1,6 @@
 add_executable(datastore_example
-    stored_ptr.h
+    managed_memory_chunk.h
+    managed_memory_chunk.cpp
     Datastore.h
     Datastore.cpp
     datastore_example.cpp
