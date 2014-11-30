@@ -6,26 +6,26 @@ void input_block(int input, void * result)
     *((int *) result) = input;
 }
 
-void add(void * in_1, void * in_2, void * result)
+void add(void * in1, void * in2, void * result)
 {
-    int first_number = *static_cast<int *>(in_1);
-    int second_number = *static_cast<int *>(in_2);
-    *((int *)result) = first_number + second_number;
+    int firstNumber = *static_cast<int *>(in1);
+    int secondNumber = *static_cast<int *>(in2);
+    *((int *)result) = firstNumber + secondNumber;
 }
 
 void output_integer(void * input)
 {
-    int integer_to_output = *static_cast<int *>(input);
-    std::cout << integer_to_output;
+    int integerToOutput = *static_cast<int *>(input);
+    std::cout << integerToOutput;
 }
 
 int main()
 {
     Datastore repository;
 
-    repository.create_entry("input_1", sizeof(int));
-    repository.create_entry("input_2", sizeof(int));
-    repository.create_entry("add_result", sizeof(int));
+    repository.createEntry("input_1", sizeof(int));
+    repository.createEntry("input_2", sizeof(int));
+    repository.createEntry("add_result", sizeof(int));
 
     input_block(3, repository["input_1"]);
     input_block(12, repository["input_2"]);

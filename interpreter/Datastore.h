@@ -3,20 +3,20 @@
 
 #include <string>
 #include <unordered_map>
-#include "managed_memory_chunk.h"
+#include "ManagedMemoryChunk.h"
 
 class Datastore
 {
 public:
-    bool is_computed(std::string data_id);
-    void * operator [](std::string data_id);
+    bool isComputed(std::string dataId);
+    void * operator [](std::string dataId);
 
-    void * create_entry(std::string chunk_id, std::size_t size_in_bytes);
-    void remove_entry(std::string data_id);
+    void * createEntry(std::string chunkId, std::size_t sizeInBytes);
+    void removeEntry(std::string dataId);
 
     void reset();
 private:
-    std::unordered_map<std::string, ManagedMemoryChunk> computed_results;
+    std::unordered_map<std::string, ManagedMemoryChunk> computedResults;
 };
 
 #endif

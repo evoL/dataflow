@@ -4,12 +4,12 @@
 
 class ManagedMemoryChunk
 {
-    void * managed_data{};
-    std::size_t managed_data_size{};
-    void release_managed_data();
+    void * managedData{};
+    std::size_t managedDataSize{};
+    void releaseManagedData();
 public:
     ManagedMemoryChunk() {};
-    explicit ManagedMemoryChunk(std::size_t chunk_size);
+    explicit ManagedMemoryChunk(std::size_t chunkSize);
     ~ManagedMemoryChunk();
 
     ManagedMemoryChunk(const ManagedMemoryChunk &) = delete;

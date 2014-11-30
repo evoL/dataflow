@@ -7,20 +7,20 @@ int main()
     LibraryLoader loader;
 
     if (!loader.load("basicmath")) {
-        std::cout << loader.get_last_error() << std::endl;
+        std::cout << loader.getLastError() << std::endl;
     } else {
-        std::cout << "Module loaded: " << loader.get_name() << std::endl;
+        std::cout << "Module loaded: " << loader.getName() << std::endl;
         std::cout << "Types [size]:" << std::endl;
 
-        for (auto it = loader.get_types().begin(); it < loader.get_types().end(); it++) {
-            std::cout << " * " << *it << " [" << loader.get_sizes().at(*it) << "]" << std::endl;
+        for (auto it = loader.getTypes().begin(); it < loader.getTypes().end(); it++) {
+            std::cout << " * " << *it << " [" << loader.getSizes().at(*it) << "]" << std::endl;
         }
 
         std::cout << "Operations:" << std::endl;
 
-        for (auto it = loader.get_operations().begin(); it < loader.get_operations().end(); it++) {
-            const std::vector<std::string> & inputs = loader.get_inputs().at(*it);
-            const std::vector<std::string> & outputs = loader.get_outputs().at(*it);
+        for (auto it = loader.getOperations().begin(); it < loader.getOperations().end(); it++) {
+            const std::vector<std::string> & inputs = loader.getInputs().at(*it);
+            const std::vector<std::string> & outputs = loader.getOutputs().at(*it);
 
             std::cout << " * " << *it << " [ ";
 
@@ -35,12 +35,12 @@ int main()
             std::cout << "]" << std::endl;
         }
 
-        unsigned int integer_size = loader.get_sizes().at("Integer");
+        unsigned int integer_size = loader.getSizes().at("Integer");
         void * a = malloc(integer_size);
         void * b = malloc(integer_size);
         void * c = malloc(integer_size);
-        loader.construct_type("Integer", "42", a);
-        loader.construct_type("Integer", "123", b);
+        loader.constructType("Integer", "42", a);
+        loader.constructType("Integer", "123", b);
 
         std::vector<void *> inputs;
         std::vector<void *> outputs;
@@ -61,12 +61,12 @@ int main()
 
         // ***************
 
-        unsigned int real_size = loader.get_sizes().at("Real");
+        unsigned int real_size = loader.getSizes().at("Real");
         void * d = malloc(real_size);
         void * e = malloc(real_size);
         void * f = malloc(real_size);
-        loader.construct_type("Real", "3.1415", d);
-        loader.construct_type("Real", "2.7183", e);
+        loader.constructType("Real", "3.1415", d);
+        loader.constructType("Real", "2.7183", e);
 
         inputs.push_back(d);
         inputs.push_back(e);

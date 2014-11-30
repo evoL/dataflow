@@ -4,72 +4,72 @@
 
 LibraryLoader::LibraryLoader():
     loaded(false),
-    dll_id(0)
+    dllId(0)
 {
 
 }
 
 LibraryLoader::~LibraryLoader()
 {
-    if (dll_id) dataflow::library_free(dll_id);
+    if (dllId) dataflow::library_free(dllId);
 }
 
-bool LibraryLoader::load(const std::string module_name)
+bool LibraryLoader::load(const std::string moduleName)
 {
-    dll_id = dataflow::library_load(module_name);
+    dllId = dataflow::library_load(moduleName);
 
-    if (!dll_id) {
+    if (!dllId) {
         error = "Library not found";
         return false;
     }
 
     // Module name
 
-    fun_module_type module_fun = (fun_module_type)dataflow::library_procedure(dll_id, "module");
+    fun_module_type moduleFun = (fun_module_type)dataflow::library_procedure(dllId, "module");
 
-    if (!module_fun) {
+    if (!moduleFun) {
         error = "Function 'module' not found";
         return false;
     }
 
-    name = (*module_fun)();
+    name = (*moduleFun)();
 
 
     // Types
 
-    fun_types_type types_fun = (fun_types_type)dataflow::library_procedure(dll_id, "types");
+    fun_types_type typesFun = (fun_types_type)dataflow::library_procedure(dllId, "types");
 
-    if (!types_fun) {
+    if (!typesFun) {
         error = "Function 'types' not found";
         return false;
     }
 
-    const char * types_data = (*types_fun)();
+    const char * typesData = (*typesFun)();
 
-    while (*types_data) {
-        if (!get_type(types_data))
+    while (*typesData) {
+        if (!getType(typesData))
             return false;
 
-        types_data += strlen(types_data) + 1;
+        typesData += strlen(typesData) + 1;
     }
 
 
     // Operations
 
-    fun_operations_type operations_fun = (fun_operations_type)dataflow::library_procedure(dll_id, "operations");
+    fun_operations_type operationsFun = (fun_operations_type)dataflow::library_procedure(dllId, "operations");
 
-    if (!operations_fun) {
+    if (!operationsFun) {
         error = "Function 'operations' not found";
         return false;
     }
 
-    const char * operations_data = (*operations_fun)();
+    const char * operationsData = (*operationsFun)();
 
-    while (*operations_data) {
-        if (!get_operation(operations_data))
+    while (*operationsData) {
+        if (!getOperation(operationsData))
             return false;
 
-        operations_data += strlen(operations_data) + 1;
+        operationsData += strlen(operationsData) + 1;
     }
 
 
@@ -79,59 +79,59 @@ bool LibraryLoader::load(const std::string module_name)
 
 void LibraryLoader::clear()
 {
-    if (dll_id) dataflow::library_free(dll_id);
+    if (dllId) dataflow::library_free(dllId);
 
     loaded = false;
-    dll_id = 0;
+    dllId = 0;
     name.clear();
     types.clear();
     operations.clear();
     error.clear();
-    type_sizes.clear();
+    typeSizes.clear();
     constructors.clear();
     inputs.clear();
     outputs.clear();
     executes.clear();
 }
 
-const std::string & LibraryLoader::get_last_error()
+const std::string & LibraryLoader::getLastError()
 {
     return error;
 }
 
-const std::string & LibraryLoader::get_name()
+const std::string & LibraryLoader::getName()
 {
     return name;
 }
 
-const std::vector<std::string> & LibraryLoader::get_types()
+const std::vector<std::string> & LibraryLoader::getTypes()
 {
     return types;
 }
 
-const std::vector<std::string> & LibraryLoader::get_operations()
+const std::vector<std::string> & LibraryLoader::getOperations()
 {
     return operations;
 }
 
-const std::unordered_map<std::string, unsigned int> & LibraryLoader::get_sizes()
+const std::unordered_map<std::string, unsigned int> & LibraryLoader::getSizes()
 {
-    return type_sizes;
+    return typeSizes;
 }
 
-const std::unordered_map<std::string, std::vector<std::string> > & LibraryLoader::get_inputs()
+const std::unordered_map<std::string, std::vector<std::string> > & LibraryLoader::getInputs()
 {
     return inputs;
 }
 
-const std::unordered_map<std::string, std::vector<std::string> > & LibraryLoader::get_outputs()
+const std::unordered_map<std::string, std::vector<std::string> > & LibraryLoader::getOutputs()
 {
     return outputs;
 }
 
-bool LibraryLoader::construct_type(const std::string & type_name, const std::string & data, void * out)
+bool LibraryLoader::constructType(const std::string & typeName, const std::string & data, void * out)
 {
-    auto res = constructors.find(type_name);
+    auto res = constructors.find(typeName);
 
     if (res == constructors.end()) {
         error = "Unknown type";
@@ -141,16 +141,16 @@ bool LibraryLoader::construct_type(const std::string & type_name, const std::str
     bool succeeded = (*res->second)(data.c_str(), out);
 
     if (!succeeded) {
-        error = "Runtime error: constructor '" + type_name + "'";
+        error = "Runtime error: constructor '" + typeName + "'";
         return false;
     }
 
     return true;
 }
 
-bool LibraryLoader::execute(const std::string & operation_name, const std::vector<void *> & in, const std::vector<void *> & out)
+bool LibraryLoader::execute(const std::string & operationName, const std::vector<void *> & in, const std::vector<void *> & out)
 {
-    auto res = executes.find(operation_name);
+    auto res = executes.find(operationName);
 
     if (res == executes.end()) {
         error = "Unknown operation";
@@ -160,110 +160,110 @@ bool LibraryLoader::execute(const std::string & operation_name, const std::vecto
     bool succeeded = (*res->second)(in.data(), out.data());
 
     if (!succeeded) {
-        error = "Runtime error: operation '" + operation_name + "'";
+        error = "Runtime error: operation '" + operationName + "'";
         return false;
     }
 
     return true;
 }
 
-bool LibraryLoader::get_type(const char * type_name)
+bool LibraryLoader::getType(const char * typeName)
 {
-    std::string type_name_str = type_name;
+    std::string typeNameStr = typeName;
 
-    if (type_sizes.find(type_name_str) != type_sizes.end())
+    if (typeSizes.find(typeNameStr) != typeSizes.end())
         return true;
 
     // type size
 
-    std::string type_size_str = type_name_str + "_size";
-    fun_size_type size_fun = (fun_size_type)dataflow::library_procedure(dll_id, type_size_str.c_str());
+    std::string typeSizeStr = typeNameStr + "_size";
+    fun_size_type sizeFun = (fun_size_type)dataflow::library_procedure(dllId, typeSizeStr.c_str());
 
-    if (!size_fun) {
-        error = "Function '" + type_size_str + "' not found";
+    if (!sizeFun) {
+        error = "Function '" + typeSizeStr + "' not found";
         return false;
     }
 
-    unsigned int size = (*size_fun)();
+    unsigned int size = (*sizeFun)();
 
     // construct function
 
-    std::string type_construct_str = type_name_str + "_construct";
-    fun_constructor_type construct_fun = (fun_constructor_type)dataflow::library_procedure(dll_id, type_construct_str.c_str());
+    std::string typeConstructStr = typeNameStr + "_construct";
+    fun_constructor_type constructFun = (fun_constructor_type)dataflow::library_procedure(dllId, typeConstructStr.c_str());
 
-    if (!construct_fun) {
-        error = "Function '" + type_construct_str + "' not found";
+    if (!constructFun) {
+        error = "Function '" + typeConstructStr + "' not found";
         return false;
     }
 
-    types.push_back(type_name);
-    type_sizes[type_name_str] = size;
-    constructors[type_name_str] = construct_fun;
+    types.push_back(typeName);
+    typeSizes[typeNameStr] = size;
+    constructors[typeNameStr] = constructFun;
 
     return true;
 }
 
-bool LibraryLoader::get_operation(const char * operation_name)
+bool LibraryLoader::getOperation(const char * operationName)
 {
-    std::string operation_name_str = operation_name;
+    std::string operationNameStr = operationName;
 
-    if (inputs.find(operation_name_str) != inputs.end())
+    if (inputs.find(operationNameStr) != inputs.end())
         return true;
 
     // input arguments
 
-    std::string operation_inputs_str = operation_name_str + "_inputs";
-    fun_types_type inputs_fun = (fun_types_type)dataflow::library_procedure(dll_id, operation_inputs_str.c_str());
+    std::string operationInputsStr = operationNameStr + "_inputs";
+    fun_types_type inputsFun = (fun_types_type)dataflow::library_procedure(dllId, operationInputsStr.c_str());
 
-    if (!inputs_fun) {
-        error = "Function '" + operation_inputs_str + "' not found";
+    if (!inputsFun) {
+        error = "Function '" + operationInputsStr + "' not found";
         return false;
     }
 
-    const char * inputs_data = (*inputs_fun)();
+    const char * inputsData = (*inputsFun)();
 
-    std::vector<std::string> inputs_temp;
+    std::vector<std::string> inputsTemp;
 
-    while (*inputs_data) {
-        inputs_temp.push_back(inputs_data);
-        inputs_data += strlen(inputs_data) + 1;
+    while (*inputsData) {
+        inputsTemp.push_back(inputsData);
+        inputsData += strlen(inputsData) + 1;
     }
 
 
     // output arguments
 
-    std::string operation_outputs_str = operation_name_str + "_outputs";
-    fun_types_type outputs_fun = (fun_types_type)dataflow::library_procedure(dll_id, operation_outputs_str.c_str());
+    std::string operationOutputsStr = operationNameStr + "_outputs";
+    fun_types_type outputsStr = (fun_types_type)dataflow::library_procedure(dllId, operationOutputsStr.c_str());
 
-    if (!outputs_fun) {
-        error = "Function '" + operation_outputs_str + "' not found";
+    if (!outputsStr) {
+        error = "Function '" + operationOutputsStr + "' not found";
         return false;
     }
 
-    const char * outputs_data = (*outputs_fun)();
+    const char * outputsData = (*outputsStr)();
 
-    std::vector<std::string> outputs_temp;
+    std::vector<std::string> outputsTemp;
 
-    while (*outputs_data) {
-        outputs_temp.push_back(outputs_data);
-        outputs_data += strlen(outputs_data) + 1;
+    while (*outputsData) {
+        outputsTemp.push_back(outputsData);
+        outputsData += strlen(outputsData) + 1;
     }
 
 
     // execute function
 
-    std::string execute_str = operation_name_str + "_execute";
-    fun_execute_type execute_fun = (fun_execute_type)dataflow::library_procedure(dll_id, execute_str.c_str());
+    std::string executeStr = operationNameStr + "_execute";
+    fun_execute_type executeFun = (fun_execute_type)dataflow::library_procedure(dllId, executeStr.c_str());
 
-    if (!execute_fun) {
-        error = "Function '" + execute_str + "' not found";
+    if (!executeFun) {
+        error = "Function '" + executeStr + "' not found";
         return false;
     }
 
-    operations.push_back(operation_name);
-    inputs[operation_name_str] = inputs_temp;
-    outputs[operation_name_str] = outputs_temp;
-    executes[operation_name_str] = execute_fun;
+    operations.push_back(operationName);
+    inputs[operationNameStr] = inputsTemp;
+    outputs[operationNameStr] = outputsTemp;
+    executes[operationNameStr] = executeFun;
 
     return true;
 }

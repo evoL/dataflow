@@ -1,6 +1,6 @@
 add_executable(datastore_example
-    managed_memory_chunk.h
-    managed_memory_chunk.cpp
+    ManagedMemoryChunk.h
+    ManagedMemoryChunk.cpp
     Datastore.h
     Datastore.cpp
     datastore_example.cpp

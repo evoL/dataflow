@@ -1,30 +1,30 @@
 #include "Datastore.h"
 
-bool Datastore::is_computed(std::string data_id)
+bool Datastore::isComputed(std::string dataId)
 {
-    return computed_results.count(data_id) && computed_results.at(data_id);
+    return computedResults.count(dataId) && computedResults.at(dataId);
 }
 
-void * Datastore::operator[](std::string data_id)
+void * Datastore::operator[](std::string dataId)
 {
-    if (computed_results.count(data_id) == 0)
+    if (computedResults.count(dataId) == 0)
         return nullptr;
 
-    return computed_results.at(data_id);
+    return computedResults.at(dataId);
 }
 
-void * Datastore::create_entry(std::string chunk_id, std::size_t size_in_bytes)
+void * Datastore::createEntry(std::string chunkId, std::size_t sizeInBytes)
 {
-    return computed_results[chunk_id] = ManagedMemoryChunk{ size_in_bytes };
+    return computedResults[chunkId] = ManagedMemoryChunk{ sizeInBytes };
 }
 
 void Datastore::reset()
 {
-    computed_results.clear();
+    computedResults.clear();
 }
 
-void Datastore::remove_entry(std::string data_id)
+void Datastore::removeEntry(std::string dataId)
 {
-    computed_results.erase(data_id);
+    computedResults.erase(dataId);
 }
 
