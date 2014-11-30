@@ -94,7 +94,7 @@ int test(bool b)
 
 Please use 4 spaces for indenting.
 
-For automatic editor adjustment an `.editorconfig` file is provided. To use it, install an appropriate plugin from the [EditorConfig website][http://editorconfig.org].
+For automatic editor adjustment an `.editorconfig` file is provided. To use it, install an appropriate plugin from the [EditorConfig website](http://editorconfig.org).
 
 ### Newlines
 
