@@ -1,7 +1,14 @@
 --indent-namespaces
+--indent-col1-comments
+--indent-preproc-define
+--indent-namespaces
 --break-blocks
 --pad-oper
+--pad-header
+--unpad-paren
 --convert-tabs
 --indent=spaces=4
 --style=kr
 --align-pointer=middle
+--keep-one-line-blocks
+--min-conditional-indent=0
