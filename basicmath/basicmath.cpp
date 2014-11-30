@@ -36,7 +36,7 @@ extern "C"
 
     BASIC_MATH_API bool DATAFLOW_MODULE Real_construct(const char * data, void * output)
     {
-        *(dReal *)output = atof(data);
+        *(dReal *)output = (dReal)atof(data);
         return true;
     }
 
