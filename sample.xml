@@ -4,21 +4,24 @@
         <import module="IO" />
     </imports>
     <schema>
-        <constructor module="Math" type="Int" pos_x="0" pos_y="0">
-            <output id="1" />
+        <!-- IDs are unique across the project, eg. constructors cannot have
+             the same ID as an output -->
+        <constructor id="1" module="Math" type="Int" pos_x="0" pos_y="0">
+            <output id="2" />
             <data>123</data>
         </constructor>
-        <constructor module="Math" type="Int" pos_x="0" pos_y="0">
-            <output id="2" />
+        <constructor id="3" module="Math" type="Int" pos_x="0" pos_y="75">
+            <output id="4" />
             <data>234</data>
         </constructor>
-        <operation module="Math" name="Add" pos_x="0" pos_y="0">
-            <input id="4" output_id="1" />
-            <input id="5" output_id="2" />
-            <output id="3" />
+        <operation id="5" module="Math" name="Add" pos_x="200" pos_y="25">
+            <!-- index defines the order of inputs in the operation -->
+            <input index="0" output_id="2" />
+            <input index="1" output_id="4" />
+            <output id="6" />
         </operation>
-        <operation module="IO" name="PrintInt" pos_x="0" pos_y="0">
-            <input id="6" output_id="3" />
+        <operation id="7" module="IO" name="PrintInt" pos_x="400" pos_y="25">
+            <input index="0" output_id="6" />
         </operation>
     </schema>
 </dataflow>
