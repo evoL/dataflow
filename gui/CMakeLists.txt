@@ -18,6 +18,12 @@ add_executable(dataflow WIN32
     MainWindow.cpp
     Module.h
     Module.cpp
+    ModuleDescription.h
+    ModuleDescription.cpp
+    ModuleIn.h
+    ModuleIn.cpp
+    ModuleOut.h
+    ModuleOut.cpp
     ModulesListModel.h
     ModulesListModel.cpp
     main.cpp
