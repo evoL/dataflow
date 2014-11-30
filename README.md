@@ -67,6 +67,12 @@ This assumes you are using the terminal and your current directory is `dataflow`
 
 ## Code style guidelines
 
+### Indentation
+
+Please use 4 spaces for indenting.
+
+For automatic editor adjustment an `.editorconfig` file is provided. To use it, install an appropriate plugin from the [EditorConfig website][http://editorconfig.org].
+
 ### Newlines
 
 **Windows users:** Please configure Git to convert newlines for you. Otherwise you might encounter problems while editing.
