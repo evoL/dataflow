@@ -67,6 +67,29 @@ This assumes you are using the terminal and your current directory is `dataflow`
 
 ## Code style guidelines
 
+### Naming
+
+- Class names should be written in `PascalCase`.
+- Method names (as opposed to function names) should be written in `camelCase`.
+- Function names (as opposed to method names) should be written in `snake_case`.
+- Classes should be put in separate files named exactly like them: `ClassName.h`, `ClassName.cpp`.
+- Files not containing any classes should be named in `snake_case`: `datastore_example.cpp`.
+
+### Brackets
+
+Please use the Kernighan & Ritchie style. Break brackets from namespaces, classes and function definitions attach them to anything else.
+
+```c++
+int test(bool b)
+{
+    if (b) {
+        bar();
+        return 1;
+    } else
+        return 0;
+}
+```
+
 ### Indentation
 
 Please use 4 spaces for indenting.
