@@ -5,30 +5,30 @@
 int main()
 {
     LibraryLoader loader;
-    if (!loader.load("basicmath"))
-    {
+
+    if (!loader.load("basicmath")) {
         std::cout << loader.get_last_error() << std::endl;
-    }
-    else
-    {
+    } else {
         std::cout << "Module loaded: " << loader.get_name() << std::endl;
         std::cout << "Types [size]:" << std::endl;
-        for (auto it = loader.get_types().begin(); it < loader.get_types().end(); it++)
-        {
+
+        for (auto it = loader.get_types().begin(); it < loader.get_types().end(); it++) {
             std::cout << " * " << *it << " [" << loader.get_sizes().at(*it) << "]" << std::endl;
         }
-        
+
         std::cout << "Operations:" << std::endl;
-        for (auto it = loader.get_operations().begin(); it < loader.get_operations().end(); it++)
-        {
-            const std::vector<std::string>& inputs = loader.get_inputs().at(*it);
-            const std::vector<std::string>& outputs = loader.get_outputs().at(*it);
-            
+
+        for (auto it = loader.get_operations().begin(); it < loader.get_operations().end(); it++) {
+            const std::vector<std::string> & inputs = loader.get_inputs().at(*it);
+            const std::vector<std::string> & outputs = loader.get_outputs().at(*it);
+
             std::cout << " * " << *it << " [ ";
+
             for (auto it2 = inputs.begin(); it2 < inputs.end(); it2++)
                 std::cout << *it2 << " ";
 
             std::cout << "-> ";
+
             for (auto it2 = outputs.begin(); it2 < outputs.end(); it2++)
                 std::cout << *it2 << " ";
 
@@ -48,11 +48,11 @@ int main()
         inputs.push_back(a);
         inputs.push_back(b);
         outputs.push_back(c);
-        
+
         loader.execute("AddIntegers", inputs, outputs);
 
         std::cout << "Adding integers: " << *(int *)a << " + " << *(int *)b << " = " << *(int *)c << std::endl;
-        
+
         free(a);
         free(b);
         free(c);
@@ -71,7 +71,7 @@ int main()
         inputs.push_back(d);
         inputs.push_back(e);
         outputs.push_back(f);
-        
+
         loader.execute("AddReals", inputs, outputs);
 
         std::cout << "Adding reals: " << *(double *)d << " + " << *(double *)e << " = " << *(double *)f << std::endl;
@@ -85,6 +85,6 @@ int main()
     }
 
     std::cin.get();
-    
+
     return 0;
 }

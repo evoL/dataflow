@@ -23,27 +23,27 @@ class DiagramScene : public QGraphicsScene
 public:
     enum Mode { InsertItem, InsertLine, MoveItem };
 
-    explicit DiagramScene(ModulesListModel *modulesListModel, QListView *modulesView, QMenu *itemMenu, QObject *parent = 0);
+    explicit DiagramScene(ModulesListModel * modulesListModel, QListView * modulesView, QMenu * itemMenu, QObject * parent = 0);
 
 public slots:
     void setMode(Mode mode);
 
 signals:
     void itemInserted();
-    void itemSelected(QGraphicsItem *item);
+    void itemSelected(QGraphicsItem * item);
 
 protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent);
+    void mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent);
 
 private:
-    QMenu *myItemMenu;
-    QListView *modulesView;
-    ModulesListModel *modulesListModel;
+    QMenu * myItemMenu;
+    QListView * modulesView;
+    ModulesListModel * modulesListModel;
     Mode myMode;
     QPointF startPoint;
-    QGraphicsLineItem *line;
+    QGraphicsLineItem * line;
     QColor myTextColor;
     QColor myItemColor;
     QColor myLineColor;

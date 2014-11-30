@@ -2,7 +2,7 @@
 
 #include <QApplication>
 
-int main(int argv, char *args[])
+int main(int argv, char * args[])
 {
     Q_INIT_RESOURCE(DiagramScene);
 

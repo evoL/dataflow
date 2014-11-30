@@ -18,12 +18,12 @@ MainWindow::MainWindow()
     connect(scene, SIGNAL(itemInserted()), this, SLOT(itemInserted()));
     createToolbars();
 
-    QHBoxLayout *layout = new QHBoxLayout;
+    QHBoxLayout * layout = new QHBoxLayout;
     layout->addWidget(modulesView);
     view = new QGraphicsView(scene);
     layout->addWidget(view);
 
-    QWidget *widget = new QWidget;
+    QWidget * widget = new QWidget;
     widget->setLayout(layout);
 
     setCentralWidget(widget);
@@ -38,22 +38,23 @@ void MainWindow::modulesViewClicked()
 
 void MainWindow::deleteItem()
 {
-    foreach (QGraphicsItem *item, scene->selectedItems()) {
+    foreach (QGraphicsItem * item, scene->selectedItems()) {
         if (item->type() == Arrow::Type) {
             scene->removeItem(item);
-            Arrow *arrow = qgraphicsitem_cast<Arrow *>(item);
+            Arrow * arrow = qgraphicsitem_cast<Arrow *>(item);
             arrow->startItem()->removeArrow(arrow);
             arrow->endItem()->removeArrow(arrow);
             delete item;
         }
     }
 
-    foreach (QGraphicsItem *item, scene->selectedItems()) {
-         if (item->type() == DiagramModuleItem::Type)
-             qgraphicsitem_cast<DiagramModuleItem *>(item)->removeArrows();
-         scene->removeItem(item);
-         delete item;
-     }
+    foreach (QGraphicsItem * item, scene->selectedItems()) {
+        if (item->type() == DiagramModuleItem::Type)
+            qgraphicsitem_cast<DiagramModuleItem *>(item)->removeArrows();
+
+        scene->removeItem(item);
+        delete item;
+    }
 }
 
 void MainWindow::pointerGroupClicked(int)
@@ -92,7 +93,7 @@ void MainWindow::createModulesList()
     modulesView->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Ignored);
     modulesView->setMinimumWidth(150);
 
-    connect(modulesView, SIGNAL(clicked(const QModelIndex&)),
+    connect(modulesView, SIGNAL(clicked(const QModelIndex &)),
             this, SLOT(modulesViewClicked()));
 }
 
@@ -131,11 +132,11 @@ void MainWindow::createToolbars()
     editToolBar = addToolBar(tr("Edit"));
     editToolBar->addAction(deleteAction);
 
-    QToolButton *pointerButton = new QToolButton;
+    QToolButton * pointerButton = new QToolButton;
     pointerButton->setCheckable(true);
     pointerButton->setChecked(true);
     pointerButton->setIcon(QIcon(":/images/pointer.png"));
-    QToolButton *linePointerButton = new QToolButton;
+    QToolButton * linePointerButton = new QToolButton;
     linePointerButton->setCheckable(true);
     linePointerButton->setIcon(QIcon(":/images/linepointer.png"));
 

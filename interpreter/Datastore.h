@@ -5,14 +5,14 @@
 #include <unordered_map>
 #include "managed_memory_chunk.h"
 
-class Datastore 
+class Datastore
 {
 public:
     bool is_computed(std::string data_id);
     void * operator [](std::string data_id);
 
-	void * create_entry(std::string chunk_id, std::size_t size_in_bytes);
-	void remove_entry(std::string data_id);
+    void * create_entry(std::string chunk_id, std::size_t size_in_bytes);
+    void remove_entry(std::string data_id);
 
     void reset();
 private:

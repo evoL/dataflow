@@ -6,15 +6,15 @@
 #include <QMenu>
 #include <QPainter>
 
-DiagramModuleItem::DiagramModuleItem(const Module *module, QMenu *contextMenu, QGraphicsItem *parent) :
+DiagramModuleItem::DiagramModuleItem(const Module * module, QMenu * contextMenu, QGraphicsItem * parent) :
     QGraphicsRectItem(parent), modulePtr(module)
 {
     myContextMenu = contextMenu;
 
-    setRect(    -modulePtr->size().width()/2,
-                -modulePtr->size().height()/2,
-                modulePtr->size().width(),
-                modulePtr->size().height());
+    setRect(-modulePtr->size().width() / 2,
+            -modulePtr->size().height() / 2,
+            modulePtr->size().width(),
+            modulePtr->size().height());
 
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);
@@ -22,7 +22,7 @@ DiagramModuleItem::DiagramModuleItem(const Module *module, QMenu *contextMenu, Q
 }
 
 
-void DiagramModuleItem::removeArrow(Arrow *arrow)
+void DiagramModuleItem::removeArrow(Arrow * arrow)
 {
     int index = arrows.indexOf(arrow);
 
@@ -32,7 +32,7 @@ void DiagramModuleItem::removeArrow(Arrow *arrow)
 
 void DiagramModuleItem::removeArrows()
 {
-    foreach (Arrow *arrow, arrows) {
+    foreach (Arrow * arrow, arrows) {
         arrow->startItem()->removeArrow(arrow);
         arrow->endItem()->removeArrow(arrow);
         scene()->removeItem(arrow);
@@ -40,22 +40,22 @@ void DiagramModuleItem::removeArrows()
     }
 }
 
-void DiagramModuleItem::addArrow(Arrow *arrow)
+void DiagramModuleItem::addArrow(Arrow * arrow)
 {
     arrows.append(arrow);
 }
 
-void DiagramModuleItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+void DiagramModuleItem::contextMenuEvent(QGraphicsSceneContextMenuEvent * event)
 {
     scene()->clearSelection();
     setSelected(true);
     myContextMenu->exec(event->screenPos());
 }
 
-QVariant DiagramModuleItem::itemChange(GraphicsItemChange change, const QVariant &value)
+QVariant DiagramModuleItem::itemChange(GraphicsItemChange change, const QVariant & value)
 {
     if (change == QGraphicsItem::ItemPositionChange) {
-        foreach (Arrow *arrow, arrows) {
+        foreach (Arrow * arrow, arrows) {
             arrow->updatePosition();
         }
     }

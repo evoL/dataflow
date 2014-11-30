@@ -8,19 +8,19 @@
 class ModuleLoader
 {
 public:
-    virtual bool                                                                load(const std::string module_name) = 0;
-    virtual void                                                                clear() = 0;
-    virtual const std::string&                                                  get_last_error() = 0;
+    virtual bool load(const std::string moduleName) = 0;
+    virtual void clear() = 0;
+    virtual const std::string & getLastError() = 0;
 
-    virtual const std::string&                                                  get_name() = 0;
-    virtual const std::vector<std::string>&                                     get_types() = 0;
-    virtual const std::vector<std::string>&                                     get_operations() = 0;
-    virtual const std::unordered_map<std::string, unsigned int>&                get_sizes() = 0;
-    virtual const std::unordered_map<std::string, std::vector<std::string> >&   get_inputs() = 0;
-    virtual const std::unordered_map<std::string, std::vector<std::string> >&   get_outputs() = 0;
+    virtual const std::string & getName() = 0;
+    virtual const std::vector<std::string> & getTypes() = 0;
+    virtual const std::vector<std::string> & getOperations() = 0;
+    virtual const std::unordered_map<std::string, unsigned int> & getSizes() = 0;
+    virtual const std::unordered_map<std::string, std::vector<std::string> > & getInputs() = 0;
+    virtual const std::unordered_map<std::string, std::vector<std::string> > & getOutputs() = 0;
 
-    virtual bool                                                                construct_type(const std::string& type_name, const std::string& data, void * out) = 0;
-    virtual bool                                                                execute(const std::string& operation_name, const std::vector<void *>& inputs, const std::vector<void *>& outputs) = 0;
+    virtual bool constructType(const std::string & typeName, const std::string & data, void * out) = 0;
+    virtual bool execute(const std::string & operationName, const std::vector<void *> & inputs, const std::vector<void *> & outputs) = 0;
 };
 
 #endif

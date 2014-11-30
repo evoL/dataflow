@@ -26,7 +26,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-   MainWindow();
+    MainWindow();
 
 private slots:
     void modulesViewClicked();
@@ -41,25 +41,25 @@ private:
     void createMenus();
     void createToolbars();
 
-    DiagramScene *scene;
-    QGraphicsView *view;
+    DiagramScene * scene;
+    QGraphicsView * view;
 
-    QAction *exitAction;
-    QAction *deleteAction;
-    QAction *aboutAction;
+    QAction * exitAction;
+    QAction * deleteAction;
+    QAction * aboutAction;
 
-    QMenu *fileMenu;
-    QMenu *itemMenu;
-    QMenu *aboutMenu;
+    QMenu * fileMenu;
+    QMenu * itemMenu;
+    QMenu * aboutMenu;
 
-    QToolBar *editToolBar;
-    QToolBar *pointerToolbar;
+    QToolBar * editToolBar;
+    QToolBar * pointerToolbar;
 
-    ModulesListModel *modulesListModel;
-    QListView *modulesView;
+    ModulesListModel * modulesListModel;
+    QListView * modulesView;
 
-    QButtonGroup *pointerTypeGroup;
-    QAction *lineAction;
+    QButtonGroup * pointerTypeGroup;
+    QAction * lineAction;
 };
 
 #endif // MAINWINDOW_H

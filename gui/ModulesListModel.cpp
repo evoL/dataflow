@@ -17,11 +17,9 @@ int ModulesListModel::rowCount(const QModelIndex & parent) const
 
 QVariant ModulesListModel::data(const QModelIndex & index, int role) const
 {
-    if (index.isValid() && index.row() < list.size() && role == Qt::DisplayRole)
-    {
+    if (index.isValid() && index.row() < list.size() && role == Qt::DisplayRole) {
         return QVariant(list.at(index.row()).toString());
-    }
-    else
+    } else
         return QVariant();
 }
 
@@ -30,7 +28,7 @@ void ModulesListModel::append(Module element)
     list.append(element);
 }
 
-const Module& ModulesListModel::at(int index)
+const Module & ModulesListModel::at(int index)
 {
     return list.at(index);
 }
