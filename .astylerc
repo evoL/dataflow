@@ -1,0 +1,7 @@
+--indent-namespaces
+--break-blocks
+--pad-oper
+--convert-tabs
+--indent=spaces=4
+--style=kr
+--align-pointer=middle

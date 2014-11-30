@@ -90,6 +90,8 @@ int test(bool b)
 }
 ```
 
+An `.astylerc` file is provided if you want to automatically adjust your formatting to recommended settings using [Artistic Style](http://astyle.sourceforge.net).
+
 ### Indentation
 
 Please use 4 spaces for indenting.
