@@ -69,9 +69,11 @@ This assumes you are using the terminal and your current directory is `dataflow`
 
 ### Naming
 
-- Class names should be written in `PascalCase`.
+- Class names (as opposed to type names) should be written in `PascalCase`.
+- Type names (as opposed to class names) should be written in `snake_case`.
 - Method names (as opposed to function names) should be written in `camelCase`.
 - Function names (as opposed to method names) should be written in `snake_case`.
+- Variable names should be written in `camelCase`.
 - Classes should be put in separate files named exactly like them: `ClassName.h`, `ClassName.cpp`.
 - Files not containing any classes should be named in `snake_case`: `datastore_example.cpp`.
 
