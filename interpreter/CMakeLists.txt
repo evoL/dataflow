@@ -15,6 +15,11 @@ add_executable(libraryloader_example
     libraryloader_example.cpp
 )
 
+add_executable(xmlparser_example
+    DataflowModel.h
+    xmlparser_example.cpp
+)
+
 if(UNIX)
     target_link_libraries(libraryloader_example dl)
 endif()
