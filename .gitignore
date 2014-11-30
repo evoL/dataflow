@@ -9,3 +9,6 @@ ipch/
 *.suo
 *.opensdf
 *.dtd
+
+# CLion
+.idea/
