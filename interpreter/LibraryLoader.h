@@ -14,6 +14,7 @@ typedef const char * (DATAFLOW_CALLING_CONVENTION * fun_module_type)();
 typedef const char * (DATAFLOW_CALLING_CONVENTION * fun_types_type)();
 typedef const char * (DATAFLOW_CALLING_CONVENTION * fun_operations_type)();
 typedef bool (DATAFLOW_CALLING_CONVENTION * fun_constructor_type)(const char *, void *);
+typedef bool (DATAFLOW_CALLING_CONVENTION * fun_destructor_type)(void *);
 typedef bool (DATAFLOW_CALLING_CONVENTION * fun_execute_type)(void * const *, void * const *);
 typedef unsigned int (DATAFLOW_CALLING_CONVENTION * fun_size_type)();
 
@@ -28,6 +29,7 @@ private:
     std::string error;
     std::unordered_map<std::string, unsigned int> typeSizes;
     std::unordered_map<std::string, fun_constructor_type> constructors;
+    std::unordered_map<std::string, fun_destructor_type> destructors;
     std::unordered_map<std::string, std::vector<std::string> > inputs;
     std::unordered_map<std::string, std::vector<std::string> > outputs;
     std::unordered_map<std::string, fun_execute_type> executes;
@@ -48,6 +50,7 @@ public:
     const std::unordered_map<std::string, std::vector<std::string> > & getOutputs();
 
     bool constructType(const std::string & typeName, const std::string & data, void * out);
+    bool destructType(const std::string & typeName, void * data);
     bool execute(const std::string & operationName, const std::vector<void *> & inputs, const std::vector<void *> & outputs);
 
 private:

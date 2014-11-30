@@ -25,18 +25,18 @@ extern "C"
 
     BASIC_MATH_API unsigned int DATAFLOW_MODULE Real_size()
     {
-        return sizeof(double);
+        return sizeof(float);
     }
 
     BASIC_MATH_API bool DATAFLOW_MODULE Integer_construct(const char * data, void * output)
     {
-        *(int *)output = atoi(data);
+        *(dInteger *)output = atoi(data);
         return true;
     }
 
     BASIC_MATH_API bool DATAFLOW_MODULE Real_construct(const char * data, void * output)
     {
-        *(double *)output = atof(data);
+        *(dReal *)output = atof(data);
         return true;
     }
 
@@ -62,13 +62,13 @@ extern "C"
 
     BASIC_MATH_API bool AddIntegers_execute(void * const * inputs, void * const * outputs)
     {
-        *(int *)(outputs[0]) = *(int *)(inputs[0]) + *(int *)(inputs[1]);
+        *(dInteger *)(outputs[0]) = *(dInteger *)(inputs[0]) + *(dInteger *)(inputs[1]);
         return true;
     }
 
     BASIC_MATH_API bool AddReals_execute(void * const * inputs, void * const * outputs)
     {
-        *(double *)(outputs[0]) = *(double *)(inputs[0]) + *(double *)(inputs[1]);
+        *(dReal *)(outputs[0]) = *(dReal *)(inputs[0]) + *(dReal *)(inputs[1]);
         return true;
     }
 }

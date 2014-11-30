@@ -72,8 +72,6 @@ bool LibraryLoader::load(const std::string moduleName)
         operationsData += strlen(operationsData) + 1;
     }
 
-
-
     return true;
 }
 
@@ -148,6 +146,22 @@ bool LibraryLoader::constructType(const std::string & typeName, const std::strin
     return true;
 }
 
+bool LibraryLoader::destructType(const std::string & typeName, void * data)
+{
+    auto res = destructors.find(typeName);
+    if (res == destructors.end())
+        return true;
+
+    bool succeeded = (*res->second)(data);
+
+    if (!succeeded) {
+        error = "Runtime error: destructor '" + typeName = "'";
+        return false;
+    }
+
+    return true;
+}
+
 bool LibraryLoader::execute(const std::string & operationName, const std::vector<void *> & in, const std::vector<void *> & out)
 {
     auto res = executes.find(operationName);
@@ -199,6 +213,14 @@ bool LibraryLoader::getType(const char * typeName)
     types.push_back(typeName);
     typeSizes[typeNameStr] = size;
     constructors[typeNameStr] = constructFun;
+
+    // destruct function (if exists)
+
+    std::string typeDestructStr = typeNameStr + "_destruct";
+    fun_destructor_type destructFun = (fun_destructor_type)dataflow::library_procedure(dllId, typeDestructStr.c_str());
+
+    if (destructFun)
+        destructors[typeNameStr] = destructFun;
 
     return true;
 }
