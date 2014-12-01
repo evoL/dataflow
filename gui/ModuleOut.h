@@ -4,7 +4,7 @@
 #include <QGraphicsPolygonItem>
 #include <QStyleOptionGraphicsItem>
 #include <QList>
-#include<QPointF>
+#include <QPointF>
 
 class Arrow;
 class ModuleOut : public QGraphicsPolygonItem
