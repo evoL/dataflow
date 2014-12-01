@@ -41,11 +41,12 @@ void MainWindow::deleteItem()
     }
 
     foreach (QGraphicsItem * item, scene->selectedItems()) {
-        if (item->type() == DiagramModuleItem::Type)
+        if (item->type() == DiagramModuleItem::Type) {
             qgraphicsitem_cast<DiagramModuleItem *>(item)->removeArrows();
 
-        scene->removeItem(item);
-        delete item;
+            scene->removeItem(item);
+            delete item;
+        }
     }
 }
 void MainWindow::pointerGroupClicked(int)
