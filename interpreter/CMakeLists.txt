@@ -9,7 +9,8 @@ add_executable(datastore_example
 add_executable(libraryloader_example
     library_loading.h
     library_loading.cpp
-    ModuleLoader.h
+    Library.h
+    Library.cpp
     LibraryLoader.h
     LibraryLoader.cpp
     libraryloader_example.cpp
