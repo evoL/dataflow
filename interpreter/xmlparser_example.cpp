@@ -1,7 +1,8 @@
 #include <iostream>
 #include "DataflowModel.h"
 
-int main() {
+int main()
+{
     std::cout << "Hello world" << std::endl;
     return 0;
 }

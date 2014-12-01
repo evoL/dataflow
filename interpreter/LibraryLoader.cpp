@@ -149,6 +149,7 @@ bool LibraryLoader::constructType(const std::string & typeName, const std::strin
 bool LibraryLoader::destructType(const std::string & typeName, void * data)
 {
     auto res = destructors.find(typeName);
+
     if (res == destructors.end())
         return true;
 

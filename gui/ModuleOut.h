@@ -12,13 +12,13 @@ class ModuleOut : public QGraphicsPolygonItem
 public:
 
     enum { Type = UserType + 2 };
-    ModuleOut(QGraphicsItem * parent=0);
+    ModuleOut(QGraphicsItem * parent = 0);
     void DrawOut(int i);
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-    void highlight (QPainter *painter,bool is_selected);
+    void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
+    void highlight(QPainter * painter, bool is_selected);
     int type() const { return Type;}
-    void addArrow(Arrow *arrow);
-    void removeArrow(Arrow *arrow);
+    void addArrow(Arrow * arrow);
+    void removeArrow(Arrow * arrow);
     void removeArrows();
 
     QPointF pos() const;
