@@ -72,7 +72,7 @@ struct Operation : Block {
     std::string name;
 };
 
-class DataflowProjectModel
+class ProjectModel
 {
     friend class XMLParser;
     
