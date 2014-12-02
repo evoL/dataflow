@@ -16,10 +16,17 @@ add_executable(libraryloader_example
     libraryloader_example.cpp
 )
 
+find_package(LibXml2 REQUIRED)
+include_directories(${LIBXML2_INCLUDE_DIR})
+
 add_executable(xmlparser_example
     DataflowModel.h
+    XMLParser.h
+    XMLParser.cpp
     xmlparser_example.cpp
 )
+
+target_link_libraries(xmlparser_example ${LIBXML2_LIBRARIES})
 
 if(UNIX)
     target_link_libraries(libraryloader_example dl)
