@@ -4,6 +4,7 @@
 #include <list>
 #include <unordered_map>
 #include <memory>
+#include <string>
 
 #include "XMLParser.h"
 
@@ -22,8 +23,8 @@ struct Position {
 };
 
 struct InputTransition {
-    int id;
-    int output_id;
+    int index;
+    int outputId;
     std::shared_ptr<Block> outputBlock;
 };
 
