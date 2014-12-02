@@ -7,7 +7,7 @@
 #include <QPointF>
 
 class Arrow;
-class ModuleIn : public QGraphicsPolygonItem
+class ModuleIn : public QGraphicsEllipseItem
 {
 public:
 

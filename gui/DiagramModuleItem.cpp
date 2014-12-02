@@ -30,12 +30,10 @@ DiagramModuleItem::DiagramModuleItem(const Module * module, QMenu * contextMenu,
 
     myContextMenu = contextMenu;
 
+    width = 100;
+    height = 100;
+
     ModuleDescription * text = new ModuleDescription(modulePtr->name, this);
-
-
-    qreal width = 100;
-    qreal height = 100;
-
     if (text->Is_text_long()) {
         width = 150;
         text->setTextWidth(150);
@@ -43,16 +41,15 @@ DiagramModuleItem::DiagramModuleItem(const Module * module, QMenu * contextMenu,
 
     height = height + (text->Scale());
 
-    setRect(-20, -20, width + 40, height + 20);
-
-
-
+    setRect(0, 0, width, height);
+    text->setAlignCenter();
 
 
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 }
+
 void DiagramModuleItem::removeArrow(Arrow * arrow)
 {
     int index = arrows.indexOf(arrow);

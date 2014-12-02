@@ -44,7 +44,11 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
         item = new DiagramModuleItem(selectedModulePtr, myItemMenu);
         item->setBrush(myItemColor);
         addItem(item);
-        item->setPos(mouseEvent->scenePos());
+
+        item->setPos(mouseEvent->scenePos() - QPointF(20,20));
+        if (item->pos().x() < 0) item->setX(0);
+        if (item->pos().y() < 0) item->setY(0);
+
         emit itemInserted();
         break;
 

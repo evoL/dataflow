@@ -10,6 +10,7 @@ public:
     ModuleDescription(QGraphicsItem * parent = 0);
     ModuleDescription(QString s, QGraphicsItem * parent = 0);
     void SetDescription(const QString desc);
+    void setAlignCenter();
     qreal Scale();
     bool Is_text_long();
 private:

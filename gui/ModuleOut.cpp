@@ -6,7 +6,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsSceneContextMenuEvent>
 
-ModuleOut::ModuleOut(QGraphicsItem * parent) : QGraphicsPolygonItem(parent)
+ModuleOut::ModuleOut(QGraphicsItem * parent) : QGraphicsEllipseItem(parent)
 {
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
@@ -15,34 +15,30 @@ void ModuleOut::DrawOut(int i)
 {
     posi = i;
     setBrush(Qt::red);
-    QPolygonF triangle;
-    triangle << QPointF(100, -15 + i * 20) << QPointF(100, i * 20) << QPoint(115, -7 + i * 20);
-    setPolygon(triangle);
+    setRect( qgraphicsitem_cast< DiagramModuleItem* >(parentItem())->getWidth() - 8 , 15 + posi*20, 15, 15);
+
+    //triangle << QPointF(100, -15 + i * 20) << QPointF(100, i * 20) << QPoint(115, -7 + i * 20);
+    //setPolygon(triangle);
 }
 
 void ModuleOut::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
-    QStyleOptionGraphicsItem * style = const_cast<QStyleOptionGraphicsItem *>(option);
+    //QStyleOptionGraphicsItem * style = const_cast<QStyleOptionGraphicsItem *>(option);
 
     bool is_selected = option->state & QStyle::State_Selected;
     highlight(painter, is_selected);
-    QGraphicsPolygonItem::paint(painter, option, widget);
+    QGraphicsEllipseItem::paint(painter, option, widget);
 }
 
 void ModuleOut::highlight(QPainter * painter, bool is_selected)
 {
     if (is_selected) {
         setBrush(Qt::green);
-        QPolygonF triangle;
-        triangle << QPointF(100, -15 + posi * 20) << QPointF(100, posi * 20) << QPoint(115, -7 + posi * 20);
-        setPolygon(triangle);
     } else {
         setBrush(Qt::red);
-        QPolygonF triangle;
-        triangle << QPointF(100, -15 + posi * 20) << QPointF(100, posi * 20) << QPoint(115, -7 + posi * 20);
-        setPolygon(triangle);
     }
 
+    setRect( qgraphicsitem_cast< DiagramModuleItem* >(parentItem())->getWidth() - 8 , 15 + posi*20, 15, 15);
 }
 
 void ModuleOut::removeArrow(Arrow * arrow)
@@ -68,8 +64,6 @@ void ModuleOut::addArrow(Arrow * arrow)
 
 QPointF ModuleOut::pos() const
 {
-    QPoint q(100, -15 + 20 * posi);
-    QPointF p = parentItem()->pos();
-    p += q;
-    return p;
+    QPoint q(qgraphicsitem_cast< DiagramModuleItem* >(parentItem())->getWidth() , 22 + 20 * posi);
+    return parentItem()->pos() + q;
 }

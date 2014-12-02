@@ -78,7 +78,7 @@ void MainWindow::createModulesList()
     QVector <QString> t;
     t.append("OUT_1");
     t.append("OUT_2");
-    modulesListModel->append(Module("Module 1", QSize(100, 50), s, t));
+    modulesListModel->append(Module("Module 1 is very, very, very long and it still looks nice", QSize(100, 50), s, t));
     modulesListModel->append(Module("Module 2", QSize(80, 80), s, t));
     modulesListModel->append(Module("Module 3", QSize(120, 120), s, t));
     modulesView = new QListView();

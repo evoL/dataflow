@@ -6,7 +6,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsSceneContextMenuEvent>
 
-ModuleIn::ModuleIn(QGraphicsItem * parent) : QGraphicsPolygonItem(parent)
+ModuleIn::ModuleIn(QGraphicsItem * parent) : QGraphicsEllipseItem(parent)
 {
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
@@ -15,37 +15,26 @@ void ModuleIn::DrawIn(int i)
 {
     posi = i;
     setBrush(Qt::red);
-    QPolygonF triangle;
-    triangle << QPointF(-15, -15 + posi * 20) << QPointF(-15, posi * 20) << QPoint(0, -7 + posi * 20);
-    setPolygon(triangle);
+    setRect(-7, 15 + posi*20, 15, 15);
 }
 
 void ModuleIn::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
-    QStyleOptionGraphicsItem * style = const_cast<QStyleOptionGraphicsItem *>(option);
+    //QStyleOptionGraphicsItem * style = const_cast<QStyleOptionGraphicsItem *>(option);
 
     bool is_selected = option->state & QStyle::State_Selected;
     highlight(painter, is_selected);
-    QGraphicsPolygonItem::paint(painter, option, widget);
+    QGraphicsEllipseItem::paint(painter, option, widget);
 }
 
 void ModuleIn::highlight(QPainter * painter, bool is_selected)
 {
     if (is_selected) {
         setBrush(Qt::green);
-        QPolygonF triangle;
-        triangle << QPointF(-15, -15 + posi * 20) << QPointF(-15, posi * 20) << QPoint(0, -7 + posi * 20);
-        setPolygon(triangle);
-
-
     } else {
         setBrush(Qt::red);
-        QPolygonF triangle;
-        triangle << QPointF(-15, -15 + posi * 20) << QPointF(-15, posi * 20) << QPoint(0, -7 + posi * 20);
-        setPolygon(triangle);
-
     }
-
+    setRect(-7, 15 + posi*20, 15, 15);
 }
 
 void ModuleIn::removeArrow(Arrow * arrow)
@@ -71,8 +60,6 @@ void ModuleIn::addArrow(Arrow * arrow)
 
 QPointF ModuleIn::pos() const
 {
-    QPoint q(-15, -15 + 20 * posi);
-    QPointF p = parentItem()->pos();
-    p += q;
-    return p;
+    QPoint q(0, 22 + 20 * posi); // y = 15+7+20*posi
+    return parentItem()->pos() + q;
 }

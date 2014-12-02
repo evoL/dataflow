@@ -29,14 +29,20 @@ public:
     enum { Type = UserType + 30 };
     DiagramModuleItem() {}
     DiagramModuleItem(const Module * module, QMenu * contextMenu, QGraphicsItem * parent = 0);
+    qreal getHeight() { return height; }
+    qreal getWidth() { return width; }
     void addArrow(Arrow * arrow);
     void removeArrow(Arrow * arrow);
     void removeArrows();
     int type() const { return Type;}
+
 protected:
     void contextMenuEvent(QGraphicsSceneContextMenuEvent * event);
     QVariant itemChange(GraphicsItemChange change, const QVariant & value);
+
 private:
+    qreal height;
+    qreal width;
     QVector <ModuleIn *> In;
     QVector <ModuleOut *> Out;
     QMenu * myContextMenu;
