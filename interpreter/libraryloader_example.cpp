@@ -81,7 +81,7 @@ int main()
         inputs.clear();
         outputs.clear();
 
-    } catch (LibraryLoadError &error) {
+    } catch (LibraryLoadError & error) {
         std::cerr << error.what() << std::endl;
     }
 

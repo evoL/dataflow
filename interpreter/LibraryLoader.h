@@ -9,7 +9,7 @@
 class LibraryLoadError : public std::runtime_error
 {
 public:
-    LibraryLoadError(const std::string& what): std::runtime_error(what) {}
+    LibraryLoadError(const std::string & what): std::runtime_error(what) {}
 };
 
 class LibraryLoader

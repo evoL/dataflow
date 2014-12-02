@@ -23,7 +23,7 @@ typedef unsigned int (DATAFLOW_CALLING_CONVENTION * type_size_fn)();
 class LibraryError : public std::runtime_error
 {
 public:
-    LibraryError(const std::string& what): std::runtime_error(what) {}
+    LibraryError(const std::string & what): std::runtime_error(what) {}
 };
 
 class Library

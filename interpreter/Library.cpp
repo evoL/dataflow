@@ -1,6 +1,7 @@
 #include "Library.h"
 
-Library::~Library() {
+Library::~Library()
+{
     dataflow::library_free(dllId);
 }
 

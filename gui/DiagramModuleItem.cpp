@@ -63,6 +63,7 @@ void DiagramModuleItem::removeArrow(Arrow * arrow)
 void DiagramModuleItem::removeArrows()
 {
     foreach (ModuleIn * in, In) in->removeArrows();
+
     foreach (ModuleOut * out, Out) out->removeArrows();
 }
 void DiagramModuleItem::addArrow(Arrow * arrow)

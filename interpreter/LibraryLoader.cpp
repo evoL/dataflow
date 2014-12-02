@@ -1,6 +1,7 @@
 #include "LibraryLoader.h"
 
-Library LibraryLoader::load(const std::string moduleName) {
+Library LibraryLoader::load(const std::string moduleName)
+{
     DATAFLOW_LIBRARY dllId = dataflow::library_load(moduleName);
 
     if (!dllId) {

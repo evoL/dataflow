@@ -39,7 +39,7 @@ struct Block {
 
     // methods
     virtual BlockType blockType() const = 0;
-    
+
     // fields
     int id;
     std::string module;
@@ -54,7 +54,7 @@ struct Constructor : Block {
 
     // methods
     virtual BlockType blockType() const { return BlockTypeConstructor; }
-    
+
     // fields
     std::string type;
     const char * data;
@@ -67,7 +67,7 @@ struct Operation : Block {
 
     // methods
     virtual BlockType blockType() const { return BlockTypeOperation; }
-    
+
     // fields
     std::list<InputTransition> inputs;
     std::string name;
@@ -76,7 +76,7 @@ struct Operation : Block {
 class ProjectModel
 {
     friend class XMLParser;
-    
+
 public:
     // getters
     const std::string & getName() { return name; }
@@ -84,7 +84,7 @@ public:
     const std::list<int> & getEntryPoints() { return entryPoints; }
     const Block & getBlock(int id) { return *blocks[id]; }
 
-//private:
+    //private:
 public:
     std::string name;
     std::list<std::string> imports;
