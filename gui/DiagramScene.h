@@ -1,11 +1,12 @@
 #ifndef DIAGRAMSCENE_H
 #define DIAGRAMSCENE_H
 #include "DiagramModuleItem.h"
-#include "modulein.h"
-#include "moduleout.h"
+#include "ModuleIn.h"
+#include "ModuleOut.h"
 #include "ModulesListModel.h"
 #include <QGraphicsScene>
 #include <QListView>
+
 QT_BEGIN_NAMESPACE
 class QGraphicsSceneMouseEvent;
 class QMenu;
@@ -14,6 +15,7 @@ class QGraphicsLineItem;
 class QColor;
 //class QListView;
 QT_END_NAMESPACE
+
 class DiagramScene : public QGraphicsScene
 {
     Q_OBJECT

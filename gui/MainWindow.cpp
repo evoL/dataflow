@@ -5,6 +5,7 @@
 #include <QtWidgets>
 #include <iostream>
 #include <QVector>
+
 MainWindow::MainWindow()
 {
     createActions();

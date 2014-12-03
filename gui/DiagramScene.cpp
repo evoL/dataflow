@@ -1,7 +1,7 @@
 #include "DiagramScene.h"
 #include "Arrow.h"
-#include "modulein.h"
-#include "moduleout.h"
+#include "ModuleIn.h"
+#include "ModuleOut.h"
 #include <QTextCursor>
 #include <QGraphicsSceneMouseEvent>
 #include <QColor>

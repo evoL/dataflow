@@ -2,9 +2,9 @@
 #include <cmath>
 #include <QPen>
 #include <QPainter>
-#include "modulein.h"
-#include "moduleout.h"
-#include<iostream>
+#include "ModuleIn.h"
+#include "ModuleOut.h"
+#include <iostream>
 
 using namespace std;
 

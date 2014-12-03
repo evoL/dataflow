@@ -1,4 +1,4 @@
-#include "moduleout.h"
+#include "ModuleOut.h"
 #include "Arrow.h"
 #include <QPolygonF>
 #include <QColor>

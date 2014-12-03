@@ -1,4 +1,4 @@
-#include "modulein.h"
+#include "ModuleIn.h"
 #include "Arrow.h"
 #include <QPolygonF>
 #include <QColor>

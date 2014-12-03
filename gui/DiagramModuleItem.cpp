@@ -4,9 +4,9 @@
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 #include <QPainter>
-#include "moduledescription.h"
-#include "modulein.h"
-#include "moduleout.h"
+#include "ModuleDescription.h"
+#include "ModuleIn.h"
+#include "ModuleOut.h"
 #include <QPolygonF>
 #include <QColor>
 
