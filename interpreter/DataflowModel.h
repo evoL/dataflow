@@ -82,8 +82,7 @@ public:
     const std::list<int> & getEntryPoints() { return entryPoints; }
     const Block & getBlock(int id) { return *blocks[id]; }
 
-    //private:
-public:
+private:
     std::string name;
     std::list<std::string> imports;
     std::list<int> entryPoints;
