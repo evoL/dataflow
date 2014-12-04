@@ -8,7 +8,8 @@ class XMLParser
 {
 public:
     ProjectModel * loadModelFromFile(std::string filePath);
-
+    std::string getLastError();
+    
 private:
     std::string lastError;
 

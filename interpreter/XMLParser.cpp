@@ -159,3 +159,8 @@ void XMLParser::linkInputsWithOutputBlocks(ProjectModel * model)
         }
     }
 }
+
+std::string XMLParser::getLastError()
+{
+    return lastError;
+}
