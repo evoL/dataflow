@@ -6,6 +6,8 @@
 #include <memory>
 #include <string>
 
+#include "Library.h"
+
 struct Block;
 
 typedef std::unordered_map<int, std::shared_ptr<Block>> BlocksMap;
@@ -78,13 +80,13 @@ class ProjectModel
 public:
     // getters
     const std::string & getName() { return name; }
-    const std::list<std::string> & getImports() { return imports; }
+    const std::list<Library> & getLibraries() { return libraries; }
     const std::list<int> & getEntryPoints() { return entryPoints; }
     const Block & getBlock(int id) { return *blocks[id]; }
 
 private:
     std::string name;
-    std::list<std::string> imports;
+    std::list<Library> libraries;
     std::list<int> entryPoints;
     BlocksMap blocks;
 };

@@ -21,6 +21,12 @@ include_directories(${LIBXML2_INCLUDE_DIR})
 
 add_executable(xmlparser_example
     DataflowModel.h
+    library_loading.h
+    library_loading.cpp
+    Library.h
+    Library.cpp
+    LibraryLoader.h
+    LibraryLoader.cpp
     XMLParser.h
     XMLParser.cpp
     xmlparser_example.cpp

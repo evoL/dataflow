@@ -1,8 +1,9 @@
 #ifndef XML_PARSER
 #define XML_PARSER
 
-#include "DataflowModel.h"
 #include <libxml/parser.h>
+#include "DataflowModel.h"
+#include "LibraryLoader.h"
 
 class XMLParser
 {
@@ -12,7 +13,8 @@ public:
     
 private:
     std::string lastError;
-
+    LibraryLoader libraryLoader;
+    
     void parseXMLTree(xmlNodePtr node, ProjectModel * model);
     void parseImportsNode(xmlNodePtr node, ProjectModel * model);
     void parseSchemeNode(xmlNodePtr node, ProjectModel * model);

@@ -70,7 +70,7 @@ void XMLParser::parseSchemeNode(xmlNodePtr node, ProjectModel * model)
 
 void XMLParser::parseImportNode(xmlNodePtr node, ProjectModel * model)
 {
-    model->imports.push_back(getStringFromProperty(node, "module"));
+    model->libraries.push_back(libraryLoader.load(getStringFromProperty(node, "module")));
 }
 
 void XMLParser::parseContructorNode(xmlNodePtr node, ProjectModel * model)
