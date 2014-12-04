@@ -6,8 +6,6 @@
 #include <memory>
 #include <string>
 
-#include "XMLParser.h"
-
 struct Block;
 
 typedef std::unordered_map<int, std::shared_ptr<Block>> BlocksMap;
