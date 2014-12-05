@@ -7,11 +7,14 @@ ModuleDescription::ModuleDescription(QString s, QGraphicsItem * parent) : QGraph
 {
     text_description = s;
     setPlainText(text_description);
+    blockHeight = this->boundingRect().height();
+    setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
 ModuleDescription::ModuleDescription(QGraphicsItem * parent) : QGraphicsTextItem(parent)
 {
     text_description = "";
     setPlainText(text_description);
+    blockHeight = this->boundingRect().height();
 }
 
 void ModuleDescription::SetDescription(const QString desc)
@@ -21,18 +24,22 @@ void ModuleDescription::SetDescription(const QString desc)
 
 void ModuleDescription::setAlignCenter()
 {
-    setTextWidth(qgraphicsitem_cast< DiagramModuleItem* >(parentItem())->getWidth() - 30);
+    setTextWidth(qgraphicsitem_cast< DiagramModuleItem* >(parentItem())->getWidth() - 1);
+    blockHeight = this->boundingRect().height();
 
+    this->setHtml("<body style='background-color:#4C6BB2;'><center>" + text_description + "</center></body>");
+
+    //748DC8
     //Setting align
-    QTextBlockFormat format;
+    /*QTextBlockFormat format;
     format.setAlignment(Qt::AlignCenter);
     QTextCursor cursor = this->textCursor();
     cursor.select(QTextCursor::Document);
     cursor.mergeBlockFormat(format);
     cursor.clearSelection();
-    this->setTextCursor(cursor);
+    this->setTextCursor(cursor);*/
 
-    setPos(15, 0);
+    setPos(1, 1);
 }
 
 bool ModuleDescription::Is_text_long()

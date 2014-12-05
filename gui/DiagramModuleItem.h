@@ -25,7 +25,7 @@ class DiagramModuleItem : public QGraphicsRectItem
 {
 public:
 
-    //ModuleDescription description;
+    ModuleDescription * moduleName;
     enum { Type = UserType + 30 };
     DiagramModuleItem() {}
     DiagramModuleItem(const Module * module, QMenu * contextMenu, QGraphicsItem * parent = 0);

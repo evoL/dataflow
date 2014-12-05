@@ -11,10 +11,12 @@ public:
     ModuleDescription(QString s, QGraphicsItem * parent = 0);
     void SetDescription(const QString desc);
     void setAlignCenter();
+    qreal getBlockHeight() { return blockHeight; }
     qreal Scale();
     bool Is_text_long();
 private:
     QString text_description;
+    qreal blockHeight;
 };
 
 #endif // MODULEDESCRIPTION_H

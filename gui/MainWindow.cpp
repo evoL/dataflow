@@ -12,7 +12,7 @@ MainWindow::MainWindow()
     createModulesList();
     createMenus();
     scene = new DiagramScene(modulesListModel, modulesView, itemMenu, this);
-    scene->setSceneRect(QRectF(0, 0, 5000, 5000));
+    scene->setSceneRect(QRectF(0, 0, 3000, 3000));
     connect(scene, SIGNAL(itemInserted()), this, SLOT(itemInserted()));
     createToolbars();
     QHBoxLayout * layout = new QHBoxLayout;

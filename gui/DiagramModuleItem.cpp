@@ -11,11 +11,26 @@
 #include <QColor>
 
 
-
 DiagramModuleItem::DiagramModuleItem(const Module * module, QMenu * contextMenu, QGraphicsItem * parent) :
     QGraphicsRectItem(parent), modulePtr(module)
 {
+    myContextMenu = contextMenu;
 
+    width = 100;
+    height = 100;
+
+    moduleName = new ModuleDescription(modulePtr->name, this);
+    if (moduleName->Is_text_long()) {
+        width = 150;
+        moduleName->setTextWidth(150);
+    }
+
+    height = height + (moduleName->Scale());
+
+    setRect(0, 0, width, height);
+    moduleName->setAlignCenter();
+
+    // IO circles
     for (int i = 0; i < modulePtr->In.size(); i++) {
         ModuleIn * first_entry = new ModuleIn(this);
         In.append(first_entry);
@@ -27,23 +42,6 @@ DiagramModuleItem::DiagramModuleItem(const Module * module, QMenu * contextMenu,
         Out.append(first_exit);
         first_exit->DrawOut(i);
     }
-
-    myContextMenu = contextMenu;
-
-    width = 100;
-    height = 100;
-
-    ModuleDescription * text = new ModuleDescription(modulePtr->name, this);
-    if (text->Is_text_long()) {
-        width = 150;
-        text->setTextWidth(150);
-    }
-
-    height = height + (text->Scale());
-
-    setRect(0, 0, width, height);
-    text->setAlignCenter();
-
 
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);

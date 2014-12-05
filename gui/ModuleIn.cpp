@@ -15,7 +15,8 @@ void ModuleIn::DrawIn(int i)
 {
     posi = i;
     setBrush(Qt::red);
-    setRect(-7, 15 + posi*20, 15, 15);
+    qreal moduleNameRectHeight = qgraphicsitem_cast< DiagramModuleItem* >(parentItem())->moduleName->getBlockHeight();
+    setRect(-7, moduleNameRectHeight + 5 + posi*20, 15, 15);
 }
 
 void ModuleIn::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
@@ -34,7 +35,8 @@ void ModuleIn::highlight(QPainter * painter, bool is_selected)
     } else {
         setBrush(Qt::red);
     }
-    setRect(-7, 15 + posi*20, 15, 15);
+    qreal moduleNameRectHeight = qgraphicsitem_cast< DiagramModuleItem* >(parentItem())->moduleName->getBlockHeight();
+    setRect(-7, moduleNameRectHeight + 5 + posi*20, 15, 15);
 }
 
 void ModuleIn::removeArrow(Arrow * arrow)
@@ -60,6 +62,7 @@ void ModuleIn::addArrow(Arrow * arrow)
 
 QPointF ModuleIn::pos() const
 {
-    QPoint q(0, 22 + 20 * posi); // y = 15+7+20*posi
+    qreal moduleNameRectHeight = qgraphicsitem_cast< DiagramModuleItem* >(parentItem())->moduleName->getBlockHeight();
+    QPoint q(0, moduleNameRectHeight + 12 + 20 * posi); // y = 15+7+20*posi
     return parentItem()->pos() + q;
 }
