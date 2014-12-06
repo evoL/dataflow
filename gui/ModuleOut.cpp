@@ -10,7 +10,7 @@
 
 ModuleOut::ModuleOut(QGraphicsItem * parent) : QGraphicsEllipseItem(parent)
 {
-    setFlag(QGraphicsItem::ItemIsSelectable, true);
+    //setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
 
 void ModuleOut::DrawOut(int i, QString text)

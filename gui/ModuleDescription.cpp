@@ -8,7 +8,7 @@ ModuleDescription::ModuleDescription(QString s, QGraphicsItem * parent) : QGraph
     text_description = s;
     setPlainText(text_description);
     blockHeight = this->boundingRect().height();
-    setFlag(QGraphicsItem::ItemIsSelectable, true);
+    //setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
 ModuleDescription::ModuleDescription(QGraphicsItem * parent) : QGraphicsTextItem(parent)
 {
