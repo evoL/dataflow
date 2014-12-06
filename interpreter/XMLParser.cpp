@@ -30,6 +30,8 @@ void XMLParser::parseXMLTree(xmlNodePtr node, ProjectModel * model)
     while (node != NULL) {
         if (xmlStrcmp(node->name, (const xmlChar *)"imports") == 0) {
             parseImportsNode(node, model);
+        } else if (xmlStrcmp(node->name, (const xmlChar *)"entry-points") == 0) {
+            parseEntryPointsNode(node, model);
         } else if (xmlStrcmp(node->name, (const xmlChar *)"schema") == 0) {
             parseSchemeNode(node, model);
         }
@@ -53,6 +55,19 @@ void XMLParser::parseImportsNode(xmlNodePtr node, ProjectModel * model)
     }
 }
 
+void XMLParser::parseEntryPointsNode(xmlNodePtr node, ProjectModel *model) {
+    xmlNodePtr childNode = node->xmlChildrenNode;
+
+    while (childNode != NULL) {
+        if (xmlStrcmp(childNode->name, (const xmlChar *)"entry-point") == 0) {
+            parseEntryPointNode(childNode, model);
+        }
+
+        childNode = childNode->next;
+    }
+}
+
+
 void XMLParser::parseSchemeNode(xmlNodePtr node, ProjectModel * model)
 {
     xmlNodePtr childNode = node->xmlChildrenNode;
@@ -72,6 +87,11 @@ void XMLParser::parseImportNode(xmlNodePtr node, ProjectModel * model)
 {
     model->libraries.push_back(libraryLoader.load(getStringFromProperty(node, "module")));
 }
+
+void XMLParser::parseEntryPointNode(xmlNodePtr node, ProjectModel *model) {
+    model->entryPoints.push_back(getIntFromProperty(node, "id"));
+}
+
 
 void XMLParser::parseContructorNode(xmlNodePtr node, ProjectModel * model)
 {
@@ -99,7 +119,6 @@ void XMLParser::parseOperationNode(xmlNodePtr node, ProjectModel * model)
 
 void XMLParser::parseOutputs(xmlNodePtr node, Block & block)
 {
-    std::list<OutputTransition> outputs;
     xmlNodePtr childNode = node->xmlChildrenNode;
 
     while (childNode != NULL) {

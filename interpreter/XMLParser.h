@@ -17,8 +17,10 @@ private:
     
     void parseXMLTree(xmlNodePtr node, ProjectModel * model);
     void parseImportsNode(xmlNodePtr node, ProjectModel * model);
+    void parseEntryPointsNode(xmlNodePtr node, ProjectModel *model);
     void parseSchemeNode(xmlNodePtr node, ProjectModel * model);
     void parseImportNode(xmlNodePtr node, ProjectModel * model);
+    void parseEntryPointNode(xmlNodePtr node, ProjectModel *model);
     void parseContructorNode(xmlNodePtr node, ProjectModel * model);
     void parseOperationNode(xmlNodePtr node, ProjectModel * model);
     void parseOutputs(xmlNodePtr node, Block & block);
