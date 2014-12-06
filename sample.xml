@@ -1,8 +1,10 @@
 <dataflow projectname="Sum a b">
     <imports>
-        <import module="Math" />
-        <import module="IO" />
+        <import module="basicmath" />
     </imports>
+    <entry-points>
+        <entry-point id="5"/>
+    </entry-points>
     <schema>
         <!-- IDs are unique across the project, eg. constructors cannot have
              the same ID as an output -->
