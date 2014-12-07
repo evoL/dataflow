@@ -13,7 +13,7 @@ public:
 
     enum { Type = UserType + 1 };
     ModuleIn(QGraphicsItem * parent = 0);
-    void DrawIn(int i);
+    void DrawIn(int i, QString text);
     void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
     void highlight(QPainter * painter, bool is_selected);
     int type() const { return Type;}
