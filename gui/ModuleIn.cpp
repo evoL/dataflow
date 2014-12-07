@@ -5,18 +5,24 @@
 #include <QPainter>
 #include <QGraphicsScene>
 #include <QGraphicsSceneContextMenuEvent>
+#include <QGraphicsTextItem>
 
 ModuleIn::ModuleIn(QGraphicsItem * parent) : QGraphicsEllipseItem(parent)
 {
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
 
-void ModuleIn::DrawIn(int i)
+void ModuleIn::DrawIn(int i, QString text)
 {
     posi = i;
     setBrush(Qt::red);
     qreal moduleNameRectHeight = qgraphicsitem_cast< DiagramModuleItem* >(parentItem())->moduleName->getBlockHeight();
     setRect(-7, moduleNameRectHeight + 5 + posi*20, 15, 15);
+
+    QGraphicsTextItem *inDesc=new QGraphicsTextItem(this);
+    inDesc->setPlainText(text.mid(0,10));
+    inDesc->setX(7);
+    inDesc->setY(3+posi*20+moduleNameRectHeight);
 }
 
 void ModuleIn::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
