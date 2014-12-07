@@ -71,6 +71,24 @@ void MainWindow::createModulesList()
     // Adding some "operations" to the model.
     // Need to be removed when modules importing is implemented.
 
+    QVector <QString> multInput;
+    multInput.append("a");
+    multInput.append("b");
+
+    QVector <QString> addInput;
+    addInput.append("a");
+    addInput.append("b");
+    addInput.append("c");
+
+    QVector <QString> multOutput;
+    multOutput.append("a*b");
+
+    QVector <QString> addOutput;
+    addOutput.append("a+b+c");
+
+    QVector <QString> inOut;
+    inOut.append("Number");
+
     QVector <QString> s;
     s.append("IN_1");
     s.append("IN_2");
@@ -79,9 +97,16 @@ void MainWindow::createModulesList()
     QVector <QString> t;
     t.append("OUT_1");
     t.append("OUT_2");
-    modulesListModel->append(Module("Module 1 is very, very, very long and it still looks nice", QSize(100, 50), s, t));
-    modulesListModel->append(Module("Module 2", QSize(80, 80), s, t));
-    modulesListModel->append(Module("Module 3", QSize(120, 120), s, t));
+
+    QVector <QString> empty;
+    modulesListModel->append(Module("Give me a number", QSize(80, 80), empty, inOut,-1));
+    modulesListModel->append(Module("Result is:", QSize(80, 80), inOut,empty,1));
+    modulesListModel->append(Module("Multiply 2 numbers", QSize(80, 80), multInput, multOutput));
+    modulesListModel->append(Module("Add 3 numbers", QSize(80, 80), addInput, addOutput));
+
+    //modulesListModel->append(Module("Module 1 is very, very, very long and it still looks nice", QSize(100, 50), s, t));
+    //modulesListModel->append(Module("Module 2", QSize(80, 80), s, t,-1));
+    //modulesListModel->append(Module("Module 3", QSize(120, 120), s, t));
     modulesView = new QListView();
     modulesView->setModel(modulesListModel);
     modulesView->setEditTriggers(QAbstractItemView::NoEditTriggers);
