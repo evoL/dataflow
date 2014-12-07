@@ -11,7 +11,7 @@ Module::Module()
 {
 }
 
-int Module::getType()
+int Module::getType() const
 {
 return blockType;            
 }
