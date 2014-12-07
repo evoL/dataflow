@@ -63,7 +63,7 @@ void Arrow::paint(QPainter * painter, const QStyleOptionGraphicsItem *, QWidget 
     arrowHead << line().p1() << arrowP1 << arrowP2;
     painter->drawLine(line());
 
-    //painter->drawPolygon(arrowHead);
+    painter->drawPolygon(arrowHead);
     if (isSelected()) {
         painter->setPen(QPen(myColor, 1, Qt::DashLine));
         QLineF myLine = line();
