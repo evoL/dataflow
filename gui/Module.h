@@ -14,7 +14,7 @@ public:
     QVector<QString> In;
     QVector<QString> Out;
     QString name;
-    int getType();
+    int getType() const;
 private:
     QSize blockSize;
     int blockType; //-1=input block, 1=output block, 0=operation block
