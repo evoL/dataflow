@@ -11,28 +11,35 @@
 struct Block;
 
 typedef std::unordered_map<int, std::shared_ptr<Block>> BlocksMap;
+typedef std::unordered_map<std::string, Library> LibraryMap;
 
-typedef enum {
+typedef enum
+{
     BlockTypeOperation,
     BlockTypeConstructor
 } BlockType;
 
-struct Position {
+struct Position
+{
     float x;
     float y;
 };
 
-struct InputTransition {
-    int index;
+struct InputTransition
+{
     int outputId;
     std::shared_ptr<Block> outputBlock;
 };
 
-struct OutputTransition {
+struct OutputTransition
+{
     int id;
 };
 
-struct Block {
+typedef std::unordered_map<int, InputTransition> InputTransitionMap;
+
+struct Block
+{
     // constructor
     Block(int id, std::string module = "", Position position = Position {0.0, 0.0}, const std::list<OutputTransition> & outputs = std::list<OutputTransition>())
         : id(id), module(module), position(position), outputs(outputs) {}
@@ -47,10 +54,13 @@ struct Block {
     std::list<OutputTransition> outputs;
 };
 
-struct Constructor : Block {
+struct Constructor : Block
+{
     // constructor
     Constructor(int id, std::string module = "", std::string type = "", Position position = Position {0.0, 0.0}, const std::list<OutputTransition> & outputs = std::list<OutputTransition>(), const char * data = "")
-        : Block(id, module, position, outputs), type(type), data(data) {}
+    :Block(id, module, position, outputs)
+	,type(type)
+	,data(data) {}
 
     // methods
     virtual BlockType blockType() const { return BlockTypeConstructor; }
@@ -60,33 +70,37 @@ struct Constructor : Block {
     const char * data;
 };
 
-struct Operation : Block {
+struct Operation : Block
+{
     // constructor
-    Operation(int id, std::string module = "",  std::string name = "", Position position = Position {0.0, 0.0}, const std::list<OutputTransition> & outputs = std::list<OutputTransition>(), const std::list<InputTransition> inputs = std::list<InputTransition>())
-        : Block(id, module, position, outputs), inputs(inputs), name(name) {}
+    Operation(int id, std::string module = "",  std::string name = "", Position position = Position {0.0, 0.0}, const std::list<OutputTransition> & outputs = std::list<OutputTransition>(), const InputTransitionMap inputs = InputTransitionMap())
+    :Block(id, module, position, outputs)
+	,inputs(inputs)
+	,name(name) {}
 
     // methods
     virtual BlockType blockType() const { return BlockTypeOperation; }
 
     // fields
-    std::list<InputTransition> inputs;
+    InputTransitionMap inputs;
     std::string name;
 };
 
 class ProjectModel
 {
     friend class XMLParser;
+	friend class ModelManipulator;
 
 public:
     // getters
     const std::string & getName() { return name; }
-    const std::list<Library> & getLibraries() { return libraries; }
+    const LibraryMap & getLibraries() { return libraries; }
     const std::list<int> & getEntryPoints() { return entryPoints; }
     const Block & getBlock(int id) { return *blocks[id]; }
 
 private:
     std::string name;
-    std::list<Library> libraries;
+    LibraryMap libraries;
     std::list<int> entryPoints;
     BlocksMap blocks;
 };

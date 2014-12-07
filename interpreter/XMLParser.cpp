@@ -4,17 +4,14 @@ ProjectModel * XMLParser::loadModelFromFile(std::string filePath)
 {
     xmlDocPtr document = xmlParseFile(filePath.c_str());
 
-    if (document == NULL) {
-        lastError = "Cannot parse document";
-        return nullptr;
-    }
+    if (document == NULL)
+        throw XMLParserError("Cannot parse document");
 
     xmlNodePtr node = xmlDocGetRootElement(document);
 
     if (node == NULL) {
-        lastError = "Document is empty";
         xmlFreeDoc(document);
-        return nullptr;
+		throw XMLParserError("Document is empty");
     }
 
     ProjectModel * model = new ProjectModel();
@@ -85,10 +82,21 @@ void XMLParser::parseSchemeNode(xmlNodePtr node, ProjectModel * model)
 
 void XMLParser::parseImportNode(xmlNodePtr node, ProjectModel * model)
 {
-    model->libraries.push_back(libraryLoader.load(getStringFromProperty(node, "module")));
+    std::string libName = getStringFromProperty(node, "module");
+	if (model->libraries.find(libName) != model->libraries.end())
+		throw XMLParserError("Duplicated import library");
+
+	try {
+		model->libraries[libName] = libraryLoader.load(libName);
+	}
+	catch (LibraryLoadError& error)
+	{
+		throw XMLParserError("Error while importing library: " + error.what)
+	}
 }
 
-void XMLParser::parseEntryPointNode(xmlNodePtr node, ProjectModel *model) {
+void XMLParser::parseEntryPointNode(xmlNodePtr node, ProjectModel *model)
+{
     model->entryPoints.push_back(getIntFromProperty(node, "id"));
 }
 
@@ -138,7 +146,10 @@ void XMLParser::parseInputs(xmlNodePtr node, Operation & operation)
         if (xmlStrcmp(childNode->name, (const xmlChar *)"input") == 0) {
             int index = getIntFromProperty(childNode, "index");
             int outputId = getIntFromProperty(childNode, "output_id");
-            operation.inputs.push_back(InputTransition { index, outputId });
+            
+			if (operation.inputs.find(index) != operation.inputs.end())
+				throw ("Duplicated input index for a block");
+			operation.inputs[index] = InputTransition { outputId };
         }
 
         childNode = childNode->next;
@@ -173,13 +184,8 @@ void XMLParser::linkInputsWithOutputBlocks(ProjectModel * model)
             Operation & op = dynamic_cast<Operation &>(*it->second);
 
             for (auto it2 = op.inputs.begin(); it2 != op.inputs.end(); ++it2) {
-                it2->outputBlock = outputIdToBlock[it2->outputId];
+                it2->second.outputBlock = outputIdToBlock[it2->second.outputId];
             }
         }
     }
-}
-
-std::string XMLParser::getLastError()
-{
-    return lastError;
 }

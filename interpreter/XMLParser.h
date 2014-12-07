@@ -2,17 +2,22 @@
 #define XML_PARSER
 
 #include <libxml/parser.h>
+#include <stdexcept>
 #include "DataflowModel.h"
 #include "LibraryLoader.h"
+
+class XMLParserError : public std::runtime_error
+{
+public:
+    XMLParserError(const std::string & what): std::runtime_error(what) {}
+};
 
 class XMLParser
 {
 public:
     ProjectModel * loadModelFromFile(std::string filePath);
-    std::string getLastError();
     
 private:
-    std::string lastError;
     LibraryLoader libraryLoader;
     
     void parseXMLTree(xmlNodePtr node, ProjectModel * model);
