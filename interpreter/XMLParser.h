@@ -18,8 +18,6 @@ public:
     ProjectModel * loadModelFromFile(std::string filePath);
     
 private:
-    LibraryLoader libraryLoader;
-    
     void parseXMLTree(xmlNodePtr node, ProjectModel * model);
     void parseImportsNode(xmlNodePtr node, ProjectModel * model);
     void parseEntryPointsNode(xmlNodePtr node, ProjectModel *model);

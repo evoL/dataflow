@@ -1,4 +1,5 @@
 #include "ModelManipulator.h"
+#include "LibraryLoader.h"
 #include <set>
 
 ModelManipulator::ModelManipulator(ProjectModel& model)
@@ -12,6 +13,198 @@ ModelManipulator::ModelManipulator(ProjectModel& model)
 	reassignIds();
 }
 
+
+void ModelManipulator::setProjectName(std::string& name)
+{
+	model.name = name;
+}
+	
+void ModelManipulator::addLibrary(std::string& name)
+{
+	if (model.libraries.find(name) != model.libraries.end())
+		return;
+
+	try {
+		model.libraries[name] = LibraryLoader::load(name);
+	}
+	catch (LibraryLoadError& error)
+	{
+		throw ModelManipulatorError(std::string("Error while importing library: ").append(error.what()));
+	}
+}
+	
+void ModelManipulator::deleteLibrary(std::string& name)
+{
+	for (auto& it : model.blocks) {
+		if (it.second->module == name)
+			deleteBlock(it.first);
+	}
+	model.libraries.erase(name);
+}
+	
+void ModelManipulator::setEntryPoint(int blockId)
+{
+	if (model.blocks.find(blockId) == model.blocks.end())
+		return;
+
+	for (auto& it : model.entryPoints) {
+		if (it == blockId)
+			return;
+	}
+	model.entryPoints.push_back(blockId);
+}
+
+void ModelManipulator::unsetEntryPoint(int blockId)
+{
+	for (std::vector<int>::iterator it=model.entryPoints.begin(); it<model.entryPoints.end(); ++it) {
+		if (*it == blockId) {
+			model.entryPoints.erase(it);
+			return;
+		}
+	}
+}
+
+void ModelManipulator::addOperation(std::string& module, std::string& name, Position position)
+{
+	auto libFound = model.libraries.find(module);
+	if (libFound == model.libraries.end())
+		throw ModelManipulatorError("Module " + module + " not imported");
+	
+	auto outputsFound = libFound->second.getOutputs().find(name);
+	if (outputsFound == libFound->second.getOutputs().end())
+		throw ModelManipulatorError("Operation " + name + " not found in module " + module);
+	
+	maxBlockId++;
+	model.blocks[maxBlockId] = std::shared_ptr<Block>(new Operation(maxBlockId, module, name, position));
+	auto& outputs = model.blocks[maxBlockId]->outputs;
+	for (int i=0; i<(int)outputsFound->second.size(); ++i)
+		outputs.push_back(OutputTransition {++maxOutputId});
+}
+
+void ModelManipulator::addConstructor(std::string& module, std::string& type, Position position)
+{
+	auto libFound = model.libraries.find(module);
+	if (libFound == model.libraries.end())
+		throw ModelManipulatorError("Module " + module + " not imported");
+	
+	bool typeFound = false;
+	for (auto& it : libFound->second.getTypes()) {
+		if (it == type) {
+			typeFound = true;
+			break;
+		}
+	}
+	
+	if (!typeFound)
+		throw ModelManipulatorError("Type " + type + " not found in module " + module);
+	
+	maxBlockId++;
+	model.blocks[maxBlockId] = std::shared_ptr<Block>(new Constructor(maxBlockId, module, type, position));
+	model.blocks[maxBlockId]->outputs.push_back(OutputTransition {++maxOutputId});
+}
+
+void ModelManipulator::deleteBlock(int blockId)
+{
+	if (model.blocks.find(blockId) == model.blocks.end())
+		return;
+
+	auto& blockPtr = model.blocks[blockId];
+	
+	for (auto& it : model.blocks) {
+		if (it.second->blockType() != BlockTypeOperation)
+			continue;
+
+		Operation& op = dynamic_cast<Operation &>(*(it.second));
+		auto& inputs = op.inputs;
+
+		std::vector<int> toErase;
+		for (auto& it2 : inputs) {
+			if (it2.second.outputBlock == blockPtr)
+				toErase.push_back(it2.first);
+		}
+
+		for (auto it2 : toErase)
+			inputs.erase(it2);
+	}
+
+	model.blocks.erase(blockId);
+}
+
+void ModelManipulator::setConstructorData(int blockId, std::string& data)
+{
+	auto foundBlock = model.blocks.find(blockId);
+	if (foundBlock == model.blocks.end() || foundBlock->second->blockType() != BlockTypeConstructor)
+		throw ModelManipulatorError("Invalid constructor Id");
+	
+	Constructor& cons = dynamic_cast<Constructor &>(*(foundBlock->second));
+	cons.data = data;
+}
+
+void ModelManipulator::setBlockPosition(int blockId, Position position)
+{
+	auto foundBlock = model.blocks.find(blockId);
+	if (foundBlock == model.blocks.end())
+		throw ModelManipulatorError("Invalid block Id");
+
+	foundBlock->second->position = position;
+}
+
+void ModelManipulator::addConnection(int outputBlockId, int outputIndex, int inputBlockId, int inputIndex)
+{
+	auto inputBlockFound = model.blocks.find(inputBlockId);
+	if (inputBlockFound == model.blocks.end() || inputBlockFound->second->blockType() != BlockTypeOperation)
+		throw ("Invalid input block Id");
+
+	auto outputBlockFound = model.blocks.find(outputBlockId);
+	if (outputBlockFound == model.blocks.end())
+		throw ModelManipulatorError("Invalid output block Id");
+
+	Operation& inputBlock = dynamic_cast<Operation&>(*(inputBlockFound->second));
+	Block& outputBlock = dynamic_cast<Block&>(*(outputBlockFound->second));
+
+	if (inputBlock.inputs.find(inputIndex) != inputBlock.inputs.end())
+		throw ModelManipulatorError("Multiple connections to single input slot not allowed");
+
+	Library& inputLib = model.libraries[inputBlock.module];
+	Library& outputLib = model.libraries[outputBlock.module];
+
+	auto inputTypes = inputLib.getInputs().find(inputBlock.name);
+	if (inputIndex >= inputTypes->second.size() || inputIndex < 0)
+		throw ModelManipulatorError("Invalid input index");
+	const std::string& inputType = inputTypes->second[inputIndex];
+
+	if (outputBlock.blockType() == BlockTypeOperation) {
+		Operation& outputOperation = dynamic_cast<Operation&>(outputBlock);
+		auto outputTypes = outputLib.getOutputs().find(outputOperation.name);
+		if (outputIndex > outputTypes->second.size() || outputIndex < 0)
+			throw ModelManipulatorError("Invalid output index");
+		const std::string& outputType = outputTypes->second[outputIndex];
+		if (outputType != inputType)
+			throw ModelManipulatorError("Connection does not type itself");
+
+		inputBlock.inputs[inputIndex] = InputTransition { outputBlock.outputs[outputIndex].id, outputBlockFound->second };
+
+	} else {
+		Constructor& outputConstructor = dynamic_cast<Constructor&>(outputBlock);
+		if (outputIndex != 0)
+			throw ("Invalid output index");
+		std::string outputType = outputConstructor.module + "." + outputConstructor.type;
+		if (outputType != inputType)
+			throw ModelManipulatorError("Connection does not type itself");
+
+		inputBlock.inputs[inputIndex] = InputTransition { outputConstructor.outputs[0].id, outputBlockFound->second };
+	}
+}
+
+void ModelManipulator::deleteConnection(int blockId, int inputIndex)
+{
+	auto blockFound = model.blocks.find(blockId);
+	if (blockFound == model.blocks.end() || blockFound->second->blockType() != BlockTypeOperation)
+		return;
+
+	Operation& op = dynamic_cast<Operation&>(*(blockFound->second));
+	op.inputs.erase(inputIndex);
+}
 
 bool ModelManipulator::checkModelCorrectness()
 {	
@@ -57,6 +250,8 @@ bool ModelManipulator::checkModelCorrectness()
 				if (outputIds.find(it2.id) != outputIds.end())
 					return false;
 				outputIds.insert(it2.id);
+				if (it2.id > maxOutputId)
+					maxOutputId = it2.id;
 			}
 
 			auto inputs = lib.getInputs().find(op.name);
@@ -68,7 +263,7 @@ bool ModelManipulator::checkModelCorrectness()
 				return false;
 
 			for (auto& it2 : op.inputs) {
-				if (it2.first >= inputs->second.size())
+				if (it2.first >= (int)inputs->second.size())
 					return false;
 
 				// check if the input is connected to a block
@@ -92,7 +287,7 @@ bool ModelManipulator::checkModelCorrectness()
 
 				// and if it is the correct one
 				bool output_found = false;
-				for (int i=0; i<block.outputs.size(); i++) {
+				for (int i=0; i<(int)block.outputs.size(); i++) {
 					if (block.outputs[i].id == it2.first) {
 						// ... and if the types match
 						if (found_output_list->second[i] != input_type)
@@ -130,6 +325,8 @@ bool ModelManipulator::checkModelCorrectness()
 			if (outputIds.find(cons.outputs[0].id) != outputIds.end())
 					return false;
 			outputIds.insert(cons.outputs[0].id);
+			if (cons.outputs[0].id > maxOutputId)
+				maxOutputId = cons.outputs[0].id;
 					 
 			break;
 		}
@@ -140,12 +337,16 @@ bool ModelManipulator::checkModelCorrectness()
 		}
 	}
 
-	// entry points
+	// check entry points
+	for (auto& ep : entryPoints) {
+		if (blocks.find(ep) == blocks.end())
+			return false;
+	}
 	
 	return true;
 }
 
 void ModelManipulator::reassignIds()
 {
-
+	// to be implemented
 }

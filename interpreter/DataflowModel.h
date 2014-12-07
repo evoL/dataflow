@@ -67,7 +67,7 @@ struct Constructor : Block
 
     // fields
     std::string type;
-    const char * data;
+    std::string data;
 };
 
 struct Operation : Block

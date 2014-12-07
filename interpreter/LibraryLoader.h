@@ -15,11 +15,11 @@ public:
 class LibraryLoader
 {
 public:
-    Library load(const std::string moduleName);
+    static Library load(const std::string moduleName);
 
 private:
-    void fillType(Library & library, const char * typeName);
-    void fillOperation(Library & library, const char * operationName);
+    static void fillType(Library & library, const char * typeName);
+    static void fillOperation(Library & library, const char * operationName);
 };
 
 #endif

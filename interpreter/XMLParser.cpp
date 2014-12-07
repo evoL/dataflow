@@ -87,7 +87,7 @@ void XMLParser::parseImportNode(xmlNodePtr node, ProjectModel * model)
 		throw XMLParserError("Duplicated import library");
 
 	try {
-		model->libraries[libName] = libraryLoader.load(libName);
+		model->libraries[libName] = LibraryLoader::load(libName);
 	}
 	catch (LibraryLoadError& error)
 	{

@@ -3,10 +3,8 @@
 
 int main()
 {
-    LibraryLoader loader;
-
     try {
-        Library basicmath{loader.load("basicmath")};
+        Library basicmath{LibraryLoader::load("basicmath")};
 
         std::cout << "Module loaded: " << basicmath.getName() << std::endl;
         std::cout << "Types [size]:" << std::endl;
