@@ -34,7 +34,7 @@ DiagramModuleItem::DiagramModuleItem(const Module * module, QMenu * contextMenu,
     for (int i = 0; i < modulePtr->In.size(); i++) {
         ModuleIn * first_entry = new ModuleIn(this);
         In.append(first_entry);
-        first_entry->DrawIn(i);
+        first_entry->DrawIn(i,modulePtr->In[i]);
     }
 
     for (int i = 0; i < modulePtr->Out.size(); i++) {
