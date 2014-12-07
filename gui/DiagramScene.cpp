@@ -90,6 +90,7 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
         removeItem(line);
         delete line;
 
+            //from end to start
         if (startItems.count() > 0 && endItems.count() > 0 &&
             startItems.first()->type() == ModuleIn::Type &&
             endItems.first()->type() == ModuleOut::Type &&
@@ -98,7 +99,26 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
             ModuleOut * endItem = qgraphicsitem_cast<ModuleOut *>(endItems.first());
             Arrow * arrow = new Arrow(startItem, endItem);
             arrow->setColor(myLineColor);
+            startItem->removeArrows();
             startItem->addArrow(arrow);
+            endItem->addArrow(arrow);
+            arrow->setZValue(-1000.0);
+            addItem(arrow);
+            arrow->updatePosition();
+        }
+
+        //from start to end
+        if (startItems.count() > 0 && endItems.count() > 0 &&
+            startItems.first()->type() == ModuleOut::Type &&
+            endItems.first()->type() == ModuleIn::Type &&
+            startItems.first() != endItems.first()) {
+            ModuleIn * startItem = qgraphicsitem_cast<ModuleIn *>(endItems.first());
+            ModuleOut * endItem = qgraphicsitem_cast<ModuleOut *>(startItems.first());
+            Arrow * arrow = new Arrow(startItem, endItem);
+            arrow->setColor(myLineColor);
+            startItem->removeArrows();
+            startItem->addArrow(arrow);
+
             endItem->addArrow(arrow);
             arrow->setZValue(-1000.0);
             addItem(arrow);
@@ -109,3 +129,4 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
     line = 0;
     QGraphicsScene::mouseReleaseEvent(mouseEvent);
 }
+
