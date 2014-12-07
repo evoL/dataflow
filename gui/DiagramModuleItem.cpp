@@ -16,13 +16,13 @@ DiagramModuleItem::DiagramModuleItem(const Module * module, QMenu * contextMenu,
 {
     myContextMenu = contextMenu;
 
-    width = 100;
+    width = 170;
     height = 100;
 
     moduleName = new ModuleDescription(modulePtr->name, this);
     if (moduleName->Is_text_long()) {
-        width = 150;
-        moduleName->setTextWidth(150);
+        width = 200;
+        moduleName->setTextWidth(250);
     }
 
     height = height + (moduleName->Scale());
@@ -40,7 +40,7 @@ DiagramModuleItem::DiagramModuleItem(const Module * module, QMenu * contextMenu,
     for (int i = 0; i < modulePtr->Out.size(); i++) {
         ModuleOut * first_exit = new ModuleOut(this);
         Out.append(first_exit);
-        first_exit->DrawOut(i);
+        first_exit->DrawOut(i,modulePtr->Out[i]);
     }
 
     setFlag(QGraphicsItem::ItemIsMovable, true);
