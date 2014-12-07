@@ -1,4 +1,5 @@
 #include "DiagramModuleItem.h"
+#include "DiagramModuleItem.h"
 #include "Arrow.h"
 #include <QGraphicsScene>
 #include <QGraphicsSceneContextMenuEvent>
@@ -28,19 +29,26 @@ DiagramModuleItem::DiagramModuleItem(const Module * module, QMenu * contextMenu,
     height = height + (moduleName->Scale());
 
     setRect(0, 0, width, height);
-    moduleName->setAlignCenter();
+    moduleName->setAlignCenter(modulePtr->getType());
 
     // IO circles
+
+    if(modulePtr->getType()!=-1)//It's not IN block
+    {
     for (int i = 0; i < modulePtr->In.size(); i++) {
         ModuleIn * first_entry = new ModuleIn(this);
         In.append(first_entry);
         first_entry->DrawIn(i,modulePtr->In[i]);
     }
+    }
 
+    if(modulePtr->getType()!=1)//It's not OUT block
+    {
     for (int i = 0; i < modulePtr->Out.size(); i++) {
         ModuleOut * first_exit = new ModuleOut(this);
         Out.append(first_exit);
         first_exit->DrawOut(i,modulePtr->Out[i]);
+    }
     }
 
     setFlag(QGraphicsItem::ItemIsMovable, true);
