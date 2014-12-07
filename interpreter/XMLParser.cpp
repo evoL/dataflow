@@ -91,7 +91,7 @@ void XMLParser::parseImportNode(xmlNodePtr node, ProjectModel * model)
 	}
 	catch (LibraryLoadError& error)
 	{
-		throw XMLParserError("Error while importing library: " + error.what)
+		throw XMLParserError(std::string("Error while importing library: ").append(error.what()));
 	}
 }
 

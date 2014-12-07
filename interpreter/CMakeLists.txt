@@ -29,6 +29,8 @@ add_executable(xmlparser_example
     LibraryLoader.cpp
     XMLParser.h
     XMLParser.cpp
+	ModelManipulator.h
+	ModelManipulator.cpp
     xmlparser_example.cpp
 )
 

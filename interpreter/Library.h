@@ -41,7 +41,8 @@ class Library
     std::unordered_map<std::string, std::vector<std::string> > outputs;
     std::unordered_map<std::string, execute_fn> executes;
 private:
-    Library() {}
+public: // temporary
+	Library() {}
 
 public:
     ~Library();

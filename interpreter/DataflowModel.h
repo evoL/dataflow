@@ -1,7 +1,7 @@
 #ifndef DATAFLOW_MODEL
 #define DATAFLOW_MODEL
 
-#include <list>
+#include <vector>
 #include <unordered_map>
 #include <memory>
 #include <string>
@@ -41,7 +41,7 @@ typedef std::unordered_map<int, InputTransition> InputTransitionMap;
 struct Block
 {
     // constructor
-    Block(int id, std::string module = "", Position position = Position {0.0, 0.0}, const std::list<OutputTransition> & outputs = std::list<OutputTransition>())
+    Block(int id, std::string module = "", Position position = Position {0.0, 0.0}, const std::vector<OutputTransition> & outputs = std::vector<OutputTransition>())
         : id(id), module(module), position(position), outputs(outputs) {}
 
     // methods
@@ -51,13 +51,13 @@ struct Block
     int id;
     std::string module;
     Position position;
-    std::list<OutputTransition> outputs;
+    std::vector<OutputTransition> outputs;
 };
 
 struct Constructor : Block
 {
     // constructor
-    Constructor(int id, std::string module = "", std::string type = "", Position position = Position {0.0, 0.0}, const std::list<OutputTransition> & outputs = std::list<OutputTransition>(), const char * data = "")
+    Constructor(int id, std::string module = "", std::string type = "", Position position = Position {0.0, 0.0}, const std::vector<OutputTransition> & outputs = std::vector<OutputTransition>(), const char * data = "")
     :Block(id, module, position, outputs)
 	,type(type)
 	,data(data) {}
@@ -73,7 +73,7 @@ struct Constructor : Block
 struct Operation : Block
 {
     // constructor
-    Operation(int id, std::string module = "",  std::string name = "", Position position = Position {0.0, 0.0}, const std::list<OutputTransition> & outputs = std::list<OutputTransition>(), const InputTransitionMap inputs = InputTransitionMap())
+    Operation(int id, std::string module = "",  std::string name = "", Position position = Position {0.0, 0.0}, const std::vector<OutputTransition> & outputs = std::vector<OutputTransition>(), const InputTransitionMap inputs = InputTransitionMap())
     :Block(id, module, position, outputs)
 	,inputs(inputs)
 	,name(name) {}
@@ -95,13 +95,12 @@ public:
     // getters
     const std::string & getName() { return name; }
     const LibraryMap & getLibraries() { return libraries; }
-    const std::list<int> & getEntryPoints() { return entryPoints; }
     const Block & getBlock(int id) { return *blocks[id]; }
 
 private:
     std::string name;
     LibraryMap libraries;
-    std::list<int> entryPoints;
+    std::vector<int> entryPoints;
     BlocksMap blocks;
 };
 
