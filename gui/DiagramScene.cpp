@@ -102,7 +102,6 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
             startItem->removeArrows();
             startItem->addArrow(arrow);
             endItem->addArrow(arrow);
-            arrow->setZValue(-1000.0);
             addItem(arrow);
             arrow->updatePosition();
         }
@@ -120,7 +119,6 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
             startItem->addArrow(arrow);
 
             endItem->addArrow(arrow);
-            arrow->setZValue(-1000.0);
             addItem(arrow);
             arrow->updatePosition();
         }
