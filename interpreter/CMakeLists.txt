@@ -32,7 +32,16 @@ add_executable(xmlparser_example
     xmlparser_example.cpp
 )
 
-target_link_libraries(xmlparser_example ${LIBXML2_LIBRARIES})
+set(LIBRARIES ${LIBXML2_LIBRARIES})
+
+# Add Iconv for Visual C++
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    find_package(Iconv REQUIRED)
+    include_directories(${ICONV_INCLUDE_DIR})
+    list(APPEND ${LIBRARIES} ${ICONV_LIBRARIES})
+endif()
+
+target_link_libraries(xmlparser_example ${LIBRARIES})
 
 if(UNIX)
     target_link_libraries(libraryloader_example dl)
