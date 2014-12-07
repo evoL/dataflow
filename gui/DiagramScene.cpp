@@ -16,6 +16,8 @@ DiagramScene::DiagramScene(ModulesListModel * modulesListModel, QListView * modu
     myMode = MoveItem;
     line = 0;
     myItemColor = QColor(169, 191, 215);
+    myInputColor =QColor(255,251,160);
+    myOutputColor=QColor(140,255,151);
     myTextColor = Qt::black;
     myLineColor = Qt::black;
 
@@ -42,7 +44,10 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
     case InsertItem:
         selectedModulePtr = &modulesListModel->at(modulesView->currentIndex().row());
         item = new DiagramModuleItem(selectedModulePtr, myItemMenu);
-        item->setBrush(myItemColor);
+
+        if(selectedModulePtr->getType()==0)item->setBrush(myItemColor);
+        if(selectedModulePtr->getType()==-1)item->setBrush(myInputColor);
+        if(selectedModulePtr->getType()==1)item->setBrush(myOutputColor);
         addItem(item);
 
         item->setPos(mouseEvent->scenePos() - QPointF(20,20));
@@ -127,4 +132,3 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
     line = 0;
     QGraphicsScene::mouseReleaseEvent(mouseEvent);
 }
-
