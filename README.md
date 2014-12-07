@@ -10,7 +10,7 @@ Currently Dataflow is tested on following platforms and compilers:
 - Linux (Ubuntu 14.04) — GCC 4.9.1
 - OS X 10.10
 
-Dataflow requires Qt 5 and CMake 2.8.11 or newer. 
+Dataflow requires Qt 5, libxml2 2.7 or newer and CMake 2.8.11 or newer. 
 
 ### Install CMake
 
@@ -33,6 +33,20 @@ Dataflow requires Qt 5 and CMake 2.8.11 or newer.
 
 **OS X**: `brew install qt5` **OR** install the [official distribution](http://www.qt.io/download-open-source/).
 
+### Install libxml2
+
+**Windows / MinGW**: Download the [latest libxml2 build](http://xmlsoft.org/sources/win32/libxml2-2.7.8.win32.zip) from the [official source](http://xmlsoft.org/sources/win32/).
+Extract it somewhere, eg. `C:\Libraries`.
+
+**Windows / Visual Studio (32 bit)**: Download the latest [iconv build](http://xmlsoft.org/sources/win32/iconv-1.9.2.win32.zip) and [libxml2 build](http://xmlsoft.org/sources/win32/libxml2-2.7.8.win32.zip) from the [official source](http://xmlsoft.org/sources/win32/).
+Extract them somewhere, eg. `C:\Libraries`.
+
+**Windows / Visual Studio (64 bit)**: We have prepared special [iconv](https://dl.dropboxusercontent.com/u/2078673/libraries/libiconv-1.14.msvc2013.win32.x64.zip) and [libxml2](https://dl.dropboxusercontent.com/u/2078673/libraries/libxml2-git.msvc2013.win32.x64.zip) builds for 64 bit users. They were built and tested on VS 2013. Download them and extract somewhere, eg: `C:\Libraries`.
+
+**Linux**: Consult your package manager or [install from sources](http://xmlsoft.org/sources/).
+
+**OS X**: Provides libxml2 by default. Alternatively, you can install a different version from Homebrew if you want: `brew install libxml2`. You can also [install from sources](http://xmlsoft.org/sources/) if you really want to.
+
 ### Setup the project
 
 This has to be performed only once. CMake is smart enough to update the project on build.
@@ -45,12 +59,12 @@ This has to be performed only once. CMake is smart enough to update the project 
   - Where is the source code: path to the `dataflow` directory
   - Where to build the binaries: path to the `build` directory you created
 4. Click _Add Entry_.
-5. Add a variable called `CMAKE_PREFIX_PATH` of type PATH and point to the Qt directory (e.g. `C:/Qt/Qt5.3.2/5.3/msvc2013_64_opengl`)
+5. Add a variable called `CMAKE_PREFIX_PATH` of type PATH and point to all directories that contain your libraries separated by semicolons. (e.g. `C:\Qt\5.4\msvc2013_opengl;C:\Libraries\iconv-1.9.2.win32;C:\Libraries\libxml2-2.7.8.win32`)
 6. Click _Configure_.
 7. Choose your compiler from the list and click _Finish_.
 8. Wait until the configuration process finishes and click _Generate_.
 9. Your project has been generated in the `build` directory.
-10. Check if Qt's `bin` directory is in your `PATH`.
+10. Check if the `bin` directories of your libraries are in your `PATH`. This allows you not to bother with copying over DLLs next to generated executables.
 
 Video (in Polish): [https://v.usetapes.com/H0vFD1KN8m](https://v.usetapes.com/H0vFD1KN8m)
 
