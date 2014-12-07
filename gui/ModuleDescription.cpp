@@ -22,12 +22,14 @@ void ModuleDescription::SetDescription(const QString desc)
     setPlainText(desc);
 }
 
-void ModuleDescription::setAlignCenter()
+void ModuleDescription::setAlignCenter(int i)
 {
     setTextWidth(qgraphicsitem_cast< DiagramModuleItem* >(parentItem())->getWidth() - 1);
     blockHeight = this->boundingRect().height();
 
-    this->setHtml("<body style='background-color:#4C6BB2;'><center>" + text_description + "</center></body>");
+    if(i==0)this->setHtml("<body style='background-color:#4C6BB2;'><center>" + text_description + "</center></body>");
+    if(i==1)this->setHtml("<body style='background-color:#1FFC52;'><center>" + text_description + "</center></body>");
+    if(i==-1)this->setHtml("<body style='background-color:#D0FC1F;'><center>" + text_description + "</center></body>");
 
     //748DC8
     //Setting align
@@ -61,3 +63,4 @@ qreal ModuleDescription::Scale()
 
     return 10 * height;
 }
+
