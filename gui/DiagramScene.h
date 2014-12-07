@@ -40,6 +40,8 @@ private:
     QGraphicsLineItem * line;
     QColor myTextColor;
     QColor myItemColor;
+    QColor myInputColor;
+    QColor myOutputColor;
     QColor myLineColor;
 };
 #endif // DIAGRAMSCENE_H
