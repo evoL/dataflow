@@ -5,37 +5,37 @@ Library::~Library()
     dataflow::library_free(dllId);
 }
 
-const std::string & Library::getName()
+const std::string & Library::getName() const
 {
     return name;
 }
 
-const std::vector<std::string> & Library::getTypes()
+const std::vector<std::string> & Library::getTypes() const
 {
     return types;
 }
 
-const std::vector<std::string> & Library::getOperations()
+const std::vector<std::string> & Library::getOperations() const
 {
     return operations;
 }
 
-const std::unordered_map<std::string, unsigned int> & Library::getSizes()
+const std::unordered_map<std::string, unsigned int> & Library::getSizes() const
 {
     return typeSizes;
 }
 
-const std::unordered_map<std::string, std::vector<std::string> > & Library::getInputs()
+const std::unordered_map<std::string, std::vector<std::string> > & Library::getInputs() const
 {
     return inputs;
 }
 
-const std::unordered_map<std::string, std::vector<std::string> > & Library::getOutputs()
+const std::unordered_map<std::string, std::vector<std::string> > & Library::getOutputs() const
 {
     return outputs;
 }
 
-void Library::constructType(const std::string & typeName, const std::string & data, void * out)
+void Library::constructType(const std::string & typeName, const std::string & data, void * out) const
 {
     auto res = constructors.find(typeName);
 
@@ -50,7 +50,7 @@ void Library::constructType(const std::string & typeName, const std::string & da
     }
 }
 
-void Library::destructType(const std::string & typeName, void * data)
+void Library::destructType(const std::string & typeName, void * data) const
 {
     auto res = destructors.find(typeName);
 
@@ -63,7 +63,7 @@ void Library::destructType(const std::string & typeName, void * data)
     }
 }
 
-void Library::execute(const std::string & operationName, const std::vector<void *> & in, const std::vector<void *> & out)
+void Library::execute(const std::string & operationName, const std::vector<void *> & in, const std::vector<void *> & out) const
 {
     auto res = executes.find(operationName);
 

@@ -47,16 +47,16 @@ public: // temporary
 public:
     ~Library();
 
-    const std::string & getName();
-    const std::vector<std::string> & getTypes();
-    const std::vector<std::string> & getOperations();
-    const std::unordered_map<std::string, unsigned int> & getSizes();
-    const std::unordered_map<std::string, std::vector<std::string> > & getInputs();
-    const std::unordered_map<std::string, std::vector<std::string> > & getOutputs();
+    const std::string & getName() const;
+	const std::vector<std::string> & getTypes() const;
+	const std::vector<std::string> & getOperations() const;
+	const std::unordered_map<std::string, unsigned int> & getSizes() const;
+	const std::unordered_map<std::string, std::vector<std::string> > & getInputs() const;
+	const std::unordered_map<std::string, std::vector<std::string> > & getOutputs() const;
 
-    void constructType(const std::string & typeName, const std::string & data, void * out);
-    void destructType(const std::string & typeName, void * data);
-    void execute(const std::string & operationName, const std::vector<void *> & inputs, const std::vector<void *> & outputs);
+	void constructType(const std::string & typeName, const std::string & data, void * out) const;
+	void destructType(const std::string & typeName, void * data) const;
+	void execute(const std::string & operationName, const std::vector<void *> & inputs, const std::vector<void *> & outputs) const;
 };
 
 #endif
