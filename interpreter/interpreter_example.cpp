@@ -6,7 +6,7 @@
 
 int main() {
 	XMLParser parser;
-	std::unique_ptr<ProjectModel> model{ parser.loadModelFromFile("C:\\Users\\Prymus\\Documents\\Uni\\Projekt zespolowy\\dataflow\\sample.xml") };
+	std::unique_ptr<ProjectModel> model{ parser.loadModelFromFile("sample.xml") };
 	
 	ModelManipulator manipulator(*model);
 	
