@@ -29,9 +29,31 @@ add_executable(xmlparser_example
     LibraryLoader.cpp
     XMLParser.h
     XMLParser.cpp
-	ModelManipulator.h
-	ModelManipulator.cpp
+    ModelManipulator.h
+    ModelManipulator.cpp
     xmlparser_example.cpp
+)
+
+add_executable(interpreter_example
+    Interpreter.h
+    Interpreter.cpp
+    DataflowModel.h
+    Library.h
+    Library.cpp
+    LibraryLoader.h
+    LibraryLoader.cpp
+    library_loading.h
+    library_loading.cpp
+    XMLParser.h
+    XMLParser.cpp
+    ModelManipulator.h
+    ModelManipulator.cpp
+    ManagedMemoryChunk.h
+    ManagedMemoryChunk.cpp
+    Datastore.h
+    Datastore.cpp
+    BlockVisitor.h
+    interpreter_example.cpp
 )
 
 set(LIBRARIES ${LIBXML2_LIBRARIES})
@@ -44,6 +66,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 endif()
 
 target_link_libraries(xmlparser_example ${LIBRARIES})
+target_link_libraries(interpreter_example ${LIBRARIES})
 
 if(UNIX)
     target_link_libraries(libraryloader_example dl)
