@@ -1,6 +1,7 @@
 <dataflow projectname="Sum a b">
     <imports>
         <import module="basicmath" />
+        <import module="io_module" />
     </imports>
     <entry-points>
         <entry-point id="5"/>
