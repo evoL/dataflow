@@ -278,27 +278,35 @@ bool ModelManipulator::checkModelCorrectness()
 				auto found_output_lib = libraries.find(outputBlock->module);
 				if (found_output_lib == libraries.end())
 					return false;
-				const std::string& oName = (outputBlock->blockType() == BlockType::Operation)
-										 ? (dynamic_cast<Operation &>(*outputBlock).name)
-										 : (dynamic_cast<Constructor &>(*outputBlock).type);
-				auto found_output_list = found_output_lib->second.getOutputs().find(oName);
-				if (found_output_list == found_output_lib->second.getOutputs().end())
-					return false;
+				if (outputBlock->blockType() == BlockType::Operation) {
+					auto found_output_list = found_output_lib->second.getOutputs().find(dynamic_cast<Operation &>(*outputBlock).name);
+					if (found_output_list == found_output_lib->second.getOutputs().end())
+						return false;
 
-				// and if it is the correct one
-				bool output_found = false;
-				for (int i=0; i<(int)block.outputs.size(); i++) {
-					if (block.outputs[i].id == it2.first) {
-						// ... and if the types match
-						if (found_output_list->second[i] != input_type)
-							return false;
+					// and if it is the correct one
+					bool output_found = false;
+					for (int i=0; i<(int)outputBlock->outputs.size(); i++) {
+						if (outputBlock->outputs[i].id == it2.second.outputId) {
+							// ... and if the types match
+							if (found_output_list->second[i] != input_type)
+								return false;
 						
-						output_found = true;
-						break;
+							output_found = true;
+							break;
+						}
 					}
+					if (!output_found)
+						return false;
+				} else {
+					if (outputBlock->outputs.size() != 1)
+						return false;
+					if (outputBlock->outputs[0].id != it2.second.outputId)
+						return false;
+
+					if ((outputBlock->module + "." + dynamic_cast<Constructor&>(*outputBlock).type) != input_type)
+						return false;
 				}
-				if (!output_found)
-					return false;
+
 			}
 
 			break;
@@ -318,7 +326,7 @@ bool ModelManipulator::checkModelCorrectness()
 			}
 
 			// check if operation has defined adequate number of outputs
-			if (cons.outputs.size() == 1)
+			if (cons.outputs.size() != 1)
 				return false;
 
 			// check if output ids are unique in the context of whole model

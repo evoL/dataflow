@@ -7,8 +7,8 @@
         <entry-point id="7"/>
     </entry-points>
     <schema>
-        <!-- IDs are unique across the project, eg. constructors cannot have
-             the same ID as an output -->
+        <!-- Output IDs and Block IDs are unique across the project, however, blocks and outputs
+             can share the same IDs -->
         <constructor id="1" module="basicmath" type="Integer" pos_x="0" pos_y="0">
             <output id="2" />
             <data>123</data>
