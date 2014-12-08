@@ -1,0 +1,11 @@
+set(sources
+    io_module.h
+    io_module.cpp
+)
+
+include_directories(${dataflow_SOURCE_DIR}/include)
+
+add_library(io_module SHARED ${sources})
+set_target_properties(io_module PROPERTIES
+    DEFINE_SYMBOL BASIC_IO_EXPORTS
+)
