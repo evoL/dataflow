@@ -7,6 +7,7 @@
 #include <string>
 
 #include "Library.h"
+#include "BlockVisitor.h"
 
 struct Block;
 
@@ -46,6 +47,7 @@ struct Block
 
     // methods
     virtual BlockType blockType() const = 0;
+	virtual void accept(BlockVisitor & visitor) = 0;
 
     // fields
     int id;
@@ -63,7 +65,8 @@ struct Constructor : Block
 	,data(data) {}
 
     // methods
-    virtual BlockType blockType() const { return BlockType::Constructor; }
+	virtual BlockType blockType() const { return BlockType::Constructor; }
+	void accept(BlockVisitor & visitor) { visitor.visit(*this); };
 
     // fields
     std::string type;
@@ -80,6 +83,7 @@ struct Operation : Block
 
     // methods
     virtual BlockType blockType() const { return BlockType::Operation; }
+	void accept(BlockVisitor & visitor) { visitor.visit(*this); };
 
     // fields
     InputTransitionMap inputs;
