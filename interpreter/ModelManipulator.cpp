@@ -111,7 +111,7 @@ void ModelManipulator::deleteBlock(int blockId)
 	auto& blockPtr = model.blocks[blockId];
 	
 	for (auto& it : model.blocks) {
-		if (it.second->blockType() != BlockTypeOperation)
+		if (it.second->blockType() != BlockType::Operation)
 			continue;
 
 		Operation& op = dynamic_cast<Operation &>(*(it.second));
@@ -133,7 +133,7 @@ void ModelManipulator::deleteBlock(int blockId)
 void ModelManipulator::setConstructorData(int blockId, std::string& data)
 {
 	auto foundBlock = model.blocks.find(blockId);
-	if (foundBlock == model.blocks.end() || foundBlock->second->blockType() != BlockTypeConstructor)
+	if (foundBlock == model.blocks.end() || foundBlock->second->blockType() != BlockType::Constructor)
 		throw ModelManipulatorError("Invalid constructor Id");
 	
 	Constructor& cons = dynamic_cast<Constructor &>(*(foundBlock->second));
@@ -152,7 +152,7 @@ void ModelManipulator::setBlockPosition(int blockId, Position position)
 void ModelManipulator::addConnection(int outputBlockId, int outputIndex, int inputBlockId, int inputIndex)
 {
 	auto inputBlockFound = model.blocks.find(inputBlockId);
-	if (inputBlockFound == model.blocks.end() || inputBlockFound->second->blockType() != BlockTypeOperation)
+	if (inputBlockFound == model.blocks.end() || inputBlockFound->second->blockType() != BlockType::Operation)
 		throw ("Invalid input block Id");
 
 	auto outputBlockFound = model.blocks.find(outputBlockId);
@@ -173,7 +173,7 @@ void ModelManipulator::addConnection(int outputBlockId, int outputIndex, int inp
 		throw ModelManipulatorError("Invalid input index");
 	const std::string& inputType = inputTypes->second[inputIndex];
 
-	if (outputBlock.blockType() == BlockTypeOperation) {
+	if (outputBlock.blockType() == BlockType::Operation) {
 		Operation& outputOperation = dynamic_cast<Operation&>(outputBlock);
 		auto outputTypes = outputLib.getOutputs().find(outputOperation.name);
 		if (outputIndex > outputTypes->second.size() || outputIndex < 0)
@@ -199,7 +199,7 @@ void ModelManipulator::addConnection(int outputBlockId, int outputIndex, int inp
 void ModelManipulator::deleteConnection(int blockId, int inputIndex)
 {
 	auto blockFound = model.blocks.find(blockId);
-	if (blockFound == model.blocks.end() || blockFound->second->blockType() != BlockTypeOperation)
+	if (blockFound == model.blocks.end() || blockFound->second->blockType() != BlockType::Operation)
 		return;
 
 	Operation& op = dynamic_cast<Operation&>(*(blockFound->second));
@@ -233,7 +233,7 @@ bool ModelManipulator::checkModelCorrectness()
 			maxBlockId = block.id;
 
 		switch (block.blockType()) {
-		case BlockTypeOperation:
+		case BlockType::Operation:
 		{
 			// check if library contains desired operation					   
 			Operation& op = dynamic_cast<Operation &>(block);
@@ -278,7 +278,7 @@ bool ModelManipulator::checkModelCorrectness()
 				auto found_output_lib = libraries.find(outputBlock->module);
 				if (found_output_lib == libraries.end())
 					return false;
-				const std::string& oName = (outputBlock->blockType() == BlockTypeOperation)
+				const std::string& oName = (outputBlock->blockType() == BlockType::Operation)
 										 ? (dynamic_cast<Operation &>(*outputBlock).name)
 										 : (dynamic_cast<Constructor &>(*outputBlock).type);
 				auto found_output_list = found_output_lib->second.getOutputs().find(oName);
@@ -304,7 +304,7 @@ bool ModelManipulator::checkModelCorrectness()
 			break;
 		}
 
-		case BlockTypeConstructor:
+		case BlockType::Constructor:
 		{
 			// check if library contains desired constructor
 			Constructor& cons = dynamic_cast<Constructor &>(block);

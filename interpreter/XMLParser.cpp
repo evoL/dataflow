@@ -180,7 +180,7 @@ void XMLParser::linkInputsWithOutputBlocks(ProjectModel * model)
     }
 
     for (auto it = model->blocks.begin(); it != model->blocks.end(); ++it) {
-        if (it->second->blockType() == BlockTypeOperation) {
+        if (it->second->blockType() == BlockType::Operation) {
             Operation & op = dynamic_cast<Operation &>(*it->second);
 
             for (auto it2 = op.inputs.begin(); it2 != op.inputs.end(); ++it2) {

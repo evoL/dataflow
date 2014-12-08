@@ -13,11 +13,11 @@ struct Block;
 typedef std::unordered_map<int, std::shared_ptr<Block>> BlocksMap;
 typedef std::unordered_map<std::string, Library> LibraryMap;
 
-typedef enum
+enum class BlockType
 {
-    BlockTypeOperation,
-    BlockTypeConstructor
-} BlockType;
+    Operation,
+    Constructor
+};
 
 struct Position
 {
@@ -63,7 +63,7 @@ struct Constructor : Block
 	,data(data) {}
 
     // methods
-    virtual BlockType blockType() const { return BlockTypeConstructor; }
+    virtual BlockType blockType() const { return BlockType::Constructor; }
 
     // fields
     std::string type;
@@ -79,7 +79,7 @@ struct Operation : Block
 	,name(name) {}
 
     // methods
-    virtual BlockType blockType() const { return BlockTypeOperation; }
+    virtual BlockType blockType() const { return BlockType::Operation; }
 
     // fields
     InputTransitionMap inputs;
