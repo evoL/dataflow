@@ -23,14 +23,14 @@ int main()
 {
     Datastore repository;
 
-    repository.createEntry("input_1", sizeof(int));
-    repository.createEntry("input_2", sizeof(int));
-    repository.createEntry("add_result", sizeof(int));
+    repository.createEntry(1, sizeof(int));
+    repository.createEntry(2, sizeof(int));
+    repository.createEntry(3, sizeof(int));
 
-    input_block(3, repository["input_1"]);
-    input_block(12, repository["input_2"]);
-    add(repository["input_1"], repository["input_2"], repository["add_result"]);
-    output_integer(repository["add_result"]);
+    input_block(3, repository[1]);
+    input_block(12, repository[2]);
+    add(repository[1], repository[2], repository[3]);
+    output_integer(repository[3]);
 
     return 0;
 }

@@ -1,11 +1,11 @@
 #include "Datastore.h"
 
-bool Datastore::isComputed(std::string dataId)
+bool Datastore::isComputed(int dataId)
 {
     return computedResults.count(dataId) && computedResults.at(dataId);
 }
 
-void * Datastore::operator[](std::string dataId)
+void * Datastore::operator[](int dataId)
 {
     if (computedResults.count(dataId) == 0)
         return nullptr;
@@ -13,7 +13,7 @@ void * Datastore::operator[](std::string dataId)
     return computedResults.at(dataId);
 }
 
-void * Datastore::createEntry(std::string chunkId, std::size_t sizeInBytes)
+void * Datastore::createEntry(int chunkId, std::size_t sizeInBytes)
 {
     return computedResults[chunkId] = ManagedMemoryChunk{ sizeInBytes };
 }
@@ -23,7 +23,7 @@ void Datastore::reset()
     computedResults.clear();
 }
 
-void Datastore::removeEntry(std::string dataId)
+void Datastore::removeEntry(int dataId)
 {
     computedResults.erase(dataId);
 }

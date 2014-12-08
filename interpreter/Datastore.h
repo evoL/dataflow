@@ -8,15 +8,15 @@
 class Datastore
 {
 public:
-    bool isComputed(std::string dataId);
-    void * operator [](std::string dataId);
+    bool isComputed(int dataId);
+    void * operator [](int dataId);
 
-    void * createEntry(std::string chunkId, std::size_t sizeInBytes);
-    void removeEntry(std::string dataId);
+    void * createEntry(int chunkId, std::size_t sizeInBytes);
+    void removeEntry(int dataId);
 
     void reset();
 private:
-    std::unordered_map<std::string, ManagedMemoryChunk> computedResults;
+    std::unordered_map<int, ManagedMemoryChunk> computedResults;
 };
 
 #endif
