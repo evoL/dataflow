@@ -10,13 +10,13 @@ void Interpreter::interpret()
 	datastore.reset();
 	auto entry_points = model.getEntryPoints();
 	for (auto point : entry_points) {
-		model.blocks[point]->accept(*this);
+		model.getBlock(point).accept(*this);
 	}
 }
 
-void Interpreter::visit(Constructor & constructor)
+void Interpreter::visit(const Constructor & constructor)
 {
-	const Library & library = model.libraries[constructor.module];
+	const Library & library = model.getLibraries().at(constructor.module);
 	auto type_size = library.getSizes().at(constructor.type);
 
 	if (constructor.outputs.size() != 1)
@@ -28,14 +28,14 @@ void Interpreter::visit(Constructor & constructor)
 	library.constructType(constructor.type, constructor.data, allocated_space);
 }
 
-void Interpreter::visit(Operation & operation)
+void Interpreter::visit(const Operation & operation)
 {
 	ensureAllInputsAreComputed(operation);
 	allocateOutputs(operation);	
 	executeOperation(operation);
 }
 
-void Interpreter::ensureAllInputsAreComputed(Operation &operation)
+void Interpreter::ensureAllInputsAreComputed(const Operation &operation)
 {
 	for (auto & input : operation.inputs) {
 		if (!datastore.isComputed(input.second.outputId)) {
@@ -44,9 +44,9 @@ void Interpreter::ensureAllInputsAreComputed(Operation &operation)
 	}
 }
 
-void Interpreter::allocateOutputs(Operation & operation)
+void Interpreter::allocateOutputs(const Operation & operation)
 {
-	auto & library = model.libraries[operation.module];
+	auto & library = model.getLibraries().at(operation.module);
 	auto & output_types = library.getOutputs().at(operation.name);
 	
 	if (output_types.size() != operation.outputs.size())
@@ -67,9 +67,9 @@ void Interpreter::allocateOutputs(Operation & operation)
 	}
 }
 
-void Interpreter::executeOperation(Operation &operation)
+void Interpreter::executeOperation(const Operation &operation)
 {
-	auto & library = model.libraries[operation.module];
+	auto & library = model.getLibraries().at(operation.module);
 	std::vector<void *> input_locations;
 	std::vector<void *> output_locations;
 

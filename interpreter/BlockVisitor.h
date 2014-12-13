@@ -6,8 +6,8 @@ struct Operation;
 
 class BlockVisitor {
 public:
-	virtual void visit(Constructor & constructor) = 0;
-	virtual void visit(Operation & constructor) = 0;
+	virtual void visit(const Constructor & constructor) = 0;
+	virtual void visit(const Operation & constructor) = 0;
 };
 
 #endif

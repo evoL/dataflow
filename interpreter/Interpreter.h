@@ -17,12 +17,12 @@ private:
 	Datastore datastore;
 	ProjectModel & model;
 
-	virtual void visit(Constructor & constructor);
-	virtual void visit(Operation & constructor);
+	virtual void visit(const Constructor & constructor);
+	virtual void visit(const Operation & constructor);
 	
-	void ensureAllInputsAreComputed(Operation &operation);
-	void allocateOutputs(Operation & operation);
-	void executeOperation(Operation &operation);
+	void ensureAllInputsAreComputed(const Operation &operation);
+	void allocateOutputs(const Operation & operation);
+	void executeOperation(const Operation &operation);
 };
 
 #endif

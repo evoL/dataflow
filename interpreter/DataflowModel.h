@@ -47,7 +47,7 @@ struct Block
 
     // methods
     virtual BlockType blockType() const = 0;
-	virtual void accept(BlockVisitor & visitor) = 0;
+	virtual void accept(BlockVisitor & visitor) const = 0;
 
     // fields
     int id;
@@ -66,7 +66,7 @@ struct Constructor : Block
 
     // methods
 	virtual BlockType blockType() const { return BlockType::Constructor; }
-	void accept(BlockVisitor & visitor) { visitor.visit(*this); };
+	void accept(BlockVisitor & visitor) const { visitor.visit(*this); };
 
     // fields
     std::string type;
@@ -83,7 +83,7 @@ struct Operation : Block
 
     // methods
     virtual BlockType blockType() const { return BlockType::Operation; }
-	void accept(BlockVisitor & visitor) { visitor.visit(*this); };
+	void accept(BlockVisitor & visitor) const { visitor.visit(*this); };
 
     // fields
     InputTransitionMap inputs;
@@ -94,8 +94,6 @@ class ProjectModel
 {
     friend class XMLParser;
 	friend class ModelManipulator;
-	friend class Interpreter;
-
 public:
     // getters
     const std::string & getName() { return name; }
