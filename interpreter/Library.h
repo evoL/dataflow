@@ -30,7 +30,8 @@ class Library
 {
     friend class LibraryLoader;
 
-    DATAFLOW_LIBRARY dllId;
+	DATAFLOW_LIBRARY dllId;
+	bool ownsDll{ false };
     std::string name;
     std::vector<std::string> types;
     std::vector<std::string> operations;
@@ -40,11 +41,17 @@ class Library
     std::unordered_map<std::string, std::vector<std::string> > inputs;
     std::unordered_map<std::string, std::vector<std::string> > outputs;
     std::unordered_map<std::string, execute_fn> executes;
-private:
-public: // temporary
-	Library() {}
 
+	void freeDll();
+	void moveFields(Library && other);
 public:
+	Library() {}
+	Library(const Library &) = delete;
+	Library & operator=(const Library &) = delete;
+
+	Library(Library && other);
+	Library & operator=(Library && other);
+
     ~Library();
 
     const std::string & getName() const;

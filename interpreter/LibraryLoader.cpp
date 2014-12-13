@@ -10,6 +10,7 @@ Library LibraryLoader::load(const std::string moduleName)
 
     Library library;
     library.dllId = dllId;
+	library.ownsDll = true;
 
     // Module name
 
