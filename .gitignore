@@ -12,3 +12,7 @@ ipch/
 
 # CLion
 .idea/
+
+# Qt Creator
+CMakeLists.txt.user
+
