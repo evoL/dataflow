@@ -47,7 +47,7 @@ struct Block
 
     // methods
     virtual BlockType blockType() const = 0;
-	virtual void accept(BlockVisitor & visitor) const = 0;
+    virtual void accept(BlockVisitor & visitor) const = 0;
 
     // fields
     int id;
@@ -60,13 +60,13 @@ struct Constructor : Block
 {
     // constructor
     Constructor(int id, std::string module = "", std::string type = "", Position position = Position {0.0, 0.0}, const std::vector<OutputTransition> & outputs = std::vector<OutputTransition>(), const char * data = "")
-    :Block(id, module, position, outputs)
-	,type(type)
-	,data(data) {}
+        : Block(id, module, position, outputs)
+        , type(type)
+        , data(data) {}
 
     // methods
-	virtual BlockType blockType() const { return BlockType::Constructor; }
-	void accept(BlockVisitor & visitor) const { visitor.visit(*this); };
+    virtual BlockType blockType() const { return BlockType::Constructor; }
+    void accept(BlockVisitor & visitor) const { visitor.visit(*this); };
 
     // fields
     std::string type;
@@ -77,13 +77,13 @@ struct Operation : Block
 {
     // constructor
     Operation(int id, std::string module = "",  std::string name = "", Position position = Position {0.0, 0.0}, const std::vector<OutputTransition> & outputs = std::vector<OutputTransition>(), const InputTransitionMap inputs = InputTransitionMap())
-    :Block(id, module, position, outputs)
-	,inputs(inputs)
-	,name(name) {}
+        : Block(id, module, position, outputs)
+        , inputs(inputs)
+        , name(name) {}
 
     // methods
     virtual BlockType blockType() const { return BlockType::Operation; }
-	void accept(BlockVisitor & visitor) const { visitor.visit(*this); };
+    void accept(BlockVisitor & visitor) const { visitor.visit(*this); };
 
     // fields
     InputTransitionMap inputs;
@@ -93,13 +93,13 @@ struct Operation : Block
 class ProjectModel
 {
     friend class XMLParser;
-	friend class ModelManipulator;
+    friend class ModelManipulator;
 public:
     // getters
     const std::string & getName() { return name; }
-	const LibraryMap & getLibraries() { return libraries; }
-	const Block & getBlock(int id) { return *blocks[id]; }
-	std::vector<int> getEntryPoints() { return entryPoints; }
+    const LibraryMap & getLibraries() { return libraries; }
+    const Block & getBlock(int id) { return *blocks[id]; }
+    std::vector<int> getEntryPoints() { return entryPoints; }
 
 private:
     std::string name;

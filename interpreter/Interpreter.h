@@ -6,23 +6,24 @@
 class InterpreterError : public std::runtime_error
 {
 public:
-	InterpreterError(const std::string & what) : std::runtime_error(what) {}
+    InterpreterError(const std::string & what) : std::runtime_error(what) {}
 };
 
-class Interpreter : private BlockVisitor {
+class Interpreter : private BlockVisitor
+{
 public:
-	Interpreter(ProjectModel & model);
-	void interpret();
+    Interpreter(ProjectModel & model);
+    void interpret();
 private:
-	Datastore datastore;
-	ProjectModel & model;
+    Datastore datastore;
+    ProjectModel & model;
 
-	virtual void visit(const Constructor & constructor);
-	virtual void visit(const Operation & constructor);
-	
-	void ensureAllInputsAreComputed(const Operation &operation);
-	void allocateOutputs(const Operation & operation);
-	void executeOperation(const Operation &operation);
+    virtual void visit(const Constructor & constructor);
+    virtual void visit(const Operation & constructor);
+
+    void ensureAllInputsAreComputed(const Operation & operation);
+    void allocateOutputs(const Operation & operation);
+    void executeOperation(const Operation & operation);
 };
 
 #endif

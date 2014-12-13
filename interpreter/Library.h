@@ -30,8 +30,8 @@ class Library
 {
     friend class LibraryLoader;
 
-	DATAFLOW_LIBRARY dllId;
-	bool ownsDll{ false };
+    DATAFLOW_LIBRARY dllId;
+    bool ownsDll{ false };
     std::string name;
     std::vector<std::string> types;
     std::vector<std::string> operations;
@@ -42,28 +42,28 @@ class Library
     std::unordered_map<std::string, std::vector<std::string> > outputs;
     std::unordered_map<std::string, execute_fn> executes;
 
-	void freeDll();
-	void moveFields(Library && other);
+    void freeDll();
+    void moveFields(Library && other);
 public:
-	Library() {}
-	Library(const Library &) = delete;
-	Library & operator=(const Library &) = delete;
+    Library() {}
+    Library(const Library &) = delete;
+    Library & operator=(const Library &) = delete;
 
-	Library(Library && other);
-	Library & operator=(Library && other);
+    Library(Library && other);
+    Library & operator=(Library && other);
 
     ~Library();
 
     const std::string & getName() const;
-	const std::vector<std::string> & getTypes() const;
-	const std::vector<std::string> & getOperations() const;
-	const std::unordered_map<std::string, unsigned int> & getSizes() const;
-	const std::unordered_map<std::string, std::vector<std::string> > & getInputs() const;
-	const std::unordered_map<std::string, std::vector<std::string> > & getOutputs() const;
+    const std::vector<std::string> & getTypes() const;
+    const std::vector<std::string> & getOperations() const;
+    const std::unordered_map<std::string, unsigned int> & getSizes() const;
+    const std::unordered_map<std::string, std::vector<std::string> > & getInputs() const;
+    const std::unordered_map<std::string, std::vector<std::string> > & getOutputs() const;
 
-	void constructType(const std::string & typeName, const std::string & data, void * out) const;
-	void destructType(const std::string & typeName, void * data) const;
-	void execute(const std::string & operationName, const std::vector<void *> & inputs, const std::vector<void *> & outputs) const;
+    void constructType(const std::string & typeName, const std::string & data, void * out) const;
+    void destructType(const std::string & typeName, void * data) const;
+    void execute(const std::string & operationName, const std::vector<void *> & inputs, const std::vector<void *> & outputs) const;
 };
 
 #endif

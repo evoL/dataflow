@@ -2,7 +2,7 @@
 
 Library::~Library()
 {
-	freeDll();
+    freeDll();
 }
 
 const std::string & Library::getName() const
@@ -80,38 +80,39 @@ void Library::execute(const std::string & operationName, const std::vector<void 
 
 Library::Library(Library && other)
 {
-	dllId = other.dllId;
-	ownsDll = other.ownsDll;
-	other.ownsDll = false;
-	moveFields(std::move(other));
+    dllId = other.dllId;
+    ownsDll = other.ownsDll;
+    other.ownsDll = false;
+    moveFields(std::move(other));
 }
 
 Library & Library::operator=(Library && other)
 {
-	freeDll();
-	dllId = other.dllId;
-	ownsDll = other.ownsDll;
-	other.ownsDll = false;
-	moveFields(std::move(other));
-	return *this;
+    freeDll();
+    dllId = other.dllId;
+    ownsDll = other.ownsDll;
+    other.ownsDll = false;
+    moveFields(std::move(other));
+    return *this;
 }
 
 void Library::freeDll()
 {
-	if (ownsDll)
-		dataflow::library_free(dllId);
-	ownsDll = false;
+    if (ownsDll)
+        dataflow::library_free(dllId);
+
+    ownsDll = false;
 }
 
 void Library::moveFields(Library && other)
 {
-	name = std::move(other.name);
-	types = std::move(other.types);
-	operations = std::move(other.operations);
-	typeSizes = std::move(other.typeSizes);
-	constructors = std::move(other.constructors);
-	destructors = std::move(other.destructors);
-	inputs = std::move(other.inputs);
-	outputs = std::move(other.outputs);
-	executes = std::move(other.executes);
+    name = std::move(other.name);
+    types = std::move(other.types);
+    operations = std::move(other.operations);
+    typeSizes = std::move(other.typeSizes);
+    constructors = std::move(other.constructors);
+    destructors = std::move(other.destructors);
+    inputs = std::move(other.inputs);
+    outputs = std::move(other.outputs);
+    executes = std::move(other.executes);
 }
