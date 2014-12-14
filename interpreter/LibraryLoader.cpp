@@ -5,7 +5,7 @@ Library LibraryLoader::load(const std::string moduleName)
     DATAFLOW_LIBRARY dllId = dataflow::library_load(moduleName);
 
     if (!dllId) {
-        throw LibraryLoadError("Library not found");
+        throw LibraryLoadError("Library '" + moduleName + "' not found");
     }
 
     Library library;
