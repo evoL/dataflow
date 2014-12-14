@@ -41,10 +41,8 @@ if(UNIX)
     target_link_libraries(dataflow dl)
 endif()
 
-add_executable(datastore_example datastore_example.cpp)
 add_executable(libraryloader_example libraryloader_example.cpp)
 add_executable(interpreter_example interpreter_example.cpp)
 
-target_link_libraries(datastore_example dataflow)
 target_link_libraries(libraryloader_example dataflow)
 target_link_libraries(interpreter_example dataflow)
