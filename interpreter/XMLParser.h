@@ -1,8 +1,10 @@
 #ifndef XML_PARSER
 #define XML_PARSER
 
-#include <libxml/parser.h>
+#include <vector>
 #include <stdexcept>
+#include <libxml/parser.h>
+#include <libxml/xmlwriter.h>
 #include "DataflowModel.h"
 #include "LibraryLoader.h"
 
@@ -16,6 +18,8 @@ class XMLParser
 {
 public:
     ProjectModel * loadModelFromFile(std::string filePath);
+    void saveModelToFile(const ProjectModel& model, const std::string filePath);
+    std::string getLastError();
     
 private:
     void parseXMLTree(xmlNodePtr node, ProjectModel * model);
@@ -46,6 +50,20 @@ private:
     {
         return (char *)xmlGetProp(node, (const xmlChar *)prop);
     }
+
+    void writeModelToFile(const ProjectModel &model, _xmlTextWriter *writer);
+    void writeImportsToFile(const LibraryMap &libraries, xmlTextWriterPtr writer);
+    void writeImportToFile(xmlTextWriterPtr writer, const std::string libraryName);
+    void writeEntryPointsToFile(const std::vector<int> &entryPoints, xmlTextWriterPtr writer);
+    void writeSchemaToFile(const ProjectModel &model, xmlTextWriterPtr writer);
+    void writeBlocksToFile(const BlocksMap &blocks, xmlTextWriterPtr writer);
+    void writeConstructorToFile(const Constructor &constructor, xmlTextWriterPtr writer);
+    void writeOperationToFile(const Operation &operation, xmlTextWriterPtr writer);
+    void writeOutputsTransitionsToFile(const std::vector<OutputTransition> &outputs, xmlTextWriterPtr writer);
+    void writeOutputTransitionToFile(const OutputTransition &transition, xmlTextWriterPtr writer);
+    void writeInputsTransitionToFile(const InputTransitionMap &inputs, xmlTextWriterPtr writer);
+    void writeInputTransitionToFile(const std::pair<int, InputTransition> &transition, xmlTextWriterPtr writer);
+    void writeConstructorDataToFile(const std::string& data, xmlTextWriterPtr writer);
 };
 
 #endif
