@@ -16,7 +16,7 @@ ProjectModel * XMLParser::loadModelFromFile(std::string filePath)
 
     if (node == NULL) {
         xmlFreeDoc(document);
-		throw XMLParserError("Document is empty");
+        throw XMLParserError("Document is empty");
     }
 
     ProjectModel * model = new ProjectModel();
@@ -24,14 +24,17 @@ ProjectModel * XMLParser::loadModelFromFile(std::string filePath)
     return model;
 }
 
-void XMLParser::saveModelToFile(const ProjectModel &model, const std::string filePath) {
+void XMLParser::saveModelToFile(const ProjectModel & model, const std::string filePath)
+{
     int error = 0;
     xmlTextWriterPtr writer = xmlNewTextWriterFilename(filePath.c_str(), 0);
+
     if (writer == NULL) {
         throw XMLParserError("Error creating the xml writer\n");
     }
 
     error = xmlTextWriterStartDocument(writer, NULL, NULL, NULL);
+
     if (error < 0) {
         throw XMLParserError("Cannot start to write to file\n");
     }
@@ -39,6 +42,7 @@ void XMLParser::saveModelToFile(const ProjectModel &model, const std::string fil
     writeModelToFile(model, writer);
 
     error = xmlTextWriterEndDocument(writer);
+
     if (error < 0) {
         throw XMLParserError("Cannot save the file\n");
     }
@@ -81,7 +85,8 @@ void XMLParser::parseImportsNode(xmlNodePtr node, ProjectModel * model)
     }
 }
 
-void XMLParser::parseEntryPointsNode(xmlNodePtr node, ProjectModel *model) {
+void XMLParser::parseEntryPointsNode(xmlNodePtr node, ProjectModel * model)
+{
     xmlNodePtr childNode = node->xmlChildrenNode;
 
     while (childNode != NULL) {
@@ -112,19 +117,18 @@ void XMLParser::parseSchemeNode(xmlNodePtr node, ProjectModel * model)
 void XMLParser::parseImportNode(xmlNodePtr node, ProjectModel * model)
 {
     std::string libName = getStringFromProperty(node, "module");
-	if (model->libraries.find(libName) != model->libraries.end())
-		throw XMLParserError("Duplicated import library");
 
-	try {
-		model->libraries[libName] = LibraryLoader::load(libName);
-	}
-	catch (LibraryLoadError& error)
-	{
-		throw XMLParserError(std::string("Error while importing library: ").append(error.what()));
-	}
+    if (model->libraries.find(libName) != model->libraries.end())
+        throw XMLParserError("Duplicated import library");
+
+    try {
+        model->libraries[libName] = LibraryLoader::load(libName);
+    } catch (LibraryLoadError & error) {
+        throw XMLParserError(std::string("Error while importing library: ").append(error.what()));
+    }
 }
 
-void XMLParser::parseEntryPointNode(xmlNodePtr node, ProjectModel *model)
+void XMLParser::parseEntryPointNode(xmlNodePtr node, ProjectModel * model)
 {
     model->entryPoints.push_back(getIntFromProperty(node, "id"));
 }
@@ -175,10 +179,11 @@ void XMLParser::parseInputs(xmlNodePtr node, Operation & operation)
         if (xmlStrcmp(childNode->name, (const xmlChar *)"input") == 0) {
             int index = getIntFromProperty(childNode, "index");
             int outputId = getIntFromProperty(childNode, "output_id");
-            
-			if (operation.inputs.find(index) != operation.inputs.end())
-				throw ("Duplicated input index for a block");
-			operation.inputs[index] = InputTransition { outputId };
+
+            if (operation.inputs.find(index) != operation.inputs.end())
+                throw ("Duplicated input index for a block");
+
+            operation.inputs[index] = InputTransition { outputId };
         }
 
         childNode = childNode->next;
@@ -221,7 +226,8 @@ void XMLParser::linkInputsWithOutputBlocks(ProjectModel * model)
 
 //// Writing XML model to file
 
-void XMLParser::writeModelToFile(ProjectModel const &model, xmlTextWriterPtr writer) {
+void XMLParser::writeModelToFile(ProjectModel const & model, xmlTextWriterPtr writer)
+{
     xmlTextWriterStartElement(writer, (xmlChar *)"dataflow");
     xmlTextWriterWriteAttribute(writer, (xmlChar *)"projectname", (xmlChar *)model.name.c_str());
 
@@ -232,23 +238,26 @@ void XMLParser::writeModelToFile(ProjectModel const &model, xmlTextWriterPtr wri
     xmlTextWriterEndElement(writer);
 }
 
-void XMLParser::writeImportsToFile(const LibraryMap &libraries, xmlTextWriterPtr writer) {
+void XMLParser::writeImportsToFile(const LibraryMap & libraries, xmlTextWriterPtr writer)
+{
     xmlTextWriterStartElement(writer, (xmlChar *)"imports");
 
-    for (auto& library : libraries) {
+    for (auto & library : libraries) {
         writeImportToFile(writer, library.first);
     }
 
     xmlTextWriterEndElement(writer);
 }
 
-void XMLParser::writeImportToFile(xmlTextWriterPtr writer, const std::string libraryName) {
+void XMLParser::writeImportToFile(xmlTextWriterPtr writer, const std::string libraryName)
+{
     xmlTextWriterStartElement(writer, (xmlChar *)"import");
     xmlTextWriterWriteAttribute(writer, (xmlChar *)"module", (xmlChar *)libraryName.c_str());
     xmlTextWriterEndElement(writer);
 }
 
-void XMLParser::writeEntryPointsToFile(const std::vector<int> &entryPoints, xmlTextWriterPtr writer) {
+void XMLParser::writeEntryPointsToFile(const std::vector<int> & entryPoints, xmlTextWriterPtr writer)
+{
     xmlTextWriterStartElement(writer, (xmlChar *)"entry-points");
 
     for (auto entryPoint : entryPoints) {
@@ -260,29 +269,33 @@ void XMLParser::writeEntryPointsToFile(const std::vector<int> &entryPoints, xmlT
     xmlTextWriterEndElement(writer);
 }
 
-void XMLParser::writeSchemaToFile(const ProjectModel &model, xmlTextWriterPtr writer) {
+void XMLParser::writeSchemaToFile(const ProjectModel & model, xmlTextWriterPtr writer)
+{
     xmlTextWriterStartElement(writer, (xmlChar *)"schema");
     writeBlocksToFile(model.blocks, writer);
     xmlTextWriterEndElement(writer);
 }
 
-void XMLParser::writeBlocksToFile(const BlocksMap &blocks, xmlTextWriterPtr writer) {
-    for (auto& block : blocks) {
+void XMLParser::writeBlocksToFile(const BlocksMap & blocks, xmlTextWriterPtr writer)
+{
+    for (auto & block : blocks) {
         switch (block.second->blockType()) {
-            case BlockType::Constructor: {
-                writeConstructorToFile(*dynamic_cast<Constructor *>(block.second.get()), writer);
-                break;
-            }
-            case BlockType::Operation: {
-                writeOperationToFile(*dynamic_cast<Operation *>(block.second.get()), writer);
-                break;
-            }
-                
+        case BlockType::Constructor: {
+            writeConstructorToFile(*dynamic_cast<Constructor *>(block.second.get()), writer);
+            break;
+        }
+
+        case BlockType::Operation: {
+            writeOperationToFile(*dynamic_cast<Operation *>(block.second.get()), writer);
+            break;
+        }
+
         }
     }
 }
 
-void XMLParser::writeConstructorToFile(const Constructor &constructor, xmlTextWriterPtr writer) {
+void XMLParser::writeConstructorToFile(const Constructor & constructor, xmlTextWriterPtr writer)
+{
     xmlTextWriterStartElement(writer, (xmlChar *)"constructor");
     xmlTextWriterWriteAttribute(writer, (xmlChar *)"id", (xmlChar *)std::to_string(constructor.id).c_str());
     xmlTextWriterWriteAttribute(writer, (xmlChar *)"module", (xmlChar *)constructor.module.c_str());
@@ -294,7 +307,8 @@ void XMLParser::writeConstructorToFile(const Constructor &constructor, xmlTextWr
     xmlTextWriterEndElement(writer);
 }
 
-void XMLParser::writeOperationToFile(const Operation &operation, xmlTextWriterPtr writer) {
+void XMLParser::writeOperationToFile(const Operation & operation, xmlTextWriterPtr writer)
+{
     xmlTextWriterStartElement(writer, (xmlChar *)"operation");
     xmlTextWriterWriteAttribute(writer, (xmlChar *)"id", (xmlChar *)std::to_string(operation.id).c_str());
     xmlTextWriterWriteAttribute(writer, (xmlChar *)"module", (xmlChar *)operation.module.c_str());
@@ -306,31 +320,36 @@ void XMLParser::writeOperationToFile(const Operation &operation, xmlTextWriterPt
     xmlTextWriterEndElement(writer);
 }
 
-void XMLParser::writeOutputsTransitionsToFile(const std::vector<OutputTransition> &outputs, xmlTextWriterPtr writer) {
-    for (auto& transition : outputs) {
+void XMLParser::writeOutputsTransitionsToFile(const std::vector<OutputTransition> & outputs, xmlTextWriterPtr writer)
+{
+    for (auto & transition : outputs) {
         writeOutputTransitionToFile(transition, writer);
     }
 }
 
-void XMLParser::writeOutputTransitionToFile(const OutputTransition &transition, xmlTextWriterPtr writer) {
+void XMLParser::writeOutputTransitionToFile(const OutputTransition & transition, xmlTextWriterPtr writer)
+{
     xmlTextWriterStartElement(writer, (xmlChar *)"output");
     xmlTextWriterWriteAttribute(writer, (xmlChar *)"id", (xmlChar *)std::to_string(transition.id).c_str());
     xmlTextWriterEndElement(writer);
 }
 
-void XMLParser::writeInputsTransitionToFile(const InputTransitionMap &inputs, xmlTextWriterPtr writer) {
-    for (auto& transition : inputs) {
+void XMLParser::writeInputsTransitionToFile(const InputTransitionMap & inputs, xmlTextWriterPtr writer)
+{
+    for (auto & transition : inputs) {
         writeInputTransitionToFile(transition, writer);
     }
 }
 
-void XMLParser::writeInputTransitionToFile(const std::pair<int, InputTransition> &transition, xmlTextWriterPtr writer) {
+void XMLParser::writeInputTransitionToFile(const std::pair<int, InputTransition> & transition, xmlTextWriterPtr writer)
+{
     xmlTextWriterStartElement(writer, (xmlChar *)"input");
     xmlTextWriterWriteAttribute(writer, (xmlChar *)"index", (xmlChar *)std::to_string(transition.first).c_str());
     xmlTextWriterWriteAttribute(writer, (xmlChar *)"output_id", (xmlChar *)std::to_string(transition.second.outputId).c_str());
     xmlTextWriterEndElement(writer);
 }
 
-void XMLParser::writeConstructorDataToFile(const std::string &data, xmlTextWriterPtr writer) {
+void XMLParser::writeConstructorDataToFile(const std::string & data, xmlTextWriterPtr writer)
+{
     xmlTextWriterWriteElement(writer, (xmlChar *)"data", (xmlChar *)data.c_str());
 }
