@@ -19,21 +19,6 @@ add_executable(libraryloader_example
 find_package(LibXml2 REQUIRED)
 include_directories(${LIBXML2_INCLUDE_DIR})
 
-add_executable(xmlparser_example
-    DataflowModel.h
-    library_loading.h
-    library_loading.cpp
-    Library.h
-    Library.cpp
-    LibraryLoader.h
-    LibraryLoader.cpp
-    XMLParser.h
-    XMLParser.cpp
-    ModelManipulator.h
-    ModelManipulator.cpp
-    xmlparser_example.cpp
-)
-
 add_executable(interpreter_example
     Interpreter.h
     Interpreter.cpp
@@ -65,7 +50,6 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     list(APPEND ${LIBRARIES} ${ICONV_LIBRARIES})
 endif()
 
-target_link_libraries(xmlparser_example ${LIBRARIES})
 target_link_libraries(interpreter_example ${LIBRARIES})
 
 if(UNIX)
