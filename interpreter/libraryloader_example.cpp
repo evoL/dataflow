@@ -32,10 +32,10 @@ int main()
             std::cout << "]" << std::endl;
         }
 
-        unsigned int integer_size = basicmath.getSizes().at("Integer");
-        void * a = malloc(integer_size);
-        void * b = malloc(integer_size);
-        void * c = malloc(integer_size);
+        unsigned int integerSize = basicmath.getSizes().at("Integer");
+        void * a = malloc(integerSize);
+        void * b = malloc(integerSize);
+        void * c = malloc(integerSize);
         basicmath.constructType("Integer", "42", a);
         basicmath.constructType("Integer", "123", b);
 
@@ -58,10 +58,10 @@ int main()
 
         // ***************
 
-        unsigned int real_size = basicmath.getSizes().at("Real");
-        void * d = malloc(real_size);
-        void * e = malloc(real_size);
-        void * f = malloc(real_size);
+        unsigned int realSize = basicmath.getSizes().at("Real");
+        void * d = malloc(realSize);
+        void * e = malloc(realSize);
+        void * f = malloc(realSize);
         basicmath.constructType("Real", "3.1415", d);
         basicmath.constructType("Real", "2.7183", e);
 

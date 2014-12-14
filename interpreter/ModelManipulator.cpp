@@ -223,11 +223,11 @@ bool ModelManipulator::checkModelCorrectness()
         Block& block = dynamic_cast<Block &>(*it.second);
 
         // check if the desired library is loaded
-        auto found_lib = model.libraries.find(block.module);
-        if (found_lib == model.libraries.end())
+        auto foundLib = model.libraries.find(block.module);
+        if (foundLib == model.libraries.end())
             return false;
 
-        Library& lib = found_lib->second;
+        Library& lib = foundLib->second;
 
         if (block.id > maxBlockId)
             maxBlockId = block.id;
@@ -272,30 +272,30 @@ bool ModelManipulator::checkModelCorrectness()
                     return false;
 
                 // get the type of input
-                const std::string& input_type = inputs->second[it2.first];
+                const std::string& inputType = inputs->second[it2.first];
 
                 // get the type of output
-                auto found_output_lib = libraries.find(outputBlock->module);
-                if (found_output_lib == libraries.end())
+                auto foundOutputLib = libraries.find(outputBlock->module);
+                if (foundOutputLib == libraries.end())
                     return false;
                 if (outputBlock->blockType() == BlockType::Operation) {
-                    auto found_output_list = found_output_lib->second.getOutputs().find(dynamic_cast<Operation &>(*outputBlock).name);
-                    if (found_output_list == found_output_lib->second.getOutputs().end())
+                    auto foundOutputList = foundOutputLib->second.getOutputs().find(dynamic_cast<Operation &>(*outputBlock).name);
+                    if (foundOutputList == foundOutputLib->second.getOutputs().end())
                         return false;
 
                     // and if it is the correct one
-                    bool output_found = false;
+                    bool outputFound = false;
                     for (int i=0; i<(int)outputBlock->outputs.size(); i++) {
                         if (outputBlock->outputs[i].id == it2.second.outputId) {
                             // ... and if the types match
-                            if (found_output_list->second[i] != input_type)
+                            if (foundOutputList->second[i] != inputType)
                                 return false;
                         
-                            output_found = true;
+                            outputFound = true;
                             break;
                         }
                     }
-                    if (!output_found)
+                    if (!outputFound)
                         return false;
                 } else {
                     if (outputBlock->outputs.size() != 1)
@@ -303,7 +303,7 @@ bool ModelManipulator::checkModelCorrectness()
                     if (outputBlock->outputs[0].id != it2.second.outputId)
                         return false;
 
-                    if ((outputBlock->module + "." + dynamic_cast<Constructor&>(*outputBlock).type) != input_type)
+                    if ((outputBlock->module + "." + dynamic_cast<Constructor&>(*outputBlock).type) != inputType)
                         return false;
                 }
 
@@ -317,10 +317,10 @@ bool ModelManipulator::checkModelCorrectness()
             // check if library contains desired constructor
             Constructor& cons = dynamic_cast<Constructor &>(block);
             
-            bool type_found = false;
+            bool typeFound = false;
             for (auto& it : lib.getTypes()) {
                 if (it == cons.type) {
-                    type_found = true;
+                    typeFound = true;
                     break;
                 }
             }
