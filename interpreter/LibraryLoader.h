@@ -5,14 +5,15 @@
 #include "Library.h"
 #include <string>
 #include <stdexcept>
+#include "interpreter_export.h"
 
-class LibraryLoadError : public std::runtime_error
+class INTERPRETER_EXPORT LibraryLoadError : public std::runtime_error
 {
 public:
     LibraryLoadError(const std::string & what): std::runtime_error(what) {}
 };
 
-class LibraryLoader
+class INTERPRETER_EXPORT LibraryLoader
 {
 public:
     static Library load(const std::string moduleName);

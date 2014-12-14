@@ -2,14 +2,15 @@
 #define DATAFLOW_INTERPRETER
 #include "DataflowModel.h"
 #include "Datastore.h"
+#include "interpreter_export.h"
 
-class InterpreterError : public std::runtime_error
+class INTERPRETER_EXPORT InterpreterError : public std::runtime_error
 {
 public:
     InterpreterError(const std::string & what) : std::runtime_error(what) {}
 };
 
-class Interpreter : private BlockVisitor
+class INTERPRETER_EXPORT Interpreter : private BlockVisitor
 {
 public:
     Interpreter(ProjectModel & model);

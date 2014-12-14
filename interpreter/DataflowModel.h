@@ -8,13 +8,14 @@
 
 #include "Library.h"
 #include "BlockVisitor.h"
+#include "interpreter_export.h"
 
 struct Block;
 
 typedef std::unordered_map<int, std::shared_ptr<Block>> BlocksMap;
 typedef std::unordered_map<std::string, Library> LibraryMap;
 
-enum class BlockType
+enum class INTERPRETER_EXPORT BlockType
 {
     Operation,
     Constructor

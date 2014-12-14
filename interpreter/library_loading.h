@@ -2,6 +2,7 @@
 #define LIBRARY_LOADING_H
 
 #include <string>
+#include "interpreter_export.h"
 
 #ifdef _WIN32
 #   include <Windows.h>
@@ -14,9 +15,9 @@
 
 namespace dataflow
 {
-    DATAFLOW_LIBRARY library_load(const std::string & libraryName);
-    DATAFLOW_PROCEDURE library_procedure(DATAFLOW_LIBRARY library, const std::string & name);
-    bool   library_free(DATAFLOW_LIBRARY library);
+    INTERPRETER_NO_EXPORT DATAFLOW_LIBRARY library_load(const std::string & libraryName);
+    INTERPRETER_NO_EXPORT DATAFLOW_PROCEDURE library_procedure(DATAFLOW_LIBRARY library, const std::string & name);
+    INTERPRETER_NO_EXPORT bool   library_free(DATAFLOW_LIBRARY library);
 }
 
 #endif

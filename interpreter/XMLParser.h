@@ -7,14 +7,15 @@
 #include <libxml/xmlwriter.h>
 #include "DataflowModel.h"
 #include "LibraryLoader.h"
+#include "interpreter_export.h"
 
-class XMLParserError : public std::runtime_error
+class INTERPRETER_EXPORT XMLParserError : public std::runtime_error
 {
 public:
     XMLParserError(const std::string & what): std::runtime_error(what) {}
 };
 
-class XMLParser
+class INTERPRETER_EXPORT XMLParser
 {
 public:
     ProjectModel * loadModelFromFile(std::string filePath);

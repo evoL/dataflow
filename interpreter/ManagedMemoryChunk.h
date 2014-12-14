@@ -1,8 +1,9 @@
 #ifndef MANAGED_MEMORY_CHUNK_H
 #define MANAGED_MEMORY_CHUNK_H
 #include <cstddef>
+#include "interpreter_export.h"
 
-class ManagedMemoryChunk
+class INTERPRETER_NO_EXPORT ManagedMemoryChunk
 {
     void * managedData{};
     std::size_t managedDataSize{};
@@ -12,8 +13,8 @@ public:
     explicit ManagedMemoryChunk(std::size_t chunkSize);
     ~ManagedMemoryChunk();
 
-    ManagedMemoryChunk(const ManagedMemoryChunk &) = delete;
-    ManagedMemoryChunk & operator=(const ManagedMemoryChunk &) = delete;
+    /*ManagedMemoryChunk(const ManagedMemoryChunk &) = delete;
+    ManagedMemoryChunk & operator=(const ManagedMemoryChunk &) = delete;*/
 
     ManagedMemoryChunk(ManagedMemoryChunk && other);
     ManagedMemoryChunk & operator=(ManagedMemoryChunk && other);

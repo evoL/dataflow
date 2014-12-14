@@ -4,8 +4,9 @@
 #include <string>
 #include <unordered_map>
 #include "ManagedMemoryChunk.h"
+#include "interpreter_export.h"
 
-class Datastore
+class INTERPRETER_NO_EXPORT Datastore
 {
 public:
     bool isComputed(int dataId);

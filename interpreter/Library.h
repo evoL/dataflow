@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <vector>
 #include "library_loading.h"
+#include "interpreter_export.h"
 
 #ifdef _MSC_VER
 #   define DATAFLOW_CALLING_CONVENTION __cdecl
@@ -20,13 +21,13 @@ typedef bool (DATAFLOW_CALLING_CONVENTION * destructor_fn)(void *);
 typedef bool (DATAFLOW_CALLING_CONVENTION * execute_fn)(void * const *, void * const *);
 typedef unsigned int (DATAFLOW_CALLING_CONVENTION * type_size_fn)();
 
-class LibraryError : public std::runtime_error
+class INTERPRETER_EXPORT LibraryError : public std::runtime_error
 {
 public:
     LibraryError(const std::string & what): std::runtime_error(what) {}
 };
 
-class Library
+class INTERPRETER_EXPORT Library
 {
     friend class LibraryLoader;
 

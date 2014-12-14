@@ -1,3 +1,5 @@
+include(GenerateExportHeader)
+
 find_package(LibXml2 REQUIRED)
 find_package(Iconv REQUIRED)
 include_directories(
@@ -24,6 +26,10 @@ add_library(dataflow SHARED
     XMLParser.h
     library_loading.cpp
     library_loading.h
+)
+
+generate_export_header(dataflow
+    BASE_NAME interpreter
 )
 
 target_link_libraries(dataflow

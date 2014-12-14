@@ -3,14 +3,15 @@
 
 #include "DataflowModel.h"
 #include <stdexcept>
+#include "interpreter_export.h"
 
-class ModelManipulatorError : public std::runtime_error
+class INTERPRETER_EXPORT ModelManipulatorError : public std::runtime_error
 {
 public:
     ModelManipulatorError(const std::string & what): std::runtime_error(what) {}
 };
 
-class ModelManipulator
+class INTERPRETER_EXPORT ModelManipulator
 {
 private:
     ProjectModel& model;
