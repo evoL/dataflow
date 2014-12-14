@@ -29,10 +29,10 @@ void Interpreter::visit(const Constructor & constructor)
     auto allocated_space = datastore.createEntry(output_id, type_size);
 
     try {
-		library.constructType(constructor.type, constructor.data, allocated_space);
-	} catch (LibraryError& err) {
-		throw InterpreterError(std::string("Library error: ") + err.what());
-	}
+        library.constructType(constructor.type, constructor.data, allocated_space);
+    } catch (LibraryError& err) {
+        throw InterpreterError(std::string("Library error: ") + err.what());
+    }
 }
 
 void Interpreter::visit(const Operation & operation)
@@ -88,8 +88,8 @@ void Interpreter::executeOperation(const Operation & operation)
         output_locations.push_back(datastore[output.id]);
 
     try {
-		library.execute(operation.name, input_locations, output_locations);
-	} catch (LibraryError& err) {
-		throw InterpreterError(std::string("Library error: ") + err.what());
-	}
+        library.execute(operation.name, input_locations, output_locations);
+    } catch (LibraryError& err) {
+        throw InterpreterError(std::string("Library error: ") + err.what());
+    }
 }
