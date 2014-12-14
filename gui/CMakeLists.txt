@@ -6,7 +6,7 @@ qt5_add_resources(resources
     DiagramScene.qrc
 )
 
-add_executable(dataflow WIN32
+add_executable(dataflow_gui WIN32
     ${resources}
     Arrow.h
     Arrow.cpp
@@ -29,6 +29,6 @@ add_executable(dataflow WIN32
     main.cpp
 )
 
-target_link_libraries(dataflow Qt5::Widgets)
+target_link_libraries(dataflow_gui Qt5::Widgets)
 
 source_group("Resources" "\\.qrc$")
