@@ -1,4 +1,5 @@
 #include "Interpreter.h"
+#include <string>
 
 
 Interpreter::Interpreter(ProjectModel & model) : model(model)
@@ -27,7 +28,11 @@ void Interpreter::visit(const Constructor & constructor)
     auto output_id = constructor.outputs[0].id;
     auto allocated_space = datastore.createEntry(output_id, type_size);
 
-    library.constructType(constructor.type, constructor.data, allocated_space);
+    try {
+		library.constructType(constructor.type, constructor.data, allocated_space);
+	} catch (LibraryError& err) {
+		throw InterpreterError(std::string("Library error: ") + err.what());
+	}
 }
 
 void Interpreter::visit(const Operation & operation)
@@ -82,5 +87,9 @@ void Interpreter::executeOperation(const Operation & operation)
     for (auto & output : operation.outputs)
         output_locations.push_back(datastore[output.id]);
 
-    library.execute(operation.name, input_locations, output_locations);
+    try {
+		library.execute(operation.name, input_locations, output_locations);
+	} catch (LibraryError& err) {
+		throw InterpreterError(std::string("Library error: ") + err.what());
+	}
 }
