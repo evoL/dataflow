@@ -29,6 +29,14 @@ add_executable(dataflow_gui WIN32
     main.cpp
 )
 
-target_link_libraries(dataflow_gui Qt5::Widgets)
+include_directories(
+    "${PROJECT_SOURCE_DIR}/interpreter"
+    "${PROJECT_BINARY_DIR}/interpreter"
+    ${LIBXML2_INCLUDE_DIR}
+    ${ICONV_INCLUDE_DIR}
+)
+
+add_dependencies(dataflow_gui dataflow)
+target_link_libraries(dataflow_gui dataflow Qt5::Widgets)
 
 source_group("Resources" "\\.qrc$")
