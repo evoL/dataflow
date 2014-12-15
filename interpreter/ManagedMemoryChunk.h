@@ -3,7 +3,7 @@
 #include <cstddef>
 #include "interpreter_export.h"
 
-class INTERPRETER_NO_EXPORT ManagedMemoryChunk
+class INTERPRETER_EXPORT ManagedMemoryChunk
 {
     void * managedData{};
     std::size_t managedDataSize{};
