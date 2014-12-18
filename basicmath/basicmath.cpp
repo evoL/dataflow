@@ -19,9 +19,14 @@ extern "C"
         return "AddIntegers\0AddReals\0AddRationals\0AddComplex\0SubIntegers\0SubReals\0SubRationals\0SubComplex\0MultIntegers\0MultReals\0MultRationals\0MultComplex\0DivIntegers\0DivReals\0DivRationals\0DivComplex\0RealFromInteger\0RealFromRational\0ComplexFromInteger\0ComplexFromReal\0ComplexFromRational\0";
     }
 
+    BASIC_MATH_API unsigned int DATAFLOW_MODULE Integer_size()
+    {
+        return sizeof(dInteger);
+    }
+
     BASIC_MATH_API unsigned int DATAFLOW_MODULE Real_size()
     {
-        return sizeof(float);
+        return sizeof(dReal);
     }
 
     BASIC_MATH_API unsigned int DATAFLOW_MODULE Rational_size()
@@ -49,10 +54,10 @@ extern "C"
     BASIC_MATH_API bool DATAFLOW_MODULE Rational_construct(const char * data, void * output)
     {
         dRational& r = *(dRational *)output;
-        
+
         if (sscanf(data, "%d %d", &r.numerator, &r.denominator) < 2)
             return false;
-        
+
         if (r.denominator == 0)
             return false;
 
@@ -62,10 +67,10 @@ extern "C"
     BASIC_MATH_API bool DATAFLOW_MODULE Complex_construct(const char * data, void * output)
     {
         dComplex& z = *(dComplex *)output;
-        
+
         if (sscanf(data, "%d %d", &z.re, &z.im) < 2)
             return false;
-        
+
         return true;
     }
 
@@ -164,7 +169,7 @@ extern "C"
         return "basicmath.Rational\0";
     }
 
-    BASIC_MATH_API const char * DATAFLOW_MODULE ComplexFromInteger_inputs()    
+    BASIC_MATH_API const char * DATAFLOW_MODULE ComplexFromInteger_inputs()
     {
         return "basicmath.Integer\0";
     }
@@ -174,7 +179,7 @@ extern "C"
         return "basicmath.Real\0";
     }
 
-    BASIC_MATH_API const char * DATAFLOW_MODULE ComplexFromRational_inputs()    
+    BASIC_MATH_API const char * DATAFLOW_MODULE ComplexFromRational_inputs()
     {
         return "basicmath.Rational\0";
     }
@@ -274,7 +279,7 @@ extern "C"
         return "basicmath.Real\0";
     }
 
-    BASIC_MATH_API const char * DATAFLOW_MODULE ComplexFromInteger_outputs()    
+    BASIC_MATH_API const char * DATAFLOW_MODULE ComplexFromInteger_outputs()
     {
         return "basicmath.Complex\0";
     }
@@ -284,7 +289,7 @@ extern "C"
         return "basicmath.Complex\0";
     }
 
-    BASIC_MATH_API const char * DATAFLOW_MODULE ComplexFromRational_outputs()    
+    BASIC_MATH_API const char * DATAFLOW_MODULE ComplexFromRational_outputs()
     {
         return "basicmath.Complex\0";
     }
@@ -306,7 +311,7 @@ extern "C"
         dRational& r1 = *(dRational *)(inputs[0]);
         dRational& r2 = *(dRational *)(inputs[1]);
         dRational& res = *(dRational *)(outputs[0]);
-        
+
         res.numerator = r1.numerator * r2.denominator + r2.numerator * r1.denominator;
         res.denominator = r1.denominator * r2.denominator;
         normalize_rational(res);
@@ -322,7 +327,7 @@ extern "C"
 
         res.re = z1.re + z2.re;
         res.im = z1.im + z2.im;
-        
+
         return true;
     }
 
@@ -343,7 +348,7 @@ extern "C"
         dRational& r1 = *(dRational *)(inputs[0]);
         dRational& r2 = *(dRational *)(inputs[1]);
         dRational& res = *(dRational *)(outputs[0]);
-        
+
         res.numerator = r1.numerator * r2.denominator - r2.numerator * r1.denominator;
         res.denominator = r1.denominator * r2.denominator;
         normalize_rational(res);
@@ -359,7 +364,7 @@ extern "C"
 
         res.re = z1.re - z2.re;
         res.im = z1.im - z2.im;
-        
+
         return true;
     }
 
@@ -380,7 +385,7 @@ extern "C"
         dRational& r1 = *(dRational *)(inputs[0]);
         dRational& r2 = *(dRational *)(inputs[1]);
         dRational& res = *(dRational *)(outputs[0]);
-        
+
         res.numerator = r1.numerator * r2.numerator;
         res.denominator = r1.denominator * r2.denominator;
         normalize_rational(res);
@@ -396,7 +401,7 @@ extern "C"
 
         res.re = z1.re * z2.re - z1.im * z2.im;
         res.im = z1.im * z2.re + z2.im * z1.re;
-        
+
         return true;
     }
 
@@ -417,11 +422,11 @@ extern "C"
         dRational& r1 = *(dRational *)(inputs[0]);
         dRational& r2 = *(dRational *)(inputs[1]);
         dRational& res = *(dRational *)(outputs[0]);
-        
+
         res.numerator = r1.numerator * r2.denominator;
         if ((res.denominator = r1.denominator * r2.numerator) < 0)
             return false;
-        
+
         normalize_rational(res);
 
         return true;
@@ -436,7 +441,7 @@ extern "C"
         dReal divisor = z2.re * z2.re + z2.im * z2.im;
         res.re = (z1.re * z2.re + z1.im * z2.im) / divisor;
         res.im = (z1.im * z2.re - z2.im * z1.re) / divisor;
-            
+
         return true;
     }
 

@@ -2,6 +2,7 @@
 #define IO_MODULE_H
 
 #include <dataflow.h>
+#include <basicmath.h>
 
 #ifdef BASIC_IO_EXPORTS
 #   define BASIC_IO_API DATAFLOW_MODULE_EXPORT
@@ -16,10 +17,13 @@ extern "C"
     BASIC_IO_API const char * DATAFLOW_MODULE operations();
     BASIC_IO_API const char * DATAFLOW_MODULE PrintInteger_inputs();
     BASIC_IO_API const char * DATAFLOW_MODULE PrintReal_inputs();
+    BASIC_IO_API const char * DATAFLOW_MODULE PrintComplex_inputs();
     BASIC_IO_API const char * DATAFLOW_MODULE PrintInteger_outputs();
     BASIC_IO_API const char * DATAFLOW_MODULE PrintReal_outputs();
+    BASIC_IO_API const char * DATAFLOW_MODULE PrintComplex_outputs();
     BASIC_IO_API bool PrintInteger_execute(void * const * inputs, void * const * outputs);
     BASIC_IO_API bool PrintReal_execute(void * const * inputs, void * const * outputs);
+    BASIC_IO_API bool PrintComplex_execute(void * const * inputs, void * const * outputs);
 }
 
 #endif

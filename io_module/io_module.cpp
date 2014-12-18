@@ -29,12 +29,22 @@ extern "C"
         return "basicmath.Real\0";
     }
 
+    BASIC_IO_API const char * DATAFLOW_MODULE PrintComplex_inputs()
+    {
+        return "basicmath.Complex\0";
+    }
+
     BASIC_IO_API const char * DATAFLOW_MODULE PrintInteger_outputs()
     {
         return "\0";
     }
 
     BASIC_IO_API const char * DATAFLOW_MODULE PrintReal_outputs()
+    {
+        return "\0";
+    }
+
+    BASIC_IO_API const char * DATAFLOW_MODULE PrintComplex_outputs()
     {
         return "\0";
     }
@@ -50,6 +60,13 @@ extern "C"
     {
         dReal value = *(dReal *)(inputs[0]);
         printf("%f\n", value);
+        return true;
+    }
+
+    BASIC_IO_API bool PrintComplex_execute(void * const * inputs, void * const *)
+    {
+        dComplex value = *(dComplex *)(inputs[0]);
+        printf("%f %fi\n", value.re, value.im);
         return true;
     }
 }

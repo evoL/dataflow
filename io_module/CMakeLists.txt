@@ -3,7 +3,10 @@ set(sources
     io_module.cpp
 )
 
-include_directories(${dataflow_SOURCE_DIR}/include)
+include_directories(
+    ${dataflow_SOURCE_DIR}/include
+    ${dataflow_SOURCE_DIR}/basicmath
+)
 
 add_library(io_module SHARED ${sources})
 set_target_properties(io_module PROPERTIES
