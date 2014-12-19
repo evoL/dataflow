@@ -5,6 +5,9 @@
 #include <QtWidgets>
 #include <iostream>
 #include <QVector>
+#include <QTextStream>
+
+using namespace std;
 
 MainWindow::MainWindow()
 {
@@ -29,6 +32,23 @@ void MainWindow::modulesViewClicked()
 {
     scene->setMode(DiagramScene::InsertItem);
 }
+
+void MainWindow::openFile()
+{
+    //QTextStream cout(stdout);
+    string fileName = QFileDialog::getOpenFileName(this, tr("Open project"),
+                                                    "",
+                                                    tr("Dataflow projects (*.xml)")).toStdString();
+
+    if (!fileName.empty())
+    {
+        cout<<fileName<<endl;
+        projectModel = XMLParser().loadModelFromFile(fileName);
+
+        setWindowTitle( QString(projectModel->getName().data()) + " - Dataflow Creator" );
+    }
+}
+
 void MainWindow::deleteItem()
 {
     foreach (QGraphicsItem * item, scene->selectedItems()) {
@@ -118,14 +138,21 @@ void MainWindow::createModulesList()
 }
 void MainWindow::createActions()
 {
+    openFileAction = new QAction(tr("Open..."), this);
+    openFileAction->setShortcut(tr("Ctrl+O"));
+    openFileAction->setStatusTip(tr("Load project file"));
+    connect(openFileAction, SIGNAL(triggered()), this, SLOT(openFile()));
+
     deleteAction = new QAction(QIcon(":/images/delete.png"), tr("&Delete"), this);
     deleteAction->setShortcut(tr("Delete"));
     deleteAction->setStatusTip(tr("Delete item from diagram"));
     connect(deleteAction, SIGNAL(triggered()), this, SLOT(deleteItem()));
+
     exitAction = new QAction(tr("E&xit"), this);
     exitAction->setShortcuts(QKeySequence::Quit);
     exitAction->setStatusTip(tr("Quit"));
     connect(exitAction, SIGNAL(triggered()), this, SLOT(close()));
+
     aboutAction = new QAction(tr("A&bout"), this);
     aboutAction->setShortcut(tr("Ctrl+B"));
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
@@ -133,6 +160,7 @@ void MainWindow::createActions()
 void MainWindow::createMenus()
 {
     fileMenu = menuBar()->addMenu(tr("&File"));
+    fileMenu->addAction(openFileAction);
     fileMenu->addAction(exitAction);
     itemMenu = menuBar()->addMenu(tr("&Item"));
     itemMenu->addAction(deleteAction);
