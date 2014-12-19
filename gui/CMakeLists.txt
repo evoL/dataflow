@@ -24,8 +24,10 @@ add_executable(dataflow_gui WIN32
     ModuleIn.cpp
     ModuleOut.h
     ModuleOut.cpp
-    ModulesListModel.h
-    ModulesListModel.cpp
+	ModulesPanelItem.h
+	ModulesPanelItem.cpp
+	ModulesPanelModel.h
+	ModulesPanelModel.cpp
     main.cpp
 )
 

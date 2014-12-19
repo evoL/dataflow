@@ -3,7 +3,7 @@
 #include <QMainWindow>
 
 #include "DiagramModuleItem.h"
-#include "ModulesListModel.h"
+#include "ModulesPanelModel.h"
 #include <DataflowModel.h>
 #include <XMLParser.h>
 
@@ -19,7 +19,7 @@ class QToolButton;
 class QAbstractButton;
 class QGraphicsView;
 class QStringListModel;
-class QListView;
+class QTreeView;
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -28,7 +28,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow();
 private slots:
-    void modulesViewClicked();
+    void panelViewClicked();
     void openFile();
     void deleteItem();
     void pointerGroupClicked(int id);
@@ -52,11 +52,12 @@ private:
     QMenu * aboutMenu;
     QToolBar * editToolBar;
     QToolBar * pointerToolbar;
-    ModulesListModel * modulesListModel;
-    QListView * modulesView;
+    
     QButtonGroup * pointerTypeGroup;
     QAction * lineAction;
 
     ProjectModel * projectModel;
+	ModulesPanelModel * panelModel;
+	QTreeView * panelView;
 };
 #endif // MAINWINDOW_H

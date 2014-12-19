@@ -3,9 +3,9 @@
 #include "DiagramModuleItem.h"
 #include "ModuleIn.h"
 #include "ModuleOut.h"
-#include "ModulesListModel.h"
+#include "ModulesPanelModel.h"
 #include <QGraphicsScene>
-#include <QListView>
+#include <QTreeView>
 
 QT_BEGIN_NAMESPACE
 class QGraphicsSceneMouseEvent;
@@ -13,7 +13,7 @@ class QMenu;
 class QPointF;
 class QGraphicsLineItem;
 class QColor;
-//class QListView;
+class QTreeView;
 QT_END_NAMESPACE
 
 class DiagramScene : public QGraphicsScene
@@ -21,7 +21,7 @@ class DiagramScene : public QGraphicsScene
     Q_OBJECT
 public:
     enum Mode { InsertItem, InsertLine, MoveItem };
-    explicit DiagramScene(ModulesListModel * modulesListModel, QListView * modulesView, QMenu * itemMenu, QObject * parent = 0);
+    explicit DiagramScene(ModulesPanelModel * panelModel, QTreeView * panelView, QMenu * itemMenu, QObject * parent = 0);
 public slots:
     void setMode(Mode mode);
 signals:
@@ -33,8 +33,8 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent);
 private:
     QMenu * myItemMenu;
-    QListView * modulesView;
-    ModulesListModel * modulesListModel;
+    QTreeView * panelView;
+    ModulesPanelModel * panelModel;
     Mode myMode;
     QPointF startPoint;
     QGraphicsLineItem * line;

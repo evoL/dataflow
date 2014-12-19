@@ -7,12 +7,12 @@
 #include <QColor>
 #include <QBrush>
 
-DiagramScene::DiagramScene(ModulesListModel * modulesListModel, QListView * modulesView, QMenu * itemMenu, QObject * parent)
+DiagramScene::DiagramScene(ModulesPanelModel * panelModel, QTreeView * panelView, QMenu * itemMenu, QObject * parent)
     : QGraphicsScene(parent)
 {
     myItemMenu = itemMenu;
-    this->modulesView = modulesView;
-    this->modulesListModel = modulesListModel;
+    this->panelView = panelView;
+    this->panelModel = panelModel;
     myMode = MoveItem;
     line = 0;
     myItemColor = QColor(169, 191, 215);
@@ -41,8 +41,8 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
     const Module * selectedModulePtr;
 
     switch (myMode) {
-    case InsertItem:
-        selectedModulePtr = &modulesListModel->at(modulesView->currentIndex().row());
+    /*case InsertItem:
+        selectedModulePtr = &panelModel->at(panelView->currentIndex().row());
         item = new DiagramModuleItem(selectedModulePtr, myItemMenu);
 
         if(selectedModulePtr->getType()==0)item->setBrush(myItemColor);
@@ -55,7 +55,7 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
         if (item->pos().y() < 0) item->setY(0);
 
         emit itemInserted();
-        break;
+        break;*/
 
     case InsertLine:
         line = new QGraphicsLineItem(QLineF(mouseEvent->scenePos(),
