@@ -29,6 +29,7 @@ public:
 	int childCount();
 	int columnCount();
 	QVariant data();
+	ItemType getItemType() { return itemType; }
 
 	ModulesPanelItem * addLibrary(const Library * library);
 	ModulesPanelItem * addOperationsLabel();

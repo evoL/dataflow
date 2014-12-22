@@ -58,13 +58,7 @@ QVariant ModulesPanelItem::data()
 	case LibraryT:
 	case OperationsLabelT:
 	case OperationT:
-		//return QString::fromStdString(static_cast<const Library*>(dataPtr)->getName());
 		return QString::fromStdString(name);
-	
-		//return QString("Operations");
-	
-		//return QString::fromStdString(*static_cast<const std::string*>(dataPtr));
-
 	}
 	return QString("Brak danych");
 }

@@ -19,19 +19,22 @@ MainWindow::MainWindow()
     scene->setSceneRect(QRectF(0, 0, 3000, 3000));
     connect(scene, SIGNAL(itemInserted()), this, SLOT(itemInserted()));
     createToolbars();
-    QHBoxLayout * layout = new QHBoxLayout;
-    layout->addWidget(panelView);
+    QSplitter * splitter = new QSplitter;
+    splitter->addWidget(panelView);
     view = new QGraphicsView(scene);
-    layout->addWidget(view);
-    QWidget * widget = new QWidget;
-    widget->setLayout(layout);
-    setCentralWidget(widget);
+    splitter->addWidget(view);
+    setCentralWidget(splitter);
     setWindowTitle(tr("Dataflow Creator"));
     setUnifiedTitleAndToolBarOnMac(true);
 }
 void MainWindow::panelViewClicked()
 {
     scene->setMode(DiagramScene::InsertItem);
+}
+
+void MainWindow::panelViewCollapsedExpanded()
+{
+	panelView->resizeColumnToContents(0);
 }
 
 void MainWindow::openFile()
@@ -49,7 +52,6 @@ void MainWindow::openFile()
 
 		panelView->setModel(panelModel);
 		
-
         setWindowTitle( QString(projectModel->getName().data()) + " - Dataflow Creator" );
     }
 }
@@ -92,7 +94,6 @@ void MainWindow::about()
 }
 void MainWindow::createModulesList()
 {
-
 	panelView = new QTreeView();
 	//panelView->setModel(panelModel);
 	panelView->setHeaderHidden(true);
@@ -100,6 +101,12 @@ void MainWindow::createModulesList()
 	panelView->setSelectionMode(QAbstractItemView::SingleSelection);
 	panelView->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Ignored);
 	panelView->setMinimumWidth(150);
+	connect(panelView, SIGNAL(clicked(const QModelIndex &)),
+		this, SLOT(panelViewClicked()));
+	connect(panelView, SIGNAL(collapsed(const QModelIndex &)),
+		this, SLOT(panelViewCollapsedExpanded()));
+	connect(panelView, SIGNAL(expanded(const QModelIndex &)),
+		this, SLOT(panelViewCollapsedExpanded()));
 
     /*modulesListModel = new ModulesListModel();
     // Adding some "operations" to the model.

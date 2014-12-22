@@ -29,6 +29,7 @@ public:
     MainWindow();
 private slots:
     void panelViewClicked();
+	void panelViewCollapsedExpanded();
     void openFile();
     void deleteItem();
     void pointerGroupClicked(int id);

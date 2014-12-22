@@ -1,6 +1,5 @@
 #include "ModulesPanelModel.h"
 
-#include <iostream>
 
 const Library * att(const LibraryMap *map, unsigned int index)
 {
@@ -50,7 +49,6 @@ void ModulesPanelModel::loadFromProjectModel(ProjectModel * projectModel)
 		}
 		it++;
 	}
-
 }
 
 QModelIndex ModulesPanelModel::index(int row, int column, const QModelIndex & parent) const
@@ -122,6 +120,9 @@ Qt::ItemFlags ModulesPanelModel::flags(const QModelIndex &index) const
 	if (!index.isValid())
 		return 0;
 
-	return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+	if (static_cast<ModulesPanelItem*>(index.internalPointer())->getItemType() == ModulesPanelItem::ItemType::OperationT)
+		return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+
+	return Qt::ItemIsEnabled;
 }
 
