@@ -1,5 +1,5 @@
-#ifndef MODULEIN_H
-#define MODULEIN_H
+#ifndef BlockIn_H
+#define BlockIn_H
 
 #include <QGraphicsPolygonItem>
 #include <QStyleOptionGraphicsItem>
@@ -7,13 +7,14 @@
 #include <QPointF>
 
 class Arrow;
-class ModuleIn : public QGraphicsEllipseItem
+class BlockIn : public QGraphicsEllipseItem
 {
 public:
 
     enum { Type = UserType + 1 };
-    ModuleIn(QGraphicsItem * parent = 0);
-    void DrawIn(int i, QString text);
+    BlockIn(int index, QGraphicsItem * parent = 0);
+	int getIndex() { return index; }
+    void DrawIn(QString text);
     void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
     void highlight(QPainter * painter, bool is_selected);
     int type() const { return Type;}
@@ -23,9 +24,9 @@ public:
     QPointF pos() const;
 
 private:
-    int posi;
+    int index;
     QList<Arrow *> arrows;
 
 };
 
-#endif // MODULEIN_H
+#endif // BlockIn_H

@@ -1,7 +1,7 @@
 #include "DiagramScene.h"
 #include "Arrow.h"
-#include "ModuleIn.h"
-#include "ModuleOut.h"
+#include "BlockIn.h"
+#include "BlockOut.h"
 #include <QTextCursor>
 #include <QGraphicsSceneMouseEvent>
 #include <QColor>
@@ -15,9 +15,7 @@ DiagramScene::DiagramScene(ModulesPanelModel * panelModel, QTreeView * panelView
     this->panelModel = panelModel;
     myMode = MoveItem;
     line = 0;
-    myItemColor = QColor(169, 191, 215);
-    myInputColor =QColor(255,251,160);
-    myOutputColor=QColor(140,255,151);
+    
     myTextColor = Qt::black;
     myLineColor = Qt::black;
 
@@ -28,6 +26,27 @@ DiagramScene::DiagramScene(ModulesPanelModel * panelModel, QTreeView * panelView
 
     setBackgroundBrush(QBrush(linearGrad));
 }
+
+DiagramBlock * DiagramScene::findBlockById(int id)
+{
+	QList<QGraphicsItem *>::iterator it = this->items().begin();
+	
+	while (it != this->items().end())
+	{
+		if (qgraphicsitem_cast<DiagramBlock*>(*it)->type() == DiagramBlock::Type)
+		{
+			DiagramBlock * block = qgraphicsitem_cast<DiagramBlock*>(*it);
+			if ( block != nullptr && block->getId() == id)
+			{
+				return block;
+			}
+
+		}
+		
+	}
+	return NULL;
+}
+
 void DiagramScene::setMode(Mode mode)
 {
     myMode = mode;
@@ -37,17 +56,18 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
     if (mouseEvent->button() != Qt::LeftButton)
         return;
 
-    DiagramModuleItem * item;
-    const Module * selectedModulePtr;
+    DiagramBlock * item;
+    const Block * selectedBlockPtr;
 
     switch (myMode) {
+    //poprawić nazwy!!!!!
     /*case InsertItem:
-        selectedModulePtr = &panelModel->at(panelView->currentIndex().row());
-        item = new DiagramModuleItem(selectedModulePtr, myItemMenu);
+        selectedBlockPtr = &panelModel->at(panelView->currentIndex().row());
+        item = new DiagramModuleItem(selectedBlockPtr, myItemMenu);
 
-        if(selectedModulePtr->getType()==0)item->setBrush(myItemColor);
-        if(selectedModulePtr->getType()==-1)item->setBrush(myInputColor);
-        if(selectedModulePtr->getType()==1)item->setBrush(myOutputColor);
+        if(selectedBlockPtr->getType()==0)item->setBrush(myItemColor);
+        if(selectedBlockPtr->getType()==-1)item->setBrush(myInputColor);
+        if(selectedBlockPtr->getType()==1)item->setBrush(myOutputColor);
         addItem(item);
 
         item->setPos(mouseEvent->scenePos() - QPointF(20,20));
@@ -95,13 +115,13 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
         removeItem(line);
         delete line;
 
-            //from end to start
+        //from end to start
         if (startItems.count() > 0 && endItems.count() > 0 &&
-            startItems.first()->type() == ModuleIn::Type &&
-            endItems.first()->type() == ModuleOut::Type &&
+            startItems.first()->type() == BlockIn::Type &&
+            endItems.first()->type() == BlockOut::Type &&
             startItems.first() != endItems.first()) {
-            ModuleIn * startItem = qgraphicsitem_cast<ModuleIn *>(startItems.first());
-            ModuleOut * endItem = qgraphicsitem_cast<ModuleOut *>(endItems.first());
+            BlockIn * startItem = qgraphicsitem_cast<BlockIn *>(startItems.first());
+            BlockOut * endItem = qgraphicsitem_cast<BlockOut *>(endItems.first());
             Arrow * arrow = new Arrow(startItem, endItem);
             arrow->setColor(myLineColor);
             startItem->removeArrows();
@@ -113,16 +133,15 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
 
         //from start to end
         if (startItems.count() > 0 && endItems.count() > 0 &&
-            startItems.first()->type() == ModuleOut::Type &&
-            endItems.first()->type() == ModuleIn::Type &&
+            startItems.first()->type() == BlockOut::Type &&
+            endItems.first()->type() == BlockIn::Type &&
             startItems.first() != endItems.first()) {
-            ModuleIn * startItem = qgraphicsitem_cast<ModuleIn *>(endItems.first());
-            ModuleOut * endItem = qgraphicsitem_cast<ModuleOut *>(startItems.first());
+            BlockIn * startItem = qgraphicsitem_cast<BlockIn *>(endItems.first());
+            BlockOut * endItem = qgraphicsitem_cast<BlockOut *>(startItems.first());
             Arrow * arrow = new Arrow(startItem, endItem);
             arrow->setColor(myLineColor);
             startItem->removeArrows();
             startItem->addArrow(arrow);
-
             endItem->addArrow(arrow);
             addItem(arrow);
             arrow->updatePosition();

@@ -1,4 +1,4 @@
-#include "ModuleOut.h"
+#include "BlockOut.h"
 #include "Arrow.h"
 #include <QPolygonF>
 #include <QColor>
@@ -8,22 +8,24 @@
 #include <QTextBlockFormat>
 #include <QTextCursor>
 
-ModuleOut::ModuleOut(QGraphicsItem * parent) : QGraphicsEllipseItem(parent)
+BlockOut::BlockOut(int index, int outputId, QGraphicsItem * parent) : QGraphicsEllipseItem(parent)
 {
+	this->index = index;
+	this->outputId = outputId;
     //setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
 
-void ModuleOut::DrawOut(int i, QString text)
+void BlockOut::DrawOut(QString text)
 {
-    posi = i;
+    //index = i;
     setBrush(Qt::red);
-    qreal moduleNameRectHeight = qgraphicsitem_cast< DiagramModuleItem* >(parentItem())->moduleName->getBlockHeight();
-    setRect( qgraphicsitem_cast< DiagramModuleItem* >(parentItem())->getWidth() - 8 , moduleNameRectHeight + 5 + posi*20, 15, 15);
+    qreal moduleNameRectHeight = qgraphicsitem_cast< DiagramBlock* >(parentItem())->blockName->getBlockHeight();
+    setRect( qgraphicsitem_cast< DiagramBlock* >(parentItem())->getWidth() - 8 , moduleNameRectHeight + 5 + index*20, 15, 15);
 
     QGraphicsTextItem *outDesc=new QGraphicsTextItem(this);
     outDesc->setPlainText(text.mid(0,10));
-    outDesc->setX(qgraphicsitem_cast< DiagramModuleItem* >(parentItem())->getWidth() - 80);
-    outDesc->setY(3+posi*20+moduleNameRectHeight);
+    outDesc->setX(qgraphicsitem_cast< DiagramBlock* >(parentItem())->getWidth() - 80);
+    outDesc->setY(3+index*20+moduleNameRectHeight);
     outDesc->setTextWidth(70);
     QTextBlockFormat format;
     format.setAlignment(Qt::AlignRight);
@@ -34,7 +36,7 @@ void ModuleOut::DrawOut(int i, QString text)
     outDesc->setTextCursor(cursor);
 }
 
-void ModuleOut::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
+void BlockOut::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
     //QStyleOptionGraphicsItem * style = const_cast<QStyleOptionGraphicsItem *>(option);
 
@@ -43,25 +45,25 @@ void ModuleOut::paint(QPainter * painter, const QStyleOptionGraphicsItem * optio
     QGraphicsEllipseItem::paint(painter, option, widget);
 }
 
-void ModuleOut::highlight(QPainter * painter, bool is_selected)
+void BlockOut::highlight(QPainter * painter, bool is_selected)
 {
     if (is_selected) {
         setBrush(Qt::green);
     } else {
         setBrush(Qt::red);
     }
-    qreal moduleNameRectHeight = qgraphicsitem_cast< DiagramModuleItem* >(parentItem())->moduleName->getBlockHeight();
-    setRect( qgraphicsitem_cast< DiagramModuleItem* >(parentItem())->getWidth() - 8 , moduleNameRectHeight + 5 + posi*20, 15, 15);
+    qreal moduleNameRectHeight = qgraphicsitem_cast< DiagramBlock* >(parentItem())->blockName->getBlockHeight();
+    setRect( qgraphicsitem_cast< DiagramBlock* >(parentItem())->getWidth() - 8 , moduleNameRectHeight + 5 + index*20, 15, 15);
 }
 
-void ModuleOut::removeArrow(Arrow * arrow)
+void BlockOut::removeArrow(Arrow * arrow)
 {
     int index = arrows.indexOf(arrow);
 
     if (index != -1)
         arrows.removeAt(index);
 }
-void ModuleOut::removeArrows()
+void BlockOut::removeArrows()
 {
     foreach (Arrow * arrow, arrows) {
         arrow->startItem()->removeArrow(arrow);
@@ -70,15 +72,15 @@ void ModuleOut::removeArrows()
         delete arrow;
     }
 }
-void ModuleOut::addArrow(Arrow * arrow)
+void BlockOut::addArrow(Arrow * arrow)
 {
     arrows.append(arrow);
 }
 
-QPointF ModuleOut::pos() const
+QPointF BlockOut::pos() const
 {
-    qreal moduleNameRectHeight = qgraphicsitem_cast< DiagramModuleItem* >(parentItem())->moduleName->getBlockHeight();
-    QPoint q(qgraphicsitem_cast< DiagramModuleItem* >(parentItem())->getWidth() , moduleNameRectHeight + 12 + 20 * posi);
+    qreal moduleNameRectHeight = qgraphicsitem_cast< DiagramBlock* >(parentItem())->blockName->getBlockHeight();
+    QPoint q(qgraphicsitem_cast< DiagramBlock* >(parentItem())->getWidth() , moduleNameRectHeight + 12 + 20 * index);
     return parentItem()->pos() + q;
 }
 

@@ -1,5 +1,5 @@
-#ifndef MODULEOUT_H
-#define MODULEOUT_H
+#ifndef BlockOut_H
+#define BlockOut_H
 
 #include <QGraphicsPolygonItem>
 #include <QStyleOptionGraphicsItem>
@@ -7,13 +7,14 @@
 #include <QPointF>
 
 class Arrow;
-class ModuleOut : public QGraphicsEllipseItem
+class BlockOut : public QGraphicsEllipseItem
 {
 public:
 
     enum { Type = UserType + 2 };
-    ModuleOut(QGraphicsItem * parent = 0);
-    void DrawOut(int i,QString text);
+    BlockOut(int index, int outputId, QGraphicsItem * parent = 0);
+	int getId() { return outputId; }
+    void DrawOut(QString text);
     void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
     void highlight(QPainter * painter, bool is_selected);
     int type() const { return Type;}
@@ -23,9 +24,10 @@ public:
 
     QPointF pos() const;
 private:
-    int posi;
+    int index;
+	int outputId;
     QList<Arrow *> arrows;
 
 };
 
-#endif // MODULEOUT_H
+#endif // BlockOut_H

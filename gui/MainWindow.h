@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 #include <QMainWindow>
 
-#include "DiagramModuleItem.h"
+#include "DiagramBlock.h"
 #include "ModulesPanelModel.h"
 #include <DataflowModel.h>
 #include <XMLParser.h>

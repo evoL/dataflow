@@ -1,6 +1,8 @@
 #include "Arrow.h"
 #include "DiagramScene.h"
-#include "DiagramModuleItem.h"
+#include "DiagramBlock.h"
+#include "DiagramConstructor.h"
+#include "DiagramOperation.h"
 #include "MainWindow.h"
 #include <QtWidgets>
 #include <iostream>
@@ -16,16 +18,22 @@ MainWindow::MainWindow()
     createModulesList();
     createMenus();
     scene = new DiagramScene(panelModel, panelView, itemMenu, this);
-    scene->setSceneRect(QRectF(0, 0, 3000, 3000));
+    scene->setSceneRect(QRectF(0, 0, 1000, 1000));
     connect(scene, SIGNAL(itemInserted()), this, SLOT(itemInserted()));
     createToolbars();
     QSplitter * splitter = new QSplitter;
     splitter->addWidget(panelView);
     view = new QGraphicsView(scene);
+		
     splitter->addWidget(view);
     setCentralWidget(splitter);
     setWindowTitle(tr("Dataflow Creator"));
     setUnifiedTitleAndToolBarOnMac(true);
+	//openFile();
+	//view->verticalScrollBar()->setSliderPosition(0);
+	//view->horizontalScrollBar()->setSliderPosition(0);
+	//view->verticalScrollBar()->setValue(1);
+	//view->horizontalScrollBar()->setValue(1);
 }
 void MainWindow::panelViewClicked()
 {
@@ -46,13 +54,68 @@ void MainWindow::openFile()
 
     if (!fileName.empty())
     {
-        cout<<fileName<<endl;
         projectModel = XMLParser().loadModelFromFile(fileName);
 		panelModel = new ModulesPanelModel(projectModel);
 
 		panelView->setModel(panelModel);
 		
         setWindowTitle( QString(projectModel->getName().data()) + " - Dataflow Creator" );
+
+		// Load blocks into diagram scene
+		const BlocksMap blocks = projectModel->getBlocks();
+		BlocksMap::const_iterator it = blocks.cbegin();
+
+		DiagramBlock *newBlock;
+		while (it != blocks.cend())
+		{
+			if (it->second->blockType() == BlockType::Constructor)
+			{
+				newBlock = new DiagramConstructor((it->second), itemMenu);
+			}
+			if (it->second->blockType() == BlockType::Operation)
+			{
+				newBlock = new DiagramOperation((it->second), itemMenu);
+			}
+
+			scene->addItem(newBlock);
+			newBlock->setPos(newBlock->getX(), newBlock->getY());
+			if (newBlock->pos().x() < 0) newBlock->setX(0);
+			if (newBlock->pos().y() < 0) newBlock->setY(0);
+			emit itemInserted();
+
+			it++;
+		}
+
+		// Load connections
+		/*it = blocks.cbegin();
+		while (it != blocks.cend())
+		{
+			if (it->second->blockType() == BlockType::Operation)
+			{
+				std::shared_ptr<Operation> currentBlock = std::static_pointer_cast<Operation>(it->second);
+				const InputTransitionMap transitions = currentBlock->inputs;
+				InputTransitionMap::const_iterator transition = transitions.cbegin();
+				while (transition != transitions.cend())
+				{
+					DiagramBlock * blockWithOutput = scene->findBlockById(transition->second.outputBlock->id);
+					DiagramBlock * blockWithInput = scene->findBlockById(currentBlock->id);
+
+					BlockIn * startItem = blockWithInput->findInputByIndex(transition->first);
+					BlockOut * endItem = blockWithOutput->findOutputById(transition->second.outputId);
+					Arrow * arrow = new Arrow(startItem, endItem);
+					arrow->setColor(scene->myLineColor);
+					startItem->removeArrows();
+					startItem->addArrow(arrow);
+					endItem->addArrow(arrow);
+					scene->addItem(arrow);
+					arrow->updatePosition();
+
+					transition++;
+				}
+			}
+			it++;
+		}*/
+
     }
 }
 
@@ -69,8 +132,8 @@ void MainWindow::deleteItem()
     }
 
     foreach (QGraphicsItem * item, scene->selectedItems()) {
-        if (item->type() == DiagramModuleItem::Type) {
-            qgraphicsitem_cast<DiagramModuleItem *>(item)->removeArrows();
+        if (item->type() == DiagramBlock::Type) {
+            qgraphicsitem_cast<DiagramBlock *>(item)->removeArrows();
 
             scene->removeItem(item);
             delete item;

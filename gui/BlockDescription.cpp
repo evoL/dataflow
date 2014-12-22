@@ -1,30 +1,30 @@
-#include "ModuleDescription.h"
-#include "DiagramModuleItem.h"
+#include "BlockDescription.h"
+#include "DiagramBlock.h"
 #include <QTextBlockFormat>
 #include <QTextCursor>
 
-ModuleDescription::ModuleDescription(QString s, QGraphicsItem * parent) : QGraphicsTextItem(parent)
+BlockDescription::BlockDescription(QString s, QGraphicsItem * parent) : QGraphicsTextItem(parent)
 {
     text_description = s;
     setPlainText(text_description);
     blockHeight = this->boundingRect().height();
     //setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
-ModuleDescription::ModuleDescription(QGraphicsItem * parent) : QGraphicsTextItem(parent)
+BlockDescription::BlockDescription(QGraphicsItem * parent) : QGraphicsTextItem(parent)
 {
     text_description = "";
     setPlainText(text_description);
     blockHeight = this->boundingRect().height();
 }
 
-void ModuleDescription::SetDescription(const QString desc)
+void BlockDescription::SetDescription(const QString desc)
 {
     setPlainText(desc);
 }
 
-void ModuleDescription::setAlignCenter(int i)
+void BlockDescription::setAlignCenter(int i)
 {
-    setTextWidth(qgraphicsitem_cast< DiagramModuleItem* >(parentItem())->getWidth() - 1);
+    setTextWidth(qgraphicsitem_cast< DiagramBlock* >(parentItem())->getWidth() - 1);
     blockHeight = this->boundingRect().height();
 
     if(i==0)this->setHtml("<body style='background-color:#4C6BB2;'><center>" + text_description + "</center></body>");
@@ -44,13 +44,13 @@ void ModuleDescription::setAlignCenter(int i)
     setPos(1, 1);
 }
 
-bool ModuleDescription::Is_text_long()
+bool BlockDescription::Is_text_long()
 {
     if (text_description.length() > 30) return true;
     else return false;
 }
 
-qreal ModuleDescription::Scale()
+qreal BlockDescription::Scale()
 {
     qreal height = 1;
     qreal text_width;

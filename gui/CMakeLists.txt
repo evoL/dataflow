@@ -10,20 +10,24 @@ add_executable(dataflow_gui WIN32
     ${resources}
     Arrow.h
     Arrow.cpp
-    DiagramModuleItem.h
-    DiagramModuleItem.cpp
+    DiagramBlock.h
+    DiagramBlock.cpp
+	DiagramOperation.h
+	DiagramOperation.cpp
+	DiagramConstructor.h
+	DiagramConstructor.cpp
     DiagramScene.h
     DiagramScene.cpp
     MainWindow.h
     MainWindow.cpp
     Module.h
     Module.cpp
-    ModuleDescription.h
-    ModuleDescription.cpp
-    ModuleIn.h
-    ModuleIn.cpp
-    ModuleOut.h
-    ModuleOut.cpp
+    BlockDescription.h
+    BlockDescription.cpp
+    BlockIn.h
+    BlockIn.cpp
+    BlockOut.h
+    BlockOut.cpp
 	ModulesPanelItem.h
 	ModulesPanelItem.cpp
 	ModulesPanelModel.h

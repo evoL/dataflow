@@ -100,6 +100,7 @@ public:
     const std::string & getName() { return name; }
     const LibraryMap & getLibraries() { return libraries; }
     const Block & getBlock(int id) { return *blocks[id]; }
+	const BlocksMap & getBlocks() { return blocks; }
     std::vector<int> getEntryPoints() { return entryPoints; }
 
 private:

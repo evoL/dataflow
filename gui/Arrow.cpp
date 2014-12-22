@@ -2,14 +2,14 @@
 #include <cmath>
 #include <QPen>
 #include <QPainter>
-#include "ModuleIn.h"
-#include "ModuleOut.h"
+#include "BlockIn.h"
+#include "BlockOut.h"
 #include <iostream>
 
 using namespace std;
 
 const qreal Pi = 3.14;
-Arrow::Arrow(ModuleIn * startItem, ModuleOut * endItem, QGraphicsItem * parent)
+Arrow::Arrow(BlockIn * startItem, BlockOut * endItem, QGraphicsItem * parent)
     : QGraphicsLineItem(parent)
 {
     myStartItem = startItem;

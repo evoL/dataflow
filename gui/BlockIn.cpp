@@ -1,4 +1,4 @@
-#include "ModuleIn.h"
+#include "BlockIn.h"
 #include "Arrow.h"
 #include <QPolygonF>
 #include <QColor>
@@ -7,25 +7,25 @@
 #include <QGraphicsSceneContextMenuEvent>
 #include <QGraphicsTextItem>
 
-ModuleIn::ModuleIn(QGraphicsItem * parent) : QGraphicsEllipseItem(parent)
+BlockIn::BlockIn(int index, QGraphicsItem * parent) : QGraphicsEllipseItem(parent)
 {
+	this->index = index;
     //setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
 
-void ModuleIn::DrawIn(int i, QString text)
+void BlockIn::DrawIn(QString text)
 {
-    posi = i;
     setBrush(Qt::red);
-    qreal moduleNameRectHeight = qgraphicsitem_cast< DiagramModuleItem* >(parentItem())->moduleName->getBlockHeight();
-    setRect(-7, moduleNameRectHeight + 5 + posi*20, 15, 15);
+    qreal moduleNameRectHeight = qgraphicsitem_cast< DiagramBlock* >(parentItem())->blockName->getBlockHeight();
+    setRect(-7, moduleNameRectHeight + 5 + index*20, 15, 15);
 
     QGraphicsTextItem *inDesc=new QGraphicsTextItem(this);
     inDesc->setPlainText(text.mid(0,10));
     inDesc->setX(7);
-    inDesc->setY(3+posi*20+moduleNameRectHeight);
+    inDesc->setY(3+index*20+moduleNameRectHeight);
 }
 
-void ModuleIn::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
+void BlockIn::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
     //QStyleOptionGraphicsItem * style = const_cast<QStyleOptionGraphicsItem *>(option);
 
@@ -34,25 +34,25 @@ void ModuleIn::paint(QPainter * painter, const QStyleOptionGraphicsItem * option
     QGraphicsEllipseItem::paint(painter, option, widget);
 }
 
-void ModuleIn::highlight(QPainter * painter, bool is_selected)
+void BlockIn::highlight(QPainter * painter, bool is_selected)
 {
     if (is_selected) {
         setBrush(Qt::green);
     } else {
         setBrush(Qt::red);
     }
-    qreal moduleNameRectHeight = qgraphicsitem_cast< DiagramModuleItem* >(parentItem())->moduleName->getBlockHeight();
-    setRect(-7, moduleNameRectHeight + 5 + posi*20, 15, 15);
+    qreal moduleNameRectHeight = qgraphicsitem_cast< DiagramBlock* >(parentItem())->blockName->getBlockHeight();
+    setRect(-7, moduleNameRectHeight + 5 + index*20, 15, 15);
 }
 
-void ModuleIn::removeArrow(Arrow * arrow)
+void BlockIn::removeArrow(Arrow * arrow)
 {
     int index = arrows.indexOf(arrow);
 
     if (index != -1)
         arrows.removeAt(index);
 }
-void ModuleIn::removeArrows()
+void BlockIn::removeArrows()
 {
     foreach (Arrow * arrow, arrows) {
         arrow->startItem()->removeArrow(arrow);
@@ -61,14 +61,14 @@ void ModuleIn::removeArrows()
         delete arrow;
     }
 }
-void ModuleIn::addArrow(Arrow * arrow)
+void BlockIn::addArrow(Arrow * arrow)
 {
     arrows.append(arrow);
 }
 
-QPointF ModuleIn::pos() const
+QPointF BlockIn::pos() const
 {
-    qreal moduleNameRectHeight = qgraphicsitem_cast< DiagramModuleItem* >(parentItem())->moduleName->getBlockHeight();
-    QPoint q(0, moduleNameRectHeight + 12 + 20 * posi); // y = 15+7+20*posi
+    qreal moduleNameRectHeight = qgraphicsitem_cast< DiagramBlock* >(parentItem())->blockName->getBlockHeight();
+    QPoint q(0, moduleNameRectHeight + 12 + 20 * index); // y = 15+7+20*index
     return parentItem()->pos() + q;
 }
