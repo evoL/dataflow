@@ -18,14 +18,17 @@ extern "C"
     BASIC_IO_API const char * DATAFLOW_MODULE PrintInteger_inputs();
     BASIC_IO_API const char * DATAFLOW_MODULE PrintReal_inputs();
     BASIC_IO_API const char * DATAFLOW_MODULE PrintComplex_inputs();
+    BASIC_IO_API const char * DATAFLOW_MODULE PrintRational_inputs();
     BASIC_IO_API const char * DATAFLOW_MODULE PrintString_inputs();
     BASIC_IO_API const char * DATAFLOW_MODULE PrintInteger_outputs();
     BASIC_IO_API const char * DATAFLOW_MODULE PrintReal_outputs();
     BASIC_IO_API const char * DATAFLOW_MODULE PrintComplex_outputs();
+    BASIC_IO_API const char * DATAFLOW_MODULE PrintRational_outputs();
     BASIC_IO_API const char * DATAFLOW_MODULE PrintString_outputs();
     BASIC_IO_API bool PrintInteger_execute(void * const * inputs, void * const * outputs);
     BASIC_IO_API bool PrintReal_execute(void * const * inputs, void * const * outputs);
     BASIC_IO_API bool PrintComplex_execute(void * const * inputs, void * const * outputs);
+    BASIC_IO_API bool PrintRational_execute(void * const * inputs, void * const * outputs);
     BASIC_IO_API bool PrintString_execute(void * const * inputs, void * const * outputs);
 }
 
