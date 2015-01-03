@@ -16,7 +16,7 @@ extern "C"
 
     BASIC_IO_API const char * DATAFLOW_MODULE operations()
     {
-        return "PrintInteger\0PrintReal\0";
+        return "PrintInteger\0PrintReal\0PrintComplex\0PrintRational\0PrintString\0";
     }
 
     BASIC_IO_API const char * DATAFLOW_MODULE PrintInteger_inputs()
@@ -34,6 +34,16 @@ extern "C"
         return "basicmath.Complex\0";
     }
 
+    BASIC_IO_API const char * DATAFLOW_MODULE PrintRational_inputs()
+    {
+        return "basicmath.Rational\0";
+    }
+
+    BASIC_IO_API const char * DATAFLOW_MODULE PrintString_inputs()
+    {
+        return "dstring.String\0";
+    }
+
     BASIC_IO_API const char * DATAFLOW_MODULE PrintInteger_outputs()
     {
         return "\0";
@@ -45,6 +55,16 @@ extern "C"
     }
 
     BASIC_IO_API const char * DATAFLOW_MODULE PrintComplex_outputs()
+    {
+        return "\0";
+    }
+
+    BASIC_IO_API const char * DATAFLOW_MODULE PrintRational_outputs()
+    {
+        return "\0";
+    }
+
+    BASIC_IO_API const char * DATAFLOW_MODULE PrintString_outputs()
     {
         return "\0";
     }
@@ -67,6 +87,20 @@ extern "C"
     {
         dComplex value = *(dComplex *)(inputs[0]);
         printf("%f %fi\n", value.re, value.im);
+        return true;
+    }
+
+    BASIC_IO_API bool PrintRational_execute(void * const * inputs, void * const *)
+    {
+        dRational value = *(dRational *)(inputs[0]);
+        printf("%f / %f\n", value.numerator, value.denominator);
+        return true;
+    }
+
+    BASIC_IO_API bool PrintString_execute(void * const * inputs, void * const *)
+    {
+        dString value = *(dString *)(inputs[0]);
+        printf("%s\n", value);
         return true;
     }
 }

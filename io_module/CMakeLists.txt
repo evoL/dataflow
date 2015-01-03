@@ -6,6 +6,7 @@ set(sources
 include_directories(
     ${dataflow_SOURCE_DIR}/include
     ${dataflow_SOURCE_DIR}/basicmath
+    ${dataflow_SOURCE_DIR}/dstring
 )
 
 add_library(io_module SHARED ${sources})

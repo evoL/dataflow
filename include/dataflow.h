@@ -22,4 +22,7 @@ static_assert(sizeof(dInteger) == 4, "dInteger is not of size 4");
 typedef float dReal;
 static_assert(sizeof(dReal) == 4, "dReal is not of size 4");
 
+typedef char * dString;
+static_assert(sizeof(dString) == 8, "dString is not of size 4");
+
 #endif
