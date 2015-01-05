@@ -1,5 +1,5 @@
-#ifndef BASICMATH_H
-#define BASICMATH_H
+#ifndef DSTRING_H
+#define DSTRING_H
 
 #include <dataflow.h>
 

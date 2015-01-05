@@ -1,0 +1,25 @@
+<dataflow projectname="PPM">
+    <imports>
+        <import module="ppm" />
+		<import module="dstring" />
+    </imports>
+    <entry-points>
+        <entry-point id="3"/>
+    </entry-points>
+    <schema>
+        <!-- Output IDs and Block IDs are unique across the project, however, blocks and outputs
+             can share the same IDs -->
+        <constructor id="1" module="ppm" type="Ppm" pos_x="0" pos_y="0">
+            <output id="1" />
+            <data>C:\Users\Prymus\Desktop\ppm\google.ppm</data>
+        </constructor>
+		<constructor id="2" module="dstring" type="String" pos_x="0" pos_y="0">
+			<output id="2" />
+			<data>C:\Users\Prymus\Desktop\ppm\ex2.ppm</data>
+		</constructor>
+		<operation id="3" module="ppm" name="SavePpm" pos_x="400" pos_y="25">
+            <input index="0" output_id="1" />
+			<input index="1" output_id="2" />
+        </operation>
+    </schema>
+</dataflow>

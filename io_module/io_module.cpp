@@ -46,27 +46,27 @@ extern "C"
 
     BASIC_IO_API const char * DATAFLOW_MODULE PrintInteger_outputs()
     {
-        return "\0";
+        return "";
     }
 
     BASIC_IO_API const char * DATAFLOW_MODULE PrintReal_outputs()
     {
-        return "\0";
+        return "";
     }
 
     BASIC_IO_API const char * DATAFLOW_MODULE PrintComplex_outputs()
     {
-        return "\0";
+        return "";
     }
 
     BASIC_IO_API const char * DATAFLOW_MODULE PrintRational_outputs()
     {
-        return "\0";
+        return "";
     }
 
     BASIC_IO_API const char * DATAFLOW_MODULE PrintString_outputs()
     {
-        return "\0";
+        return "";
     }
 
     BASIC_IO_API bool PrintInteger_execute(void * const * inputs, void * const *)

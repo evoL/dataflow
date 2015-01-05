@@ -32,6 +32,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 add_subdirectory(basicmath)
 add_subdirectory(io_module)
 add_subdirectory(dstring)
+add_subdirectory(ppm)
 add_subdirectory(interpreter)
 add_subdirectory(gui)
 
