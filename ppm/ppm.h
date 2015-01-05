@@ -2,7 +2,6 @@
 #define PPM_H
 
 #include <dataflow.h>
-//#include <dstring.h>
 #include <cstdio>
 
 #ifdef PPM_EXPORTS
@@ -15,14 +14,14 @@
 
 struct dColor
 {
-	unsigned char r, g, b;
+    unsigned char r, g, b;
 };
 
 struct dPpm
 {
     uint32_t width;
-	uint32_t height;
-	dColor * data;
+    uint32_t height;
+    dColor * data;
 };
 
 #pragma pack()
@@ -35,14 +34,29 @@ extern "C"
     PPM_API unsigned int DATAFLOW_MODULE Ppm_size();
     PPM_API bool DATAFLOW_MODULE Ppm_construct(const char * data, void * output);
     PPM_API bool DATAFLOW_MODULE Ppm_destruct(void * data);
-	PPM_API const char * DATAFLOW_MODULE SavePpm_inputs();
-	PPM_API const char * DATAFLOW_MODULE SavePpm_outputs();
-	PPM_API bool DATAFLOW_MODULE SavePpm_execute(void * const * inputs, void * const * outputs);
+    PPM_API const char * DATAFLOW_MODULE SavePpm_inputs();
+    PPM_API const char * DATAFLOW_MODULE NegativePpm_inputs();
+    PPM_API const char * DATAFLOW_MODULE RotateLeftPpm_inputs();
+    PPM_API const char * DATAFLOW_MODULE RotateRightPpm_inputs();
+    PPM_API const char * DATAFLOW_MODULE HorizontalReflectionPpm_inputs();
+    PPM_API const char * DATAFLOW_MODULE VerticalReflectionPpm_inputs();
+    PPM_API const char * DATAFLOW_MODULE SavePpm_outputs();
+    PPM_API const char * DATAFLOW_MODULE NegativePpm_outputs();
+    PPM_API const char * DATAFLOW_MODULE RotateLeftPpm_outputs();
+    PPM_API const char * DATAFLOW_MODULE RotateRightPpm_outputs();
+    PPM_API const char * DATAFLOW_MODULE HorizontalReflectionPpm_outputs();
+    PPM_API const char * DATAFLOW_MODULE VerticalReflectionPpm_outputs();
+    PPM_API bool DATAFLOW_MODULE SavePpm_execute(void * const * inputs, void * const *);
+    PPM_API bool DATAFLOW_MODULE NegativePpm_execute(void * const * inputs, void * const * outputs);
+    PPM_API bool DATAFLOW_MODULE RotateLeftPpm_execute(void * const * inputs, void * const * outputs);
+    PPM_API bool DATAFLOW_MODULE RotateRightPpm_execute(void * const * inputs, void * const * outputs);
+    PPM_API bool DATAFLOW_MODULE HorizontalReflectionPpm_execute(void * const * inputs, void * const * outputs);
+    PPM_API bool DATAFLOW_MODULE VerticalReflectionPpm_execute(void * const * inputs, void * const * outputs);
 
-	// private functions
-	void try_comment(FILE * f);
-	void skip_whitespaces(FILE * f);
-	int fpeek(FILE * f);
+
+    // private functions
+    void try_comment(FILE * f);
+    int fpeek(FILE * f);
 }
 
 #endif

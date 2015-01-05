@@ -71,35 +71,35 @@ extern "C"
 
     BASIC_IO_API bool PrintInteger_execute(void * const * inputs, void * const *)
     {
-        dInteger value = *(dInteger *)(inputs[0]);
+        dInteger& value = *(dInteger *)(inputs[0]);
         printf("%d\n", value);
         return true;
     }
 
     BASIC_IO_API bool PrintReal_execute(void * const * inputs, void * const *)
     {
-        dReal value = *(dReal *)(inputs[0]);
+        dReal& value = *(dReal *)(inputs[0]);
         printf("%f\n", value);
         return true;
     }
 
     BASIC_IO_API bool PrintComplex_execute(void * const * inputs, void * const *)
     {
-        dComplex value = *(dComplex *)(inputs[0]);
+        dComplex& value = *(dComplex *)(inputs[0]);
         printf("%f %fi\n", value.re, value.im);
         return true;
     }
 
     BASIC_IO_API bool PrintRational_execute(void * const * inputs, void * const *)
     {
-        dRational value = *(dRational *)(inputs[0]);
+        dRational& value = *(dRational *)(inputs[0]);
         printf("%f / %f\n", value.numerator, value.denominator);
         return true;
     }
 
     BASIC_IO_API bool PrintString_execute(void * const * inputs, void * const *)
     {
-        dString value = *(dString *)(inputs[0]);
+        dString& value = *(dString *)(inputs[0]);
         printf("%s\n", value);
         return true;
     }

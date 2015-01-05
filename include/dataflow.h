@@ -14,6 +14,24 @@
 #   define DATAFLOW_MODULE
 #endif
 
+// Check windows
+#if _WIN32 || _WIN64
+#if _WIN64
+#define ENVIRONMENT64
+#else
+#define ENVIRONMENT32
+#endif
+#endif
+
+// Check GCC
+#if __GNUC__
+#if __x86_64__ || __ppc64__
+#define ENVIRONMENT64
+#else
+#define ENVIRONMENT32
+#endif
+#endif
+
 
 // Basic dataflow types
 typedef int32_t dInteger;
@@ -23,6 +41,13 @@ typedef float dReal;
 static_assert(sizeof(dReal) == 4, "dReal is not of size 4");
 
 typedef char * dString;
-static_assert(sizeof(dString) == 8, "dString is not of size 4");
+#ifdef ENVIRONMENT64
+static_assert(sizeof(dString) == 8, "dString is not of size 8");
+#elif defined ENVIRONMENT32
+static_assert(sizeof(dString) == 4, "dString is not of size 4");
+#else
+#error 
+#endif
+
 
 #endif

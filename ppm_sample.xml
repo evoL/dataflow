@@ -1,10 +1,14 @@
 <dataflow projectname="PPM">
     <imports>
         <import module="ppm" />
-		<import module="dstring" />
+        <import module="dstring" />
     </imports>
     <entry-points>
-        <entry-point id="3"/>
+        <entry-point id="12"/>
+        <entry-point id="13"/>
+        <entry-point id="14"/>
+        <entry-point id="15"/>
+        <entry-point id="16"/>
     </entry-points>
     <schema>
         <!-- Output IDs and Block IDs are unique across the project, however, blocks and outputs
@@ -13,13 +17,65 @@
             <output id="1" />
             <data>C:\Users\Prymus\Desktop\ppm\google.ppm</data>
         </constructor>
-		<constructor id="2" module="dstring" type="String" pos_x="0" pos_y="0">
-			<output id="2" />
-			<data>C:\Users\Prymus\Desktop\ppm\ex2.ppm</data>
-		</constructor>
-		<operation id="3" module="ppm" name="SavePpm" pos_x="400" pos_y="25">
+        <constructor id="2" module="dstring" type="String" pos_x="0" pos_y="0">
+            <output id="2" />
+            <data>C:\Users\Prymus\Desktop\ppm\negative.ppm</data>
+        </constructor>
+        <constructor id="3" module="dstring" type="String" pos_x="0" pos_y="0">
+            <output id="3" />
+            <data>C:\Users\Prymus\Desktop\ppm\rotleft.ppm</data>
+        </constructor>
+        <constructor id="4" module="dstring" type="String" pos_x="0" pos_y="0">
+            <output id="4" />
+            <data>C:\Users\Prymus\Desktop\ppm\rotright.ppm</data>
+        </constructor>
+        <constructor id="5" module="dstring" type="String" pos_x="0" pos_y="0">
+            <output id="5" />
+            <data>C:\Users\Prymus\Desktop\ppm\href.ppm</data>
+        </constructor>
+        <constructor id="6" module="dstring" type="String" pos_x="0" pos_y="0">
+            <output id="6" />
+            <data>C:\Users\Prymus\Desktop\ppm\vref.ppm</data>
+        </constructor>
+        <operation id="7" module="ppm" name="NegativePpm" pos_x="0" pos_y="0">
             <input index="0" output_id="1" />
-			<input index="1" output_id="2" />
+            <output id="7" />
+        </operation>
+        <operation id="8" module="ppm" name="RotateLeftPpm" pos_x="0" pos_y="0">
+            <input index="0" output_id="1" />
+            <output id="8" />
+        </operation>
+        <operation id="9" module="ppm" name="RotateRightPpm" pos_x="0" pos_y="0">
+            <input index="0" output_id="1" />
+            <output id="9" />
+        </operation>
+        <operation id="10" module="ppm" name="HorizontalReflectionPpm" pos_x="0" pos_y="0">
+            <input index="0" output_id="1" />
+            <output id="10" />
+        </operation>
+        <operation id="11" module="ppm" name="VerticalReflectionPpm" pos_x="0" pos_y="0">
+            <input index="0" output_id="1" />
+            <output id="11" />
+        </operation>
+        <operation id="12" module="ppm" name="SavePpm" pos_x="0" pos_y="0">
+            <input index="0" output_id="7" />
+            <input index="1" output_id="2" />
+        </operation>
+        <operation id="13" module="ppm" name="SavePpm" pos_x="0" pos_y="0">
+            <input index="0" output_id="8" />
+            <input index="1" output_id="3" />
+        </operation>
+        <operation id="14" module="ppm" name="SavePpm" pos_x="0" pos_y="0">
+            <input index="0" output_id="9" />
+            <input index="1" output_id="4" />
+        </operation>
+        <operation id="15" module="ppm" name="SavePpm" pos_x="0" pos_y="0">
+            <input index="0" output_id="10" />
+            <input index="1" output_id="5" />
+        </operation>
+        <operation id="16" module="ppm" name="SavePpm" pos_x="0" pos_y="0">
+            <input index="0" output_id="11" />
+            <input index="1" output_id="6" />
         </operation>
     </schema>
 </dataflow>
