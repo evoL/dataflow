@@ -20,6 +20,7 @@ class QAbstractButton;
 class QGraphicsView;
 class QStringListModel;
 class QTreeView;
+class QPushButton;
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -56,6 +57,7 @@ private:
     
     QButtonGroup * pointerTypeGroup;
     QAction * lineAction;
+    QPushButton *execute;
 
     ProjectModel * projectModel;
 	ModulesPanelModel * panelModel;
