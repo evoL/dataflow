@@ -10,6 +10,7 @@
 #include "ModuleOut.h"
 #include <QPolygonF>
 #include <QColor>
+#include <QGraphicsProxyWidget>
 
 
 DiagramModuleItem::DiagramModuleItem(const Module * module, QMenu * contextMenu, QGraphicsItem * parent) :
@@ -30,6 +31,18 @@ DiagramModuleItem::DiagramModuleItem(const Module * module, QMenu * contextMenu,
 
     setRect(0, 0, width, height);
     moduleName->setAlignCenter(modulePtr->getType());
+    
+    // input
+
+    if(modulePtr->getType()==-1)
+    {
+        block_input=new QLineEdit();
+        QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget(this);
+        block_input->setFixedWidth(100);
+        block_input->setPlaceholderText("Input");
+        proxy->setWidget(block_input);
+        proxy->setPos(5,40);
+    }
 
     // IO circles
 
