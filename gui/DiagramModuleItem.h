@@ -4,6 +4,7 @@
 #include <QGraphicsPixmapItem>
 #include <QList>
 #include <QVector>
+#include <QLineEdit>
 #include "Module.h"
 #include "ModuleDescription.h"
 #include "ModuleIn.h"
@@ -48,5 +49,6 @@ private:
     QMenu * myContextMenu;
     QList<Arrow *> arrows;
     const Module * modulePtr;
+    QLineEdit * block_input;
 };
 #endif // DIAGRAMMODULEITEM_H
