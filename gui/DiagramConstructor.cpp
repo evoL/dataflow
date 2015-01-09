@@ -1,4 +1,6 @@
 #include "DiagramConstructor.h"
+#include <QGraphicsProxyWidget>
+#include <QLineEdit>
 
 
 DiagramConstructor::DiagramConstructor()
@@ -24,6 +26,15 @@ DiagramConstructor::DiagramConstructor(const std::shared_ptr<Block> blockPointer
     setRect(0, 0, width, height);
     blockName->setAlignCenter(-1); //to do: block types, have to do sth with argument
 	setBrush(myInputColor);
+	
+	
+   QLineEdit *block_input1;
+   block_input1=new QLineEdit();
+   QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget(this);
+   block_input1->setFixedWidth(100);
+   block_input1->setPlaceholderText("Input");
+   proxy->setWidget(block_input1);
+   proxy->setPos(5,40);
 
     // Output circles
     for (int i = 0; i < blockPtr->outputs.size(); i++) {
