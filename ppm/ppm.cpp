@@ -3,6 +3,10 @@
 #include <cstring>
 
 #define _PX(ppm, x, y) ((ppm).data[(y)*(ppm).width + (x)])
+#define _FX(filter, x, y) ((filter).data[(y)*(filter).size + (x)])
+
+#define _INTMAX(a, b)  (((a) > (b)) ? (a) : (b)) 
+#define _INTMIN(a, b)  (((a) < (b)) ? (a) : (b))
 
 extern "C"
 {
@@ -13,12 +17,12 @@ extern "C"
 
     PPM_API const char * DATAFLOW_MODULE types()
     {
-        return "Ppm\0";
+        return "Ppm\0ImageFilter\0";
     }
 
     PPM_API const char * DATAFLOW_MODULE operations()
     {
-        return "SavePpm\0NegativePpm\0RotateLeftPpm\0RotateRightPpm\0HorizontalReflectionPpm\0VerticalReflectionPpm\0ToGrayscalePpm\0";
+        return "SavePpm\0NegativePpm\0RotateLeftPpm\0RotateRightPpm\0HorizontalReflectionPpm\0VerticalReflectionPpm\0ToGrayscalePpm\0ApplyFilterPpm\0";
     }
 
     PPM_API unsigned int DATAFLOW_MODULE Ppm_size()
@@ -26,6 +30,11 @@ extern "C"
         return sizeof(dPpm);
     }
 
+    PPM_API unsigned int DATAFLOW_MODULE ImageFilter_size()
+    {
+        return sizeof(dImageFilter);
+    }
+    
     PPM_API bool DATAFLOW_MODULE Ppm_construct(const char * data, void * output)
     {
         dPpm& ppm = *(dPpm *)output;
@@ -79,6 +88,29 @@ extern "C"
         return true;
     }
 
+    PPM_API bool DATAFLOW_MODULE ImageFilter_construct(const char * data, void * output)
+    {
+        dImageFilter& imageFilter = *(dImageFilter *)output;
+        
+        FILE * f = fopen(data, "rb");
+        if (!f)
+            return false;
+        
+        fscanf(f, "%u", &imageFilter.size);
+        
+        if (imageFilter.size % 2 == 0)
+            return false;
+        
+        imageFilter.data = (int32_t *)malloc(sizeof(int32_t) * imageFilter.size * imageFilter.size);
+        
+        for (int i = 0; i < imageFilter.size * imageFilter.size; ++i)
+        {
+            fscanf(f, "%d", &imageFilter.data[i]);
+        }
+        
+        return true;
+    }
+    
     PPM_API bool DATAFLOW_MODULE Ppm_destruct(void * data)
     {
         dPpm& ppm = *(dPpm *)data;
@@ -86,6 +118,13 @@ extern "C"
         return true;
     }
 
+    PPM_API bool DATAFLOW_MODULE ImageFilter_destruct(void * data)
+    {
+        dImageFilter& imageFilter = *(dImageFilter *)data;
+        free(imageFilter.data);
+        return true;
+    }
+    
     PPM_API const char * DATAFLOW_MODULE SavePpm_inputs()
     {
         return "ppm.Ppm\0dstring.String\0";
@@ -121,6 +160,11 @@ extern "C"
         return "ppm.Ppm\0";
     }
     
+    PPM_API const char * DATAFLOW_MODULE ApplyFilterPpm_inputs()
+    {
+        return "ppm.Ppm\0ppm.ImageFilter\0basicmath.Integer";
+    }
+    
     PPM_API const char * DATAFLOW_MODULE SavePpm_outputs()
     {
         return "";
@@ -152,6 +196,11 @@ extern "C"
     }
     
     PPM_API const char * DATAFLOW_MODULE ToGrayscalePpm_outputs()
+    {
+        return "ppm.Ppm\0";
+    }
+    
+    PPM_API const char * DATAFLOW_MODULE ApplyFilterPpm_outputs()
     {
         return "ppm.Ppm\0";
     }
@@ -298,9 +347,73 @@ extern "C"
         return true;
     }
 
+    PPM_API bool DATAFLOW_MODULE ApplyFilterPpm_execute(void * const * inputs, void * const * outputs)
+    {
+        // Inputs and outputs
+        dPpm &ppm = *(dPpm *)(inputs[0]);
+        dImageFilter &filter = *(dImageFilter *)(inputs[1]);
+        dInteger &noOfLoops = *(dInteger *)(inputs[2]);
+        dPpm &out_ppm = *(dPpm *)(outputs[0]);
+        
+        out_ppm.width = ppm.width;
+        out_ppm.height = ppm.height;
+        out_ppm.data = (dColor *)malloc(sizeof(dColor) * ppm.width * ppm.height);
+        
+        // Some computations at beginning
+        int32_t radius = filter.size / 2;
+        int32_t allWeights = 0;
+        
+        for (int i = 0; i < filter.size * filter.size; ++i) {
+            allWeights += filter.data[i];
+        }
+        
+        if (allWeights == 0)
+            allWeights = 1;
+        
+        //Algorithm
+        dPpm ppm_old;
+        ppm_old.width = ppm.width;
+        ppm_old.height = ppm.height;
+        ppm_old.data = (dColor *)malloc(sizeof(dColor) * ppm.width * ppm.height);
+        memcpy(ppm_old.data, ppm.data, sizeof(dColor) * ppm.width * ppm.height);
+        dPpm ppm_new;
+        ppm_new.width = ppm.width;
+        ppm_new.height = ppm.height;
+        ppm_new.data = (dColor *)malloc(sizeof(dColor) * ppm.width * ppm.height);
+        
+        for (int i = 0; i < noOfLoops; ++i) {
+            for (int py=0; py < ppm.height; py++) {
+                for (int px=0; px < ppm.width; px++) {
+                    //------- For all points
+                    int32_t r = 0,g = 0, b = 0;
+                    for (int fy = 0; fy < filter.size; ++fy) {
+                        for (int fx = 0; fx < filter.size; ++fx) {
+                            int safe_px = _INTMIN(_INTMAX(0, px - radius + fx), ppm.width - 1);
+                            int safe_py = _INTMIN(_INTMAX(0, py - radius + fy), ppm.height - 1);
+                            r += _PX(ppm_old, safe_px, safe_py).r * _FX(filter, fx, fy);
+                            g += _PX(ppm_old, safe_px, safe_py).g * _FX(filter, fx, fy);
+                            b += _PX(ppm_old, safe_px, safe_py).b * _FX(filter, fx, fy);
+                        }
+                    }
+                    _PX(ppm_new, px, py).r = _INTMIN(_INTMAX(r / allWeights, 0), 255);
+                    _PX(ppm_new, px, py).g = _INTMIN(_INTMAX(g / allWeights, 0), 255);
+                    _PX(ppm_new, px, py).b = _INTMIN(_INTMAX(b / allWeights, 0), 255);
+                    //-------
+                }
+            }
+            memcpy(ppm_old.data, ppm_new.data, sizeof(dColor) * ppm.width * ppm.height);
+        }
+        memcpy(out_ppm.data, ppm_new.data, sizeof(dColor) * ppm.width * ppm.height);
+        
+        //clean up
+        free(ppm_old.data);
+        free(ppm_new.data);
+        
+        return true;
+    }
     
     // private
-
+    
     void try_comment(FILE * f)
     {
         char linebuf[1024];
