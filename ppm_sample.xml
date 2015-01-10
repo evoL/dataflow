@@ -77,5 +77,39 @@
             <input index="0" output_id="11" />
             <input index="1" output_id="6" />
         </operation>
+        <constructor id="17" module="dstring" type="String" pos_x="0" pos_y="0">
+            <output id="12" />
+            <data>input_path</data>
+        </constructor>
+        <operation id="18" module="ppm" name="ToGrayscalePpm" pos_x="0" pos_y="0">
+            <input index="0" output_id="1" />
+            <output id="13" />
+        </operation>
+        <operation id="19" module="ppm" name="SavePpm" pos_x="0" pos_y="0">
+            <input index="0" output_id="13" />
+            <input index="1" output_id="12" />
+        </operation>
+        <constructor id="20" module="dstring" type="String" pos_x="0" pos_y="0">
+            <output id="14" />
+            <data>input_path</data>
+        </constructor>
+        <constructor id="21" module="ppm" type="ImageFilter" pos_x="0" pos_y="0">
+            <output id="15" />
+            <data>path_to_filter</data>
+        </constructor>
+        <constructor id="22" module="basicmath" type="Integer" pos_x="0" pos_y="0">
+            <output id="16" />
+            <data>3</data>
+        </constructor>
+        <operation id="24" module="ppm" name="ApplyFilterPpm" pos_x="0" pos_y="0">
+            <input index="0" output_id="1" />
+            <input index="1" output_id="15" />
+            <input index="2" output_id="16" />
+            <output id="17" />
+        </operation>
+        <operation id="25" module="ppm" name="SavePpm" pos_x="0" pos_y="0">
+            <input index="0" output_id="17" />
+            <input index="1" output_id="14" />
+        </operation>
     </schema>
 </dataflow>
