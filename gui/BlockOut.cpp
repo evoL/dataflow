@@ -19,12 +19,12 @@ void BlockOut::DrawOut(QString text)
 {
     //index = i;
     setBrush(Qt::red);
-    qreal moduleNameRectHeight = qgraphicsitem_cast< DiagramBlock* >(parentItem())->blockName->getBlockHeight();
-    setRect( qgraphicsitem_cast< DiagramBlock* >(parentItem())->getWidth() - 8 , moduleNameRectHeight + 5 + index*20, 15, 15);
+    qreal moduleNameRectHeight = static_cast< DiagramBlock* >(parentItem())->blockName->getBlockHeight();
+    setRect( static_cast< DiagramBlock* >(parentItem())->getWidth() - 8 , moduleNameRectHeight + 5 + index*20, 15, 15);
 
     QGraphicsTextItem *outDesc=new QGraphicsTextItem(this);
     outDesc->setPlainText(text.mid(0,10));
-    outDesc->setX(qgraphicsitem_cast< DiagramBlock* >(parentItem())->getWidth() - 80);
+    outDesc->setX(static_cast< DiagramBlock* >(parentItem())->getWidth() - 80);
     outDesc->setY(3+index*20+moduleNameRectHeight);
     outDesc->setTextWidth(70);
     QTextBlockFormat format;
@@ -52,8 +52,8 @@ void BlockOut::highlight(QPainter * painter, bool is_selected)
     } else {
         setBrush(Qt::red);
     }
-    qreal moduleNameRectHeight = qgraphicsitem_cast< DiagramBlock* >(parentItem())->blockName->getBlockHeight();
-    setRect( qgraphicsitem_cast< DiagramBlock* >(parentItem())->getWidth() - 8 , moduleNameRectHeight + 5 + index*20, 15, 15);
+    qreal moduleNameRectHeight = static_cast< DiagramBlock* >(parentItem())->blockName->getBlockHeight();
+    setRect( static_cast< DiagramBlock* >(parentItem())->getWidth() - 8 , moduleNameRectHeight + 5 + index*20, 15, 15);
 }
 
 void BlockOut::removeArrow(Arrow * arrow)
@@ -79,8 +79,8 @@ void BlockOut::addArrow(Arrow * arrow)
 
 QPointF BlockOut::pos() const
 {
-    qreal moduleNameRectHeight = qgraphicsitem_cast< DiagramBlock* >(parentItem())->blockName->getBlockHeight();
-    QPoint q(qgraphicsitem_cast< DiagramBlock* >(parentItem())->getWidth() , moduleNameRectHeight + 12 + 20 * index);
+    qreal moduleNameRectHeight = static_cast< DiagramBlock* >(parentItem())->blockName->getBlockHeight();
+    QPoint q(static_cast< DiagramBlock* >(parentItem())->getWidth() , moduleNameRectHeight + 12 + 20 * index);
     return parentItem()->pos() + q;
 }
 

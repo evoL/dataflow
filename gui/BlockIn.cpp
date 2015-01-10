@@ -16,7 +16,7 @@ BlockIn::BlockIn(int index, QGraphicsItem * parent) : QGraphicsEllipseItem(paren
 void BlockIn::DrawIn(QString text)
 {
     setBrush(Qt::red);
-    qreal moduleNameRectHeight = qgraphicsitem_cast< DiagramBlock* >(parentItem())->blockName->getBlockHeight();
+    qreal moduleNameRectHeight = static_cast< DiagramBlock* >(parentItem())->blockName->getBlockHeight();
     setRect(-7, moduleNameRectHeight + 5 + index*20, 15, 15);
 
     QGraphicsTextItem *inDesc=new QGraphicsTextItem(this);
@@ -41,7 +41,7 @@ void BlockIn::highlight(QPainter * painter, bool is_selected)
     } else {
         setBrush(Qt::red);
     }
-    qreal moduleNameRectHeight = qgraphicsitem_cast< DiagramBlock* >(parentItem())->blockName->getBlockHeight();
+    qreal moduleNameRectHeight = static_cast< DiagramBlock* >(parentItem())->blockName->getBlockHeight();
     setRect(-7, moduleNameRectHeight + 5 + index*20, 15, 15);
 }
 
@@ -68,7 +68,7 @@ void BlockIn::addArrow(Arrow * arrow)
 
 QPointF BlockIn::pos() const
 {
-    qreal moduleNameRectHeight = qgraphicsitem_cast< DiagramBlock* >(parentItem())->blockName->getBlockHeight();
+    qreal moduleNameRectHeight = static_cast< DiagramBlock* >(parentItem())->blockName->getBlockHeight();
     QPoint q(0, moduleNameRectHeight + 12 + 20 * index); // y = 15+7+20*index
     return parentItem()->pos() + q;
 }

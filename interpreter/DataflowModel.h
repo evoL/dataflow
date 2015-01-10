@@ -2,7 +2,7 @@
 #define DATAFLOW_MODEL
 
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <memory>
 #include <string>
 
@@ -38,7 +38,7 @@ struct OutputTransition
     int id;
 };
 
-typedef std::map<int, InputTransition> InputTransitionMap;
+typedef std::unordered_map<int, InputTransition> InputTransitionMap;
 
 struct Block
 {

@@ -29,11 +29,11 @@ MainWindow::MainWindow()
     setCentralWidget(splitter);
     setWindowTitle(tr("Dataflow Creator"));
     setUnifiedTitleAndToolBarOnMac(true);
-    //openFile();
-    //view->verticalScrollBar()->setSliderPosition(0);
-    //view->horizontalScrollBar()->setSliderPosition(0);
-    //view->verticalScrollBar()->setValue(1);
-    //view->horizontalScrollBar()->setValue(1);
+	openFile();
+	//view->verticalScrollBar()->setSliderPosition(0);
+	//view->horizontalScrollBar()->setSliderPosition(0);
+	//view->verticalScrollBar()->setValue(1);
+	//view->horizontalScrollBar()->setValue(1);
 }
 void MainWindow::panelViewClicked()
 {
@@ -86,36 +86,34 @@ void MainWindow::openFile()
             it++;
         }
 
-        // Load connections
-        it = blocks.cbegin();
-        while (it != blocks.cend())
-        {
-            if (it->second->blockType() == BlockType::Operation)
-            {
-                std::shared_ptr<Operation> currentBlock = std::static_pointer_cast<Operation>(it->second);
-                const InputTransitionMap transitions = currentBlock->inputs;
-                InputTransitionMap::const_iterator transition = transitions.cbegin();
-                while (transition != transitions.cend())
-                {
-                    DiagramBlock * blockWithOutput = scene->findBlockById(transition->second.outputBlock->id);
-                    DiagramBlock * blockWithInput = scene->findBlockById(currentBlock->id);
-
-                    BlockIn * startItem = blockWithInput->findInputByIndex(transition->first);
-                    BlockOut * endItem = blockWithOutput->findOutputById(transition->second.outputId);
-                    Arrow * arrow = new Arrow(startItem, endItem);
-                    arrow->setColor(scene->myLineColor);
-                    startItem->removeArrows();
-                    startItem->addArrow(arrow);
-                    endItem->addArrow(arrow);
-                    scene->addItem(arrow);
-                    arrow->updatePosition();
-
-                    transition++;
-                }
-            }
-            it++;
-        }
-
+		// Load connections
+		it = blocks.cbegin();
+		while (it != blocks.cend())
+		{
+			if (it->second->blockType() == BlockType::Operation)
+			{
+				std::shared_ptr<Operation> currentBlock = std::static_pointer_cast<Operation>(it->second);
+				const InputTransitionMap transitions = currentBlock->inputs;
+				InputTransitionMap::const_iterator transition = transitions.cbegin();
+				while (transition != transitions.cend())
+				{
+					if (transition->second.outputBlock != nullptr) // Assumption: not connected input has nullptr as outputBlock
+					{
+						bool paintingOK = scene->paintConnection(currentBlock->id,
+							transition->first,
+							transition->second.outputBlock->id,
+							transition->second.outputId);
+						if (!paintingOK) throw std::string("Can't connect blocks!");
+					}
+					transition++;
+				}
+			}
+			else
+			{
+				std::cout << "Nie-Operation" << endl;
+			}
+			it++;
+		}
     }
 }
 
@@ -140,21 +138,25 @@ void MainWindow::deleteItem()
         }
     }
 }
+
 void MainWindow::pointerGroupClicked(int)
 {
     scene->setMode(DiagramScene::Mode(pointerTypeGroup->checkedId()));
 }
+
 void MainWindow::itemInserted()
 {
     pointerTypeGroup->button(int(DiagramScene::MoveItem))->setChecked(true);
     scene->setMode(DiagramScene::Mode(pointerTypeGroup->checkedId()));
     panelView->clearSelection();
 }
+
 void MainWindow::about()
 {
     QMessageBox::about(this, tr("About Dataflow"),
                        tr("About Dataflow Project"));
 }
+
 void MainWindow::createModulesList()
 {
     panelView = new QTreeView();
@@ -171,6 +173,7 @@ void MainWindow::createModulesList()
     connect(panelView, SIGNAL(expanded(const QModelIndex &)),
         this, SLOT(panelViewCollapsedExpanded()));
 }
+
 void MainWindow::createActions()
 {
     openFileAction = new QAction(tr("Open..."), this);
@@ -192,6 +195,7 @@ void MainWindow::createActions()
     aboutAction->setShortcut(tr("Ctrl+B"));
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
 }
+
 void MainWindow::createMenus()
 {
     fileMenu = menuBar()->addMenu(tr("&File"));
@@ -203,6 +207,7 @@ void MainWindow::createMenus()
     aboutMenu = menuBar()->addMenu(tr("&Help"));
     aboutMenu->addAction(aboutAction);
 }
+
 void MainWindow::createToolbars()
 {
     editToolBar = addToolBar(tr("Edit"));

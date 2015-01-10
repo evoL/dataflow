@@ -29,9 +29,11 @@ class Arrow;
 class DiagramOperation : public DiagramBlock
 {
 public:
+	enum { Type = UserType + 32 };
 	DiagramOperation();
 	DiagramOperation(const std::shared_ptr<Block> blockPtr, QMenu * contextMenu, QGraphicsItem * parent = 0);
 	~DiagramOperation();
+	int type() const { return Type; }
 
 	virtual int getId() { return blockPtr->id; }
     virtual qreal getHeight() { return height; }

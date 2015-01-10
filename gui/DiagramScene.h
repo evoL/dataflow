@@ -1,6 +1,7 @@
 #ifndef DIAGRAMSCENE_H
 #define DIAGRAMSCENE_H
 #include "DiagramBlock.h"
+#include "DiagramOperation.h"
 #include "BlockIn.h"
 #include "BlockOut.h"
 #include "ModulesPanelModel.h"
@@ -22,9 +23,12 @@ class DiagramScene : public QGraphicsScene
 public:
     enum Mode { InsertItem, InsertLine, MoveItem };
     explicit DiagramScene(ModulesPanelModel * panelModel, QTreeView * panelView, QMenu * itemMenu, QObject * parent = 0);
-	DiagramBlock * findBlockById(int id);
+	//DiagramBlock * findBlockById(int id);
+	BlockIn * findInput(DiagramOperation * block, int index);
+	BlockOut * findOutput(DiagramBlock * block, int id);
+	bool paintConnection(int inputBlockId, int inputBlockInput, int outputBlockId, int outputBlockOutputId);
 	
-	QColor myLineColor;
+	
 public slots:
     void setMode(Mode mode);
 signals:
@@ -42,7 +46,6 @@ private:
     QPointF startPoint;
     QGraphicsLineItem * line;
     QColor myTextColor;
-    
-    
+    QColor myLineColor;    
 };
 #endif // DIAGRAMSCENE_H

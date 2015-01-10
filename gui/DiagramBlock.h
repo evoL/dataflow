@@ -31,7 +31,7 @@ class DiagramBlock : public QGraphicsRectItem
 public:
 
 
-    enum { Type = UserType + 30 };
+    //enum { Type = UserType + 30 };
     DiagramBlock() {}
     //DiagramBlock(const Block * block, QMenu * contextMenu, QGraphicsItem * parent = 0);
 	virtual int getId() = 0;
@@ -47,7 +47,7 @@ public:
     void addArrow(Arrow * arrow);
     void removeArrow(Arrow * arrow);
     void removeArrows();
-	int type() const { return Type;}
+	//int type() const { return Type;}
 
     BlockDescription * blockName;
 

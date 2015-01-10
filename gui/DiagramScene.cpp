@@ -6,6 +6,9 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QColor>
 #include <QBrush>
+#include <iostream>
+#include "DiagramConstructor.h"
+#include "DiagramOperation.h"
 
 DiagramScene::DiagramScene(ModulesPanelModel * panelModel, QTreeView * panelView, QMenu * itemMenu, QObject * parent)
     : QGraphicsScene(parent)
@@ -19,7 +22,6 @@ DiagramScene::DiagramScene(ModulesPanelModel * panelModel, QTreeView * panelView
     myTextColor = Qt::black;
     myLineColor = Qt::black;
 
-
     QLinearGradient linearGrad(QPointF(0, 0), QPointF(3000, 3000));
     linearGrad.setColorAt(0, QColor(175, 175, 175));
     linearGrad.setColorAt(1, QColor(230, 230, 230));
@@ -27,7 +29,7 @@ DiagramScene::DiagramScene(ModulesPanelModel * panelModel, QTreeView * panelView
     setBackgroundBrush(QBrush(linearGrad));
 }
 
-DiagramBlock * DiagramScene::findBlockById(int id)
+/*DiagramBlock * DiagramScene::findBlockById(int id)
 {
     for (auto & item : items()) {
         if (item->type() != DiagramBlock::Type) continue;
@@ -38,12 +40,73 @@ DiagramBlock * DiagramScene::findBlockById(int id)
     }
     
 	return NULL;
+}*/
+
+BlockIn * DiagramScene::findInput(DiagramOperation * block, int index)
+{
+	auto inputs = block->getBlockInputs();
+	auto it = inputs->begin();
+	while (it != inputs->end())
+	{
+		if ((*it)->getIndex() == index) return *it;
+		it++;
+	}
+	return NULL;
+}
+
+BlockOut * DiagramScene::findOutput(DiagramBlock * block, int id)
+{
+	auto outputs = block->getBlockOutputs();
+	auto it = outputs->begin();
+	while (it != outputs->end())
+	{
+		if ((*it)->getId() == id) return *it;
+		it++;
+	}
+	return NULL;
+}
+
+bool DiagramScene::paintConnection(int inputBlockId, int inputBlockInput, int outputBlockId, int outputBlockOutputId)
+{
+	DiagramOperation * inputBlock = NULL;
+	DiagramBlock * outputBlock = NULL;
+	for (int i = 0; i < items().size() && (inputBlock == nullptr || outputBlock == nullptr); i++)
+	{
+		if ((items()[i])->type() == DiagramConstructor::Type || (items()[i])->type() == DiagramOperation::Type)
+		{
+			DiagramBlock * item = static_cast<DiagramBlock*>(items()[i]);
+			if (item->getId() == inputBlockId)
+				inputBlock = static_cast<DiagramOperation*>(item);
+			else if (item->getId() == outputBlockId)
+				outputBlock = item;
+		}
+	}
+
+	if (inputBlock == nullptr || outputBlock == nullptr) return false;
+
+	// Find circles
+	BlockIn * endItem = findInput(inputBlock, inputBlockInput);
+	BlockOut * startItem = findOutput(outputBlock, outputBlockOutputId);
+
+	if (endItem == nullptr || startItem == nullptr) return false;
+
+	// Paint arrow
+	Arrow * arrow = new Arrow(endItem, startItem);
+	arrow->setColor(myLineColor);
+	startItem->removeArrows();
+	startItem->addArrow(arrow);
+	endItem->addArrow(arrow);
+	addItem(arrow);
+	arrow->updatePosition();
+
+	return true;
 }
 
 void DiagramScene::setMode(Mode mode)
 {
     myMode = mode;
 }
+
 void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
 {
     if (mouseEvent->button() != Qt::LeftButton)
@@ -83,6 +146,7 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
 
     QGraphicsScene::mousePressEvent(mouseEvent);
 }
+
 void DiagramScene::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
 {
     if (myMode == InsertLine && line != 0) {
@@ -92,6 +156,7 @@ void DiagramScene::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
         QGraphicsScene::mouseMoveEvent(mouseEvent);
     }
 }
+
 void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
 {
     if (line != 0 && myMode == InsertLine) {
