@@ -18,7 +18,7 @@ extern "C"
 
     PPM_API const char * DATAFLOW_MODULE operations()
     {
-        return "SavePpm\0NegativePpm\0RotateLeftPpm\0RotateRightPpm\0HorizontalReflectionPpm\0VerticalReflectionPpm\0";
+        return "SavePpm\0NegativePpm\0RotateLeftPpm\0RotateRightPpm\0HorizontalReflectionPpm\0VerticalReflectionPpm\0ToGrayscalePpm\0";
     }
 
     PPM_API unsigned int DATAFLOW_MODULE Ppm_size()
@@ -116,6 +116,11 @@ extern "C"
         return "ppm.Ppm\0";
     }
 
+    PPM_API const char * DATAFLOW_MODULE ToGrayscalePpm_inputs()
+    {
+        return "ppm.Ppm\0";
+    }
+    
     PPM_API const char * DATAFLOW_MODULE SavePpm_outputs()
     {
         return "";
@@ -142,6 +147,11 @@ extern "C"
     }
 
     PPM_API const char * DATAFLOW_MODULE VerticalReflectionPpm_outputs()
+    {
+        return "ppm.Ppm\0";
+    }
+    
+    PPM_API const char * DATAFLOW_MODULE ToGrayscalePpm_outputs()
     {
         return "ppm.Ppm\0";
     }
@@ -262,6 +272,29 @@ extern "C"
             }
         }
 
+        return true;
+    }
+    
+    PPM_API bool DATAFLOW_MODULE ToGrayscalePpm_execute(void * const * inputs, void * const * outputs)
+    {
+        dPpm& ppm = *(dPpm *)(inputs[0]);
+        dPpm& out_ppm = *(dPpm *)(outputs[0]);
+        
+        out_ppm.width = ppm.width;
+        out_ppm.height = ppm.height;
+        out_ppm.data = (dColor *)malloc(sizeof(dColor) * ppm.width * ppm.height);
+        
+        unsigned char luminosity_color;
+        
+        for (int y=0; y<out_ppm.height; y++) {
+            for (int x=0; x<out_ppm.width; x++) {
+                luminosity_color = 0.21 * _PX(ppm, x, y).r + 0.72 * _PX(ppm, x, y).g + 0.07 * _PX(ppm, x, y).b;
+                _PX(out_ppm, x, y).r = luminosity_color;
+                _PX(out_ppm, x, y).g = luminosity_color;
+                _PX(out_ppm, x, y).b = luminosity_color;
+            }
+        }
+        
         return true;
     }
 

@@ -40,19 +40,21 @@ extern "C"
     PPM_API const char * DATAFLOW_MODULE RotateRightPpm_inputs();
     PPM_API const char * DATAFLOW_MODULE HorizontalReflectionPpm_inputs();
     PPM_API const char * DATAFLOW_MODULE VerticalReflectionPpm_inputs();
+    PPM_API const char * DATAFLOW_MODULE ToGrayscalePpm_inputs();
     PPM_API const char * DATAFLOW_MODULE SavePpm_outputs();
     PPM_API const char * DATAFLOW_MODULE NegativePpm_outputs();
     PPM_API const char * DATAFLOW_MODULE RotateLeftPpm_outputs();
     PPM_API const char * DATAFLOW_MODULE RotateRightPpm_outputs();
     PPM_API const char * DATAFLOW_MODULE HorizontalReflectionPpm_outputs();
     PPM_API const char * DATAFLOW_MODULE VerticalReflectionPpm_outputs();
+    PPM_API const char * DATAFLOW_MODULE ToGrayscalePpm_outputs();
     PPM_API bool DATAFLOW_MODULE SavePpm_execute(void * const * inputs, void * const *);
     PPM_API bool DATAFLOW_MODULE NegativePpm_execute(void * const * inputs, void * const * outputs);
     PPM_API bool DATAFLOW_MODULE RotateLeftPpm_execute(void * const * inputs, void * const * outputs);
     PPM_API bool DATAFLOW_MODULE RotateRightPpm_execute(void * const * inputs, void * const * outputs);
     PPM_API bool DATAFLOW_MODULE HorizontalReflectionPpm_execute(void * const * inputs, void * const * outputs);
     PPM_API bool DATAFLOW_MODULE VerticalReflectionPpm_execute(void * const * inputs, void * const * outputs);
-
+    PPM_API bool DATAFLOW_MODULE ToGrayscalePpm_execute(void * const * inputs, void * const * outputs);
 
     // private functions
     void try_comment(FILE * f);
