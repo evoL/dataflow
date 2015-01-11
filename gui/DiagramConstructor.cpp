@@ -7,8 +7,8 @@ DiagramConstructor::DiagramConstructor()
 {
 }
 
-DiagramConstructor::DiagramConstructor(const std::shared_ptr<Block> blockPointer, QMenu * contextMenu, QGraphicsItem * parent) 
-	: blockPtr(std::static_pointer_cast<Constructor>(blockPointer))
+DiagramConstructor::DiagramConstructor(const std::shared_ptr<Block> blockPointer, QMenu * contextMenu, QGraphicsItem * parent)
+    : blockPtr(std::static_pointer_cast<Constructor>(blockPointer))
 {
     myContextMenu = contextMenu;
 

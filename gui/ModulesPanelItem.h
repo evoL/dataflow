@@ -16,6 +16,7 @@ public:
 		RootT,
 		LibraryT,
 		OperationsLabelT,
+		ConstructorsLabelT,
 		OperationT,
 		ConstructorT,
 	};
@@ -29,11 +30,14 @@ public:
 	int childCount();
 	int columnCount();
 	QVariant data();
+	const void * getDataPtr() { return dataPtr; }
 	ItemType getItemType() { return itemType; }
 
 	ModulesPanelItem * addLibrary(const Library * library);
 	ModulesPanelItem * addOperationsLabel();
+	ModulesPanelItem * addConstructorsLabel();
 	ModulesPanelItem * addOperation(const std::string operation);
+    ModulesPanelItem * addConstructor(const std::string constructor);
 
 private:
 	ModulesPanelItem * parentItem;

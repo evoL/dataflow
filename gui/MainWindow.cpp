@@ -48,14 +48,17 @@ void MainWindow::panelViewCollapsedExpanded()
 void MainWindow::openFile()
 {
     //QTextStream cout(stdout);
-    string fileName = QFileDialog::getOpenFileName(this, tr("Open project"),
+    /*string fileName = QFileDialog::getOpenFileName(this, tr("Open project"),
                                                     "",
-                                                    tr("Dataflow projects (*.xml)")).toStdString();
+                                                    tr("Dataflow projects (*.xml)")).toStdString();*/
 
-    if (!fileName.empty())
+    //if (!fileName.empty())
+	if (1)
     {
-        projectModel = XMLParser().loadModelFromFile(fileName);
-        panelModel = new ModulesPanelModel(projectModel);
+        projectModel = XMLParser().loadModelFromFile("Debug/sample.xml");
+		manipulator = new ModelManipulator(*projectModel);
+		panelModel = new ModulesPanelModel(projectModel);
+		scene->setProjectModel(projectModel, manipulator);
 
         panelView->setModel(panelModel);
 

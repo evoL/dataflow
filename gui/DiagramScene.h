@@ -23,6 +23,9 @@ class DiagramScene : public QGraphicsScene
 public:
     enum Mode { InsertItem, InsertLine, MoveItem };
     explicit DiagramScene(ModulesPanelModel * panelModel, QTreeView * panelView, QMenu * itemMenu, QObject * parent = 0);
+	void setProjectModel(ProjectModel * projectModel, ModelManipulator * modelManipulator) 
+		{ this->projectModel = projectModel; this->manipulator = modelManipulator; }
+
 	//DiagramBlock * findBlockById(int id);
 	BlockIn * findInput(DiagramOperation * block, int index);
 	BlockOut * findOutput(DiagramBlock * block, int id);
@@ -42,6 +45,10 @@ private:
     QMenu * myItemMenu;
     QTreeView * panelView;
     ModulesPanelModel * panelModel;
+
+	ProjectModel * projectModel;
+	ModelManipulator * manipulator;
+
     Mode myMode;
     QPointF startPoint;
     QGraphicsLineItem * line;

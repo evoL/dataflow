@@ -12,7 +12,6 @@ BlockDescription::BlockDescription(QString s, QGraphicsItem * parent) : QGraphic
     blockHeight = this->boundingRect().height();
     //setFlag(QGraphicsItem::ItemIsSelectable, true);
 
-	
 }
 BlockDescription::BlockDescription(QGraphicsItem * parent) : QGraphicsTextItem(parent)
 {
@@ -28,8 +27,7 @@ void BlockDescription::SetDescription(const QString desc)
 
 void BlockDescription::setAlignCenter(int i)
 {
-	DiagramBlock *parr = static_cast<DiagramBlock*> (parentItem());
-    setTextWidth(parr->getWidth() - 1);
+	setTextWidth(static_cast<DiagramBlock*>(parentItem())->getWidth() - 1);
     blockHeight = this->boundingRect().height();
 
     if(i==0)this->setHtml("<body style='background-color:#4C6BB2;'><center>" + text_description + "</center></body>");

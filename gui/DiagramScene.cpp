@@ -6,6 +6,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QColor>
 #include <QBrush>
+#include <memory>
 #include <iostream>
 #include "DiagramConstructor.h"
 #include "DiagramOperation.h"
@@ -113,24 +114,30 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
         return;
 
     DiagramBlock * item;
-    const Block * selectedBlockPtr;
+    std::shared_ptr<const Block> selectedBlockPtr;
 
     switch (myMode) {
-    //poprawić nazwy!!!!!
-    /*case InsertItem:
-        selectedBlockPtr = &panelModel->at(panelView->currentIndex().row());
-        item = new DiagramModuleItem(selectedBlockPtr, myItemMenu);
+    case InsertItem:
+        /*selectedBlockPtr = panelModel->data(panelView->currentIndex());
+		if (selectedBlockPtr->blockType() == BlockType::Constructor)
+		{
+            //DiagramConstructor * item = new DiagramConstructor(selectedBlockPtr, myItemMenu);
+            //addItem(item);
+		}
+		if (selectedBlockPtr->blockType() == BlockType::Operation)
+		{
+            //DiagramOperation * item = new DiagramOperation(selectedBlockPtr, myItemMenu);
+            //addItem(item);
+		}
 
-        if(selectedBlockPtr->getType()==0)item->setBrush(myItemColor);
-        if(selectedBlockPtr->getType()==-1)item->setBrush(myInputColor);
-        if(selectedBlockPtr->getType()==1)item->setBrush(myOutputColor);
-        addItem(item);
+       
 
         item->setPos(mouseEvent->scenePos() - QPointF(20,20));
         if (item->pos().x() < 0) item->setX(0);
         if (item->pos().y() < 0) item->setY(0);
 
         emit itemInserted();
+		// Uaktualnić model!
         break;*/
 
     case InsertLine:

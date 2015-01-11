@@ -22,7 +22,7 @@ public:
     int columnCount(const QModelIndex & parent = QModelIndex()) const;
     QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
 	Qt::ItemFlags flags(const QModelIndex &index) const;
-    
+    std::shared_ptr<const Block> getBlockPtr(const QModelIndex &index) const;
 
 private:
     ModulesPanelItem * rootItem;

@@ -22,6 +22,7 @@ ModulesPanelItem * ModulesPanelItem::child(int row)
 	case RootT:
 	case LibraryT:
 	case OperationsLabelT:
+	case ConstructorsLabelT:
 		if (row >= 0 && row < children.size())
 			return children.at(row);
 	}
@@ -58,9 +59,11 @@ QVariant ModulesPanelItem::data()
 	case LibraryT:
 	case OperationsLabelT:
 	case OperationT:
+	case ConstructorsLabelT:
+	case ConstructorT:
 		return QString::fromStdString(name);
 	}
-	return QString("Brak danych");
+	return QString("No data");
 }
 
 ModulesPanelItem * ModulesPanelItem::addLibrary(const Library * library)
@@ -77,9 +80,23 @@ ModulesPanelItem * ModulesPanelItem::addOperationsLabel()
 	return newLabel;
 }
 
+ModulesPanelItem * ModulesPanelItem::addConstructorsLabel()
+{
+	ModulesPanelItem * newLabel = new ModulesPanelItem("Constructors", NULL, ConstructorsLabelT, this);
+	children.push_back(newLabel);
+	return newLabel;
+}
+
 ModulesPanelItem * ModulesPanelItem::addOperation(const std::string operation)
 {
 	ModulesPanelItem * newOperation = new ModulesPanelItem(operation, NULL, OperationT, this);
 	children.push_back(newOperation);
 	return newOperation;
+}
+
+ModulesPanelItem * ModulesPanelItem::addConstructor(const std::string constructor)
+{
+	ModulesPanelItem * newConstructor = new ModulesPanelItem(constructor, NULL, ConstructorT, this);
+	children.push_back(newConstructor);
+	return newConstructor;
 }

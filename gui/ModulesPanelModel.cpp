@@ -38,15 +38,28 @@ void ModulesPanelModel::loadFromProjectModel(ProjectModel * projectModel)
 
 		// Block types
 		const std::vector<std::string> operations = (it->second.getOperations());
+		const std::vector<std::string> constructors = (it->second.getTypes());
+
+		// Constructors
+		if (constructors.size() > 0)
+		{
+			auto * constructorsLabel = libraryItem->addConstructorsLabel();
+			for (int i = 0; i < constructors.size(); i++)
+			{
+				constructorsLabel->addConstructor(constructors[i]);
+			}
+		}
+
+		// Operations
 		if (operations.size() > 0)
 		{
 			auto * operationsLabel = libraryItem->addOperationsLabel();
-			// Operations
 			for (int i = 0; i < operations.size(); i++)
 			{
 				operationsLabel->addOperation(operations[i]);
 			}
 		}
+
 		it++;
 	}
 }
@@ -109,7 +122,7 @@ QVariant ModulesPanelModel::data(const QModelIndex & index, int role) const
 
 	if (role != Qt::DisplayRole)
 		return QVariant();
-
+	
 	ModulesPanelItem *item = static_cast<ModulesPanelItem*>(index.internalPointer());
 
 	return item->data();
@@ -120,9 +133,18 @@ Qt::ItemFlags ModulesPanelModel::flags(const QModelIndex &index) const
 	if (!index.isValid())
 		return 0;
 
-	if (static_cast<ModulesPanelItem*>(index.internalPointer())->getItemType() == ModulesPanelItem::ItemType::OperationT)
+	if (static_cast<ModulesPanelItem*>(index.internalPointer())->getItemType() == ModulesPanelItem::ItemType::OperationT ||  
+		static_cast<ModulesPanelItem*>(index.internalPointer())->getItemType() == ModulesPanelItem::ItemType::ConstructorT)
 		return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 
 	return Qt::ItemIsEnabled;
+}
+
+std::shared_ptr<const Block> ModulesPanelModel::getBlockPtr(const QModelIndex &index) const
+{
+	if (!index.isValid()) return NULL;
+
+	ModulesPanelItem *item = static_cast<ModulesPanelItem*>(index.internalPointer());
+    return std::shared_ptr<const Block>(static_cast<const Block*>(item->getDataPtr()));
 }
 

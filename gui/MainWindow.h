@@ -5,6 +5,7 @@
 #include "DiagramBlock.h"
 #include "ModulesPanelModel.h"
 #include <DataflowModel.h>
+#include <ModelManipulator.h>
 #include <XMLParser.h>
 
 class DiagramScene;
@@ -60,6 +61,8 @@ private:
     QPushButton *execute;
 
     ProjectModel * projectModel;
+	ModelManipulator * manipulator;
+
 	ModulesPanelModel * panelModel;
 	QTreeView * panelView;
 };
