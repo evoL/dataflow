@@ -7,6 +7,7 @@
 #include "ModulesPanelModel.h"
 #include <QGraphicsScene>
 #include <QTreeView>
+#include <ModelManipulator.h>
 
 QT_BEGIN_NAMESPACE
 class QGraphicsSceneMouseEvent;
@@ -23,15 +24,15 @@ class DiagramScene : public QGraphicsScene
 public:
     enum Mode { InsertItem, InsertLine, MoveItem };
     explicit DiagramScene(ModulesPanelModel * panelModel, QTreeView * panelView, QMenu * itemMenu, QObject * parent = 0);
-	void setProjectModel(ProjectModel * projectModel, ModelManipulator * modelManipulator) 
-		{ this->projectModel = projectModel; this->manipulator = modelManipulator; }
+    void setProjectModel(ProjectModel * projectModel, ModelManipulator * modelManipulator)
+        { this->projectModel = projectModel; this->manipulator = modelManipulator; }
 
-	//DiagramBlock * findBlockById(int id);
-	BlockIn * findInput(DiagramOperation * block, int index);
-	BlockOut * findOutput(DiagramBlock * block, int id);
-	bool paintConnection(int inputBlockId, int inputBlockInput, int outputBlockId, int outputBlockOutputId);
-	
-	
+    //DiagramBlock * findBlockById(int id);
+    BlockIn * findInput(DiagramOperation * block, int index);
+    BlockOut * findOutput(DiagramBlock * block, int id);
+    bool paintConnection(int inputBlockId, int inputBlockInput, int outputBlockId, int outputBlockOutputId);
+
+
 public slots:
     void setMode(Mode mode);
 signals:
@@ -46,13 +47,13 @@ private:
     QTreeView * panelView;
     ModulesPanelModel * panelModel;
 
-	ProjectModel * projectModel;
-	ModelManipulator * manipulator;
+    ProjectModel * projectModel;
+    ModelManipulator * manipulator;
 
     Mode myMode;
     QPointF startPoint;
     QGraphicsLineItem * line;
     QColor myTextColor;
-    QColor myLineColor;    
+    QColor myLineColor;
 };
 #endif // DIAGRAMSCENE_H
