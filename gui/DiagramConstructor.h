@@ -29,20 +29,20 @@ class Arrow;
 class DiagramConstructor : public DiagramBlock
 {
 public:
-	enum { Type = UserType + 31 };
-	DiagramConstructor();
+    enum { Type = UserType + 31 };
+    DiagramConstructor();
     DiagramConstructor(const std::shared_ptr<Block> blockPointer, QMenu * contextMenu, QGraphicsItem * parent = 0);
-	~DiagramConstructor();
-	int type() const { return Type; }
+    ~DiagramConstructor();
+    int type() const { return Type; }
 
-	virtual int getId() { return blockPtr->id;  }
+    virtual int getId() { return constructorPointer->id;  }
     virtual qreal getHeight() { return height; }
     virtual qreal getWidth() { return width; }
-	virtual float getX() { return blockPtr->position.x; }
-	virtual float getY() { return blockPtr->position.y; }
+    virtual float getX() { return constructorPointer->position.x; }
+    virtual float getY() { return constructorPointer->position.y; }
 
 private:
-	const std::shared_ptr<Constructor> blockPtr;
+    const std::shared_ptr<Constructor> constructorPointer;
 };
 
 #endif
