@@ -2,6 +2,7 @@
     <imports>
         <import module="ppm" />
         <import module="dstring" />
+        <import module="basicmath" />
     </imports>
     <entry-points>
         <entry-point id="12"/>
@@ -9,6 +10,8 @@
         <entry-point id="14"/>
         <entry-point id="15"/>
         <entry-point id="16"/>
+        <entry-point id="19"/>
+        <entry-point id="25"/>
     </entry-points>
     <schema>
         <!-- Output IDs and Block IDs are unique across the project, however, blocks and outputs
