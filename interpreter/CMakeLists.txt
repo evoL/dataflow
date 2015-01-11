@@ -46,3 +46,5 @@ add_executable(interpreter_example interpreter_example.cpp)
 
 target_link_libraries(libraryloader_example dataflow)
 target_link_libraries(interpreter_example dataflow)
+
+install(TARGETS dataflow libraryloader_example interpreter_example DESTINATION ${DATAFLOW_OUTPUT_DIR})

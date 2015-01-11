@@ -12,10 +12,10 @@ add_executable(dataflow_gui WIN32
     Arrow.cpp
     DiagramBlock.h
     DiagramBlock.cpp
-	DiagramOperation.h
-	DiagramOperation.cpp
-	DiagramConstructor.h
-	DiagramConstructor.cpp
+    DiagramOperation.h
+    DiagramOperation.cpp
+    DiagramConstructor.h
+    DiagramConstructor.cpp
     DiagramScene.h
     DiagramScene.cpp
     MainWindow.h
@@ -28,10 +28,10 @@ add_executable(dataflow_gui WIN32
     BlockIn.cpp
     BlockOut.h
     BlockOut.cpp
-	ModulesPanelItem.h
-	ModulesPanelItem.cpp
-	ModulesPanelModel.h
-	ModulesPanelModel.cpp
+    ModulesPanelItem.h
+    ModulesPanelItem.cpp
+    ModulesPanelModel.h
+    ModulesPanelModel.cpp
     main.cpp
 )
 
@@ -44,5 +44,7 @@ include_directories(
 
 add_dependencies(dataflow_gui dataflow)
 target_link_libraries(dataflow_gui dataflow Qt5::Widgets)
+
+install(TARGETS dataflow_gui DESTINATION ${DATAFLOW_OUTPUT_DIR})
 
 source_group("Resources" "\\.qrc$")

@@ -29,6 +29,11 @@ endif()
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+# Setup output binary path
+set(DATAFLOW_OUTPUT_DIR "${dataflow_BINARY_DIR}/bin")
+file(MAKE_DIRECTORY ${DATAFLOW_OUTPUT_DIR})
+set(CMAKE_INSTALL_RPATH ${DATAFLOW_OUTPUT_DIR})
+
 add_subdirectory(basicmath)
 add_subdirectory(io_module)
 add_subdirectory(dstring)

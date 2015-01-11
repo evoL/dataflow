@@ -13,3 +13,5 @@ add_library(io_module SHARED ${sources})
 set_target_properties(io_module PROPERTIES
     DEFINE_SYMBOL BASIC_IO_EXPORTS
 )
+
+install(TARGETS io_module DESTINATION ${DATAFLOW_OUTPUT_DIR})

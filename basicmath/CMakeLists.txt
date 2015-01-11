@@ -9,3 +9,5 @@ add_library(basicmath SHARED ${sources})
 set_target_properties(basicmath PROPERTIES
     DEFINE_SYMBOL BASIC_MATH_EXPORTS
 )
+
+install(TARGETS basicmath DESTINATION ${DATAFLOW_OUTPUT_DIR})

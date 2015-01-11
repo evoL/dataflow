@@ -11,3 +11,5 @@ add_library(dstring SHARED ${sources})
 set_target_properties(dstring PROPERTIES
     DEFINE_SYMBOL DSTRING_EXPORTS
 )
+
+install(TARGETS dstring DESTINATION ${DATAFLOW_OUTPUT_DIR})

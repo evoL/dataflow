@@ -11,3 +11,5 @@ add_library(ppm SHARED ${sources})
 set_target_properties(ppm PROPERTIES
     DEFINE_SYMBOL PPM_EXPORTS
 )
+
+install(TARGETS ppm DESTINATION ${DATAFLOW_OUTPUT_DIR})
