@@ -18,7 +18,7 @@ MainWindow::MainWindow()
     createActions();
     createModulesList();
     createMenus();
-    scene = new DiagramScene(panelModel, panelView, itemMenu, this);
+    scene = new DiagramScene(panelModel.data(), panelView, itemMenu, this);
     scene->setSceneRect(QRectF(0, 0, 1000, 1000));
     connect(scene, SIGNAL(itemInserted()), this, SLOT(itemInserted()));
     createToolbars();
@@ -30,11 +30,11 @@ MainWindow::MainWindow()
     setCentralWidget(splitter);
     setWindowTitle(tr("Dataflow Creator"));
     setUnifiedTitleAndToolBarOnMac(true);
-	//openFile();
-	//view->verticalScrollBar()->setSliderPosition(0);
-	//view->horizontalScrollBar()->setSliderPosition(0);
-	//view->verticalScrollBar()->setValue(1);
-	//view->horizontalScrollBar()->setValue(1);
+    //openFile();
+    //view->verticalScrollBar()->setSliderPosition(0);
+    //view->horizontalScrollBar()->setSliderPosition(0);
+    //view->verticalScrollBar()->setValue(1);
+    //view->horizontalScrollBar()->setValue(1);
 }
 void MainWindow::panelViewClicked()
 {
@@ -55,14 +55,17 @@ void MainWindow::openFile()
 
     if (!fileName.empty())
     {
-        projectModel = XMLParser().loadModelFromFile(fileName);
-		manipulator = new ModelManipulator(*projectModel);
-		panelModel = new ModulesPanelModel(projectModel);
-		scene->setProjectModel(projectModel, manipulator);
+        projectModel.reset(XMLParser().loadModelFromFile(fileName));
+        manipulator.reset(new ModelManipulator(*projectModel));
+        panelModel.reset(new ModulesPanelModel(projectModel.data()));
+        scene->setProjectModel(projectModel.data(), manipulator.data());
 
-        panelView->setModel(panelModel);
+        panelView->setModel(panelModel.data());
 
         setWindowTitle( QString(projectModel->getName().data()) + " - Dataflow Creator" );
+
+        // Clear scene before redraw
+        scene->clear();
 
         // Load blocks into diagram scene
         const BlocksMap blocks = projectModel->getBlocks();
@@ -89,30 +92,30 @@ void MainWindow::openFile()
             it++;
         }
 
-		// Load connections
-		it = blocks.cbegin();
-		while (it != blocks.cend())
-		{
-			if (it->second->blockType() == BlockType::Operation)
-			{
-				std::shared_ptr<Operation> currentBlock = std::static_pointer_cast<Operation>(it->second);
-				const InputTransitionMap transitions = currentBlock->inputs;
-				InputTransitionMap::const_iterator transition = transitions.cbegin();
-				while (transition != transitions.cend())
-				{
-					if (transition->second.outputBlock != nullptr) // Assumption: not connected input has nullptr as outputBlock
-					{
-						bool paintingOK = scene->paintConnection(currentBlock->id,
-							transition->first,
-							transition->second.outputBlock->id,
-							transition->second.outputId);
-						if (!paintingOK) throw std::string("Can't connect blocks!");
-					}
-					transition++;
-				}
-			}
-			it++;
-		}
+        // Load connections
+        it = blocks.cbegin();
+        while (it != blocks.cend())
+        {
+            if (it->second->blockType() == BlockType::Operation)
+            {
+                std::shared_ptr<Operation> currentBlock = std::static_pointer_cast<Operation>(it->second);
+                const InputTransitionMap transitions = currentBlock->inputs;
+                InputTransitionMap::const_iterator transition = transitions.cbegin();
+                while (transition != transitions.cend())
+                {
+                    if (transition->second.outputBlock != nullptr) // Assumption: not connected input has nullptr as outputBlock
+                    {
+                        bool paintingOK = scene->paintConnection(currentBlock->id,
+                            transition->first,
+                            transition->second.outputBlock->id,
+                            transition->second.outputId);
+                        if (!paintingOK) throw std::string("Can't connect blocks!");
+                    }
+                    transition++;
+                }
+            }
+            it++;
+        }
     }
 }
 

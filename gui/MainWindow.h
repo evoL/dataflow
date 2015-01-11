@@ -64,10 +64,10 @@ private:
     QButtonGroup * pointerTypeGroup;
     QAction * lineAction;
 
-    ProjectModel * projectModel;
-	ModelManipulator * manipulator;
+    QScopedPointer<ProjectModel> projectModel;
+    QScopedPointer<ModelManipulator> manipulator;
 
-	ModulesPanelModel * panelModel;
-	QTreeView * panelView;
+    QScopedPointer<ModulesPanelModel> panelModel;
+    QTreeView * panelView;
 };
 #endif // MAINWINDOW_H
