@@ -22,6 +22,9 @@ int main(int argc, char *argv[])
     } catch (XMLParserError e) {
         std::cerr << e.what() << std::endl;
         return 1;
+    } catch (ModelManipulatorError e) {
+        std::cerr << "Manipulator error: " << e.what() << std::endl;
+        return 1;
     }
 }
 
