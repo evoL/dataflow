@@ -7,6 +7,8 @@
 #include <DataflowModel.h>
 #include <ModelManipulator.h>
 #include <XMLParser.h>
+#include <QAction>
+#include <QScopedPointer>
 
 class DiagramScene;
 
@@ -31,12 +33,13 @@ public:
     MainWindow();
 private slots:
     void panelViewClicked();
-	void panelViewCollapsedExpanded();
+    void panelViewCollapsedExpanded();
     void openFile();
     void deleteItem();
     void pointerGroupClicked(int id);
     void itemInserted();
     void about();
+    void execute();
 private:
     void createModulesList();
     void createActions();
@@ -50,15 +53,16 @@ private:
     QAction * exitAction;
     QAction * deleteAction;
     QAction * aboutAction;
+    QScopedPointer<QAction> executeAction;
+
     QMenu * fileMenu;
     QMenu * itemMenu;
     QMenu * aboutMenu;
     QToolBar * editToolBar;
     QToolBar * pointerToolbar;
-    
+
     QButtonGroup * pointerTypeGroup;
     QAction * lineAction;
-    QPushButton *execute;
 
     ProjectModel * projectModel;
 	ModelManipulator * manipulator;

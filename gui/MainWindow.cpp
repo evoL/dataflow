@@ -9,6 +9,7 @@
 #include <QVector>
 #include <QTextStream>
 #include <typeinfo>
+#include <Interpreter.h>
 
 using namespace std;
 
@@ -155,6 +156,19 @@ void MainWindow::about()
                        tr("About Dataflow Project"));
 }
 
+void MainWindow::execute()
+{
+    // TODO: we're assuming the Manipulator will be constantly checking for
+    //       correctness, so I don't add it here
+
+    try {
+        Interpreter interpreter(*projectModel);
+        interpreter.interpret();
+    } catch (InterpreterError e) {
+        QMessageBox::critical(this, tr("Runtime error"), e.what());
+    }
+}
+
 void MainWindow::createModulesList()
 {
     panelView = new QTreeView();
@@ -180,7 +194,7 @@ void MainWindow::createActions()
     connect(openFileAction, SIGNAL(triggered()), this, SLOT(openFile()));
 
     deleteAction = new QAction(QIcon(":/images/delete.png"), tr("&Delete"), this);
-    deleteAction->setShortcut(tr("Delete"));
+    deleteAction->setShortcuts(QList<QKeySequence>{ tr("Delete"), tr("Backspace") });
     deleteAction->setStatusTip(tr("Delete item from diagram"));
     connect(deleteAction, SIGNAL(triggered()), this, SLOT(deleteItem()));
 
@@ -190,8 +204,11 @@ void MainWindow::createActions()
     connect(exitAction, SIGNAL(triggered()), this, SLOT(close()));
 
     aboutAction = new QAction(tr("A&bout"), this);
-    aboutAction->setShortcut(tr("Ctrl+B"));
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
+
+    executeAction.reset(new QAction(QIcon(":/images/run.png"), tr("&Execute"), this));
+    executeAction->setShortcut(tr("Ctrl+E"));
+    connect(executeAction.data(), SIGNAL(triggered()), this, SLOT(execute()));
 }
 
 void MainWindow::createMenus()
@@ -208,8 +225,6 @@ void MainWindow::createMenus()
 
 void MainWindow::createToolbars()
 {
-    editToolBar = addToolBar(tr("Edit"));
-    editToolBar->addAction(deleteAction);
     QToolButton * pointerButton = new QToolButton;
     pointerButton->setCheckable(true);
     pointerButton->setChecked(true);
@@ -225,5 +240,9 @@ void MainWindow::createToolbars()
     pointerToolbar = addToolBar(tr("Pointer type"));
     pointerToolbar->addWidget(pointerButton);
     pointerToolbar->addWidget(linePointerButton);
+
+    editToolBar = addToolBar(tr("Edit"));
+    editToolBar->addAction(deleteAction);
+    editToolBar->addAction(executeAction.data());
 }
 
