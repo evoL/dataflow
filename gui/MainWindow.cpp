@@ -29,7 +29,7 @@ MainWindow::MainWindow()
     setCentralWidget(splitter);
     setWindowTitle(tr("Dataflow Creator"));
     setUnifiedTitleAndToolBarOnMac(true);
-	openFile();
+	//openFile();
 	//view->verticalScrollBar()->setSliderPosition(0);
 	//view->horizontalScrollBar()->setSliderPosition(0);
 	//view->verticalScrollBar()->setValue(1);
@@ -48,14 +48,13 @@ void MainWindow::panelViewCollapsedExpanded()
 void MainWindow::openFile()
 {
     //QTextStream cout(stdout);
-    /*string fileName = QFileDialog::getOpenFileName(this, tr("Open project"),
+    string fileName = QFileDialog::getOpenFileName(this, tr("Open project"),
                                                     "",
-                                                    tr("Dataflow projects (*.xml)")).toStdString();*/
+                                                    tr("Dataflow projects (*.xml)")).toStdString();
 
-    //if (!fileName.empty())
-	if (1)
+    if (!fileName.empty())
     {
-        projectModel = XMLParser().loadModelFromFile("Debug/sample.xml");
+        projectModel = XMLParser().loadModelFromFile(fileName);
 		manipulator = new ModelManipulator(*projectModel);
 		panelModel = new ModulesPanelModel(projectModel);
 		scene->setProjectModel(projectModel, manipulator);
@@ -110,10 +109,6 @@ void MainWindow::openFile()
 					}
 					transition++;
 				}
-			}
-			else
-			{
-				std::cout << "Nie-Operation" << endl;
 			}
 			it++;
 		}
