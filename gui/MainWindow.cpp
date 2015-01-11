@@ -24,16 +24,16 @@ MainWindow::MainWindow()
     QSplitter * splitter = new QSplitter;
     splitter->addWidget(panelView);
     view = new QGraphicsView(scene);
-		
+
     splitter->addWidget(view);
     setCentralWidget(splitter);
     setWindowTitle(tr("Dataflow Creator"));
     setUnifiedTitleAndToolBarOnMac(true);
-	//openFile();
-	//view->verticalScrollBar()->setSliderPosition(0);
-	//view->horizontalScrollBar()->setSliderPosition(0);
-	//view->verticalScrollBar()->setValue(1);
-	//view->horizontalScrollBar()->setValue(1);
+    //openFile();
+    //view->verticalScrollBar()->setSliderPosition(0);
+    //view->horizontalScrollBar()->setSliderPosition(0);
+    //view->verticalScrollBar()->setValue(1);
+    //view->horizontalScrollBar()->setValue(1);
 }
 void MainWindow::panelViewClicked()
 {
@@ -42,7 +42,7 @@ void MainWindow::panelViewClicked()
 
 void MainWindow::panelViewCollapsedExpanded()
 {
-	panelView->resizeColumnToContents(0);
+    panelView->resizeColumnToContents(0);
 }
 
 void MainWindow::openFile()
@@ -55,66 +55,66 @@ void MainWindow::openFile()
     if (!fileName.empty())
     {
         projectModel = XMLParser().loadModelFromFile(fileName);
-		panelModel = new ModulesPanelModel(projectModel);
+        panelModel = new ModulesPanelModel(projectModel);
 
-		panelView->setModel(panelModel);
-		
+        panelView->setModel(panelModel);
+
         setWindowTitle( QString(projectModel->getName().data()) + " - Dataflow Creator" );
 
-		// Load blocks into diagram scene
-		const BlocksMap blocks = projectModel->getBlocks();
-		BlocksMap::const_iterator it = blocks.cbegin();
+        // Load blocks into diagram scene
+        const BlocksMap blocks = projectModel->getBlocks();
+        BlocksMap::const_iterator it = blocks.cbegin();
 
-		DiagramBlock *newBlock;
-		while (it != blocks.cend())
-		{
-			if (it->second->blockType() == BlockType::Constructor)
-			{
-				newBlock = new DiagramConstructor((it->second), itemMenu);
-			}
-			if (it->second->blockType() == BlockType::Operation)
-			{
-				newBlock = new DiagramOperation((it->second), itemMenu);
-			}
+        DiagramBlock *newBlock;
+        while (it != blocks.cend())
+        {
+            if (it->second->blockType() == BlockType::Constructor)
+            {
+                newBlock = new DiagramConstructor((it->second), itemMenu);
+            }
+            if (it->second->blockType() == BlockType::Operation)
+            {
+                newBlock = new DiagramOperation((it->second), itemMenu);
+            }
 
-			scene->addItem(newBlock);
-			newBlock->setPos(newBlock->getX(), newBlock->getY());
-			if (newBlock->pos().x() < 0) newBlock->setX(0);
-			if (newBlock->pos().y() < 0) newBlock->setY(0);
-			emit itemInserted();
+            scene->addItem(newBlock);
+            newBlock->setPos(newBlock->getX(), newBlock->getY());
+            if (newBlock->pos().x() < 0) newBlock->setX(0);
+            if (newBlock->pos().y() < 0) newBlock->setY(0);
+            emit itemInserted();
 
-			it++;
-		}
+            it++;
+        }
 
-		// Load connections
-		/*it = blocks.cbegin();
-		while (it != blocks.cend())
-		{
-			if (it->second->blockType() == BlockType::Operation)
-			{
-				std::shared_ptr<Operation> currentBlock = std::static_pointer_cast<Operation>(it->second);
-				const InputTransitionMap transitions = currentBlock->inputs;
-				InputTransitionMap::const_iterator transition = transitions.cbegin();
-				while (transition != transitions.cend())
-				{
-					DiagramBlock * blockWithOutput = scene->findBlockById(transition->second.outputBlock->id);
-					DiagramBlock * blockWithInput = scene->findBlockById(currentBlock->id);
+        // Load connections
+        it = blocks.cbegin();
+        while (it != blocks.cend())
+        {
+            if (it->second->blockType() == BlockType::Operation)
+            {
+                std::shared_ptr<Operation> currentBlock = std::static_pointer_cast<Operation>(it->second);
+                const InputTransitionMap transitions = currentBlock->inputs;
+                InputTransitionMap::const_iterator transition = transitions.cbegin();
+                while (transition != transitions.cend())
+                {
+                    DiagramBlock * blockWithOutput = scene->findBlockById(transition->second.outputBlock->id);
+                    DiagramBlock * blockWithInput = scene->findBlockById(currentBlock->id);
 
-					BlockIn * startItem = blockWithInput->findInputByIndex(transition->first);
-					BlockOut * endItem = blockWithOutput->findOutputById(transition->second.outputId);
-					Arrow * arrow = new Arrow(startItem, endItem);
-					arrow->setColor(scene->myLineColor);
-					startItem->removeArrows();
-					startItem->addArrow(arrow);
-					endItem->addArrow(arrow);
-					scene->addItem(arrow);
-					arrow->updatePosition();
+                    BlockIn * startItem = blockWithInput->findInputByIndex(transition->first);
+                    BlockOut * endItem = blockWithOutput->findOutputById(transition->second.outputId);
+                    Arrow * arrow = new Arrow(startItem, endItem);
+                    arrow->setColor(scene->myLineColor);
+                    startItem->removeArrows();
+                    startItem->addArrow(arrow);
+                    endItem->addArrow(arrow);
+                    scene->addItem(arrow);
+                    arrow->updatePosition();
 
-					transition++;
-				}
-			}
-			it++;
-		}*/
+                    transition++;
+                }
+            }
+            it++;
+        }
 
     }
 }
@@ -157,68 +157,19 @@ void MainWindow::about()
 }
 void MainWindow::createModulesList()
 {
-	panelView = new QTreeView();
-	//panelView->setModel(panelModel);
-	panelView->setHeaderHidden(true);
-	panelView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-	panelView->setSelectionMode(QAbstractItemView::SingleSelection);
-	panelView->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Ignored);
-	panelView->setMinimumWidth(150);
-	connect(panelView, SIGNAL(clicked(const QModelIndex &)),
-		this, SLOT(panelViewClicked()));
-	connect(panelView, SIGNAL(collapsed(const QModelIndex &)),
-		this, SLOT(panelViewCollapsedExpanded()));
-	connect(panelView, SIGNAL(expanded(const QModelIndex &)),
-		this, SLOT(panelViewCollapsedExpanded()));
-
-    /*modulesListModel = new ModulesListModel();
-    // Adding some "operations" to the model.
-    // Need to be removed when modules importing is implemented.
-
-    QVector <QString> multInput;
-    multInput.append("a");
-    multInput.append("b");
-
-    QVector <QString> addInput;
-    addInput.append("a");
-    addInput.append("b");
-    addInput.append("c");
-
-    QVector <QString> multOutput;
-    multOutput.append("a*b");
-
-    QVector <QString> addOutput;
-    addOutput.append("a+b+c");
-
-    QVector <QString> inOut;
-    inOut.append("Number");
-
-    QVector <QString> s;
-    s.append("IN_1");
-    s.append("IN_2");
-    s.append("IN_3");
-
-    QVector <QString> t;
-    t.append("OUT_1");
-    t.append("OUT_2");
-
-    QVector <QString> empty;
-    modulesListModel->append(Module("Give me a number", QSize(80, 80), empty, inOut,-1));
-    modulesListModel->append(Module("Result is:", QSize(80, 80), inOut,empty,1));
-    modulesListModel->append(Module("Multiply 2 numbers", QSize(80, 80), multInput, multOutput));
-    modulesListModel->append(Module("Add 3 numbers", QSize(80, 80), addInput, addOutput));
-
-    //modulesListModel->append(Module("Module 1 is very, very, very long and it still looks nice", QSize(100, 50), s, t));
-    //modulesListModel->append(Module("Module 2", QSize(80, 80), s, t,-1));
-    //modulesListModel->append(Module("Module 3", QSize(120, 120), s, t));
-    panelView = new QListView();
-    panelView->setModel(modulesListModel);
+    panelView = new QTreeView();
+    //panelView->setModel(panelModel);
+    panelView->setHeaderHidden(true);
     panelView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     panelView->setSelectionMode(QAbstractItemView::SingleSelection);
     panelView->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Ignored);
     panelView->setMinimumWidth(150);
     connect(panelView, SIGNAL(clicked(const QModelIndex &)),
-            this, SLOT(panelViewClicked()));*/
+        this, SLOT(panelViewClicked()));
+    connect(panelView, SIGNAL(collapsed(const QModelIndex &)),
+        this, SLOT(panelViewCollapsedExpanded()));
+    connect(panelView, SIGNAL(expanded(const QModelIndex &)),
+        this, SLOT(panelViewCollapsedExpanded()));
 }
 void MainWindow::createActions()
 {

@@ -29,21 +29,14 @@ DiagramScene::DiagramScene(ModulesPanelModel * panelModel, QTreeView * panelView
 
 DiagramBlock * DiagramScene::findBlockById(int id)
 {
-	QList<QGraphicsItem *>::iterator it = this->items().begin();
-	
-	while (it != this->items().end())
-	{
-		if (qgraphicsitem_cast<DiagramBlock*>(*it)->type() == DiagramBlock::Type)
-		{
-			DiagramBlock * block = qgraphicsitem_cast<DiagramBlock*>(*it);
-			if ( block != nullptr && block->getId() == id)
-			{
-				return block;
-			}
-
-		}
-		
-	}
+    for (auto & item : items()) {
+        if (item->type() != DiagramBlock::Type) continue;
+        
+        DiagramBlock * block = qgraphicsitem_cast<DiagramBlock*>(item);
+        if (block != nullptr && block->getId() == id)
+            return block;
+    }
+    
 	return NULL;
 }
 
