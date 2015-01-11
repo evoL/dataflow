@@ -7,9 +7,7 @@ ModelManipulator::ModelManipulator(ProjectModel& model)
 ,maxOutputId(0)
 ,maxBlockId(0)
 {
-    if (!checkModelCorrectness())
-        throw ModelManipulatorError("Invalid model");
-
+    ensureModelCorrectness();
     reassignIds();
 }
 
@@ -18,7 +16,7 @@ void ModelManipulator::setProjectName(std::string& name)
 {
     model.name = name;
 }
-    
+
 void ModelManipulator::addLibrary(std::string& name)
 {
     if (model.libraries.find(name) != model.libraries.end())
@@ -32,7 +30,7 @@ void ModelManipulator::addLibrary(std::string& name)
         throw ModelManipulatorError(std::string("Error while importing library: ").append(error.what()));
     }
 }
-    
+
 void ModelManipulator::deleteLibrary(std::string& name)
 {
     for (auto& it : model.blocks) {
@@ -41,7 +39,7 @@ void ModelManipulator::deleteLibrary(std::string& name)
     }
     model.libraries.erase(name);
 }
-    
+
 void ModelManipulator::setEntryPoint(int blockId)
 {
     if (model.blocks.find(blockId) == model.blocks.end())
@@ -69,11 +67,11 @@ void ModelManipulator::addOperation(std::string& module, std::string& name, Posi
     auto libFound = model.libraries.find(module);
     if (libFound == model.libraries.end())
         throw ModelManipulatorError("Module " + module + " not imported");
-    
+
     auto outputsFound = libFound->second.getOutputs().find(name);
     if (outputsFound == libFound->second.getOutputs().end())
         throw ModelManipulatorError("Operation " + name + " not found in module " + module);
-    
+
     maxBlockId++;
     model.blocks[maxBlockId] = std::shared_ptr<Block>(new Operation(maxBlockId, module, name, position));
     auto& outputs = model.blocks[maxBlockId]->outputs;
@@ -86,7 +84,7 @@ void ModelManipulator::addConstructor(std::string& module, std::string& type, Po
     auto libFound = model.libraries.find(module);
     if (libFound == model.libraries.end())
         throw ModelManipulatorError("Module " + module + " not imported");
-    
+
     bool typeFound = false;
     for (auto& it : libFound->second.getTypes()) {
         if (it == type) {
@@ -94,10 +92,10 @@ void ModelManipulator::addConstructor(std::string& module, std::string& type, Po
             break;
         }
     }
-    
+
     if (!typeFound)
         throw ModelManipulatorError("Type " + type + " not found in module " + module);
-    
+
     maxBlockId++;
     model.blocks[maxBlockId] = std::shared_ptr<Block>(new Constructor(maxBlockId, module, type, position));
     model.blocks[maxBlockId]->outputs.push_back(OutputTransition {++maxOutputId});
@@ -109,7 +107,7 @@ void ModelManipulator::deleteBlock(int blockId)
         return;
 
     auto& blockPtr = model.blocks[blockId];
-    
+
     for (auto& it : model.blocks) {
         if (it.second->blockType() != BlockType::Operation)
             continue;
@@ -135,7 +133,7 @@ void ModelManipulator::setConstructorData(int blockId, std::string& data)
     auto foundBlock = model.blocks.find(blockId);
     if (foundBlock == model.blocks.end() || foundBlock->second->blockType() != BlockType::Constructor)
         throw ModelManipulatorError("Invalid constructor Id");
-    
+
     Constructor& cons = dynamic_cast<Constructor &>(*(foundBlock->second));
     cons.data = data;
 }
@@ -206,10 +204,9 @@ void ModelManipulator::deleteConnection(int blockId, int inputIndex)
     op.inputs.erase(inputIndex);
 }
 
-bool ModelManipulator::checkModelCorrectness()
-{    
-    if (model.name.length() == 0)
-        return false;
+void ModelManipulator::ensureModelCorrectness()
+{
+    if (model.name.length() == 0) throw ModelManipulatorError("Model name cannot be empty");
 
     LibraryMap& libraries = model.libraries;
     std::vector<int>& entryPoints = model.entryPoints;
@@ -218,14 +215,14 @@ bool ModelManipulator::checkModelCorrectness()
     // iterate over blocks
 
     std::set<int> outputIds;
-    
+
     for (auto& it : blocks) {
         Block& block = dynamic_cast<Block &>(*it.second);
 
         // check if the desired library is loaded
         auto foundLib = model.libraries.find(block.module);
         if (foundLib == model.libraries.end())
-            return false;
+            throw ModelManipulatorError("Module '" + block.module + "' is not loaded");
 
         Library& lib = foundLib->second;
 
@@ -235,20 +232,24 @@ bool ModelManipulator::checkModelCorrectness()
         switch (block.blockType()) {
         case BlockType::Operation:
         {
-            // check if library contains desired operation                       
+            // check if library contains desired operation
             Operation& op = dynamic_cast<Operation &>(block);
             auto outputs = lib.getOutputs().find(op.name);
             if (outputs == lib.getOutputs().end())
-                return false;
+                throw ModelManipulatorError("Operation '" + block.module + "." + op.name + "' doesn't exist (at block "
+                                            + std::to_string(block.id) + ")");
 
             // check if operation has defined adequate number of outputs
             if (outputs->second.size() != op.outputs.size())
-                return false;
+                throw ModelManipulatorError("Output count mismatch for block " + std::to_string(block.id)
+                                            + "; needs " + std::to_string(op.outputs.size())
+                                            + " , has " + std::to_string(outputs->second.size()));
 
             // check if output ids are unique in the context of whole model
             for (auto& it2 : op.outputs) {
                 if (outputIds.find(it2.id) != outputIds.end())
-                    return false;
+                    throw ModelManipulatorError("Invalid output ID at block " + std::to_string(block.id)
+                                                + ": " + std::to_string(it2.id));
                 outputIds.insert(it2.id);
                 if (it2.id > maxOutputId)
                     maxOutputId = it2.id;
@@ -256,20 +257,24 @@ bool ModelManipulator::checkModelCorrectness()
 
             auto inputs = lib.getInputs().find(op.name);
             if (inputs == lib.getInputs().end())
-                return false;
+                throw ModelManipulatorError("Operation '" + block.module + "." + op.name + "' doesn't exist (at block "
+                                            + std::to_string(block.id) + ")");
 
             // check if there are specified redundant inputs
             if (inputs->second.size() < op.inputs.size())
-                return false;
+                throw ModelManipulatorError("Block " + std::to_string(block.id) + " has redundant inputs");
 
             for (auto& it2 : op.inputs) {
                 if (it2.first >= (int)inputs->second.size())
-                    return false;
+                    throw ModelManipulatorError("Invalid input ID at block " + std::to_string(block.id)
+                                                + ": " + std::to_string(it2.first));
 
                 // check if the input is connected to a block
                 std::shared_ptr<Block> outputBlock = it2.second.outputBlock;
                 if (outputBlock.get() == 0)
-                    return false;
+                    throw ModelManipulatorError("Input " + std::to_string(it2.first)
+                                                + " (at block " + std::to_string(block.id)
+                                                + ") is not connected");
 
                 // get the type of input
                 const std::string& inputType = inputs->second[it2.first];
@@ -277,11 +282,12 @@ bool ModelManipulator::checkModelCorrectness()
                 // get the type of output
                 auto foundOutputLib = libraries.find(outputBlock->module);
                 if (foundOutputLib == libraries.end())
-                    return false;
+                    throw ModelManipulatorError("Block " + std::to_string(outputBlock->id) + " has invalid type: " + outputBlock->module);
+
                 if (outputBlock->blockType() == BlockType::Operation) {
                     auto foundOutputList = foundOutputLib->second.getOutputs().find(dynamic_cast<Operation &>(*outputBlock).name);
                     if (foundOutputList == foundOutputLib->second.getOutputs().end())
-                        return false;
+                        throw ModelManipulatorError("Block " + std::to_string(outputBlock->id) + "has no output called: " + dynamic_cast<Operation &>(*outputBlock).name);
 
                     // and if it is the correct one
                     bool outputFound = false;
@@ -289,22 +295,28 @@ bool ModelManipulator::checkModelCorrectness()
                         if (outputBlock->outputs[i].id == it2.second.outputId) {
                             // ... and if the types match
                             if (foundOutputList->second[i] != inputType)
-                                return false;
-                        
+                                throw ModelManipulatorError("Type mismatch: output (block " + std::to_string(outputBlock->id) + ") has "
+                                                            + foundOutputList->second[i] + ", input " + std::to_string(it2.first) + " needs " + inputType);
+
                             outputFound = true;
                             break;
                         }
                     }
                     if (!outputFound)
-                        return false;
+                        throw ModelManipulatorError("Invalid output block " + std::to_string(outputBlock->id));
                 } else {
                     if (outputBlock->outputs.size() != 1)
-                        return false;
+                        throw ModelManipulatorError("Block " + std::to_string(outputBlock->id)
+                                                    + " must have 1 output, has " + std::to_string(outputBlock->outputs.size()));
                     if (outputBlock->outputs[0].id != it2.second.outputId)
-                        return false;
+                        throw ModelManipulatorError("Block " + std::to_string(outputBlock->id)
+                                                    + "'s output ID is " + std::to_string(outputBlock->outputs[0].id)
+                                                    + ", expected " + std::to_string(it2.second.outputId));
 
                     if ((outputBlock->module + "." + dynamic_cast<Constructor&>(*outputBlock).type) != inputType)
-                        return false;
+                        throw ModelManipulatorError("Type mismatch: Block " + std::to_string(outputBlock->id)
+                                                    + " is of type " + (outputBlock->module + "." + dynamic_cast<Constructor&>(*outputBlock).type)
+                                                    + ", expected " + inputType);
                 }
 
             }
@@ -316,7 +328,7 @@ bool ModelManipulator::checkModelCorrectness()
         {
             // check if library contains desired constructor
             Constructor& cons = dynamic_cast<Constructor &>(block);
-            
+
             bool typeFound = false;
             for (auto& it : lib.getTypes()) {
                 if (it == cons.type) {
@@ -327,20 +339,23 @@ bool ModelManipulator::checkModelCorrectness()
 
             // check if operation has defined adequate number of outputs
             if (cons.outputs.size() != 1)
-                return false;
+                throw ModelManipulatorError("Block " + std::to_string(cons.id)
+                                            + " must have 1 output, has " + std::to_string(cons.outputs.size()));
 
             // check if output ids are unique in the context of whole model
             if (outputIds.find(cons.outputs[0].id) != outputIds.end())
-                    return false;
+                throw ModelManipulatorError("Block " + std::to_string(cons.id)
+                                            + " has invalid output ID " + std::to_string(cons.outputs[0].id));
+
             outputIds.insert(cons.outputs[0].id);
             if (cons.outputs[0].id > maxOutputId)
                 maxOutputId = cons.outputs[0].id;
-                     
+
             break;
         }
 
         default:
-            return false;
+            throw ModelManipulatorError("Invalid type for block " + std::to_string(block.id));
 
         }
     }
@@ -348,10 +363,8 @@ bool ModelManipulator::checkModelCorrectness()
     // check entry points
     for (auto& ep : entryPoints) {
         if (blocks.find(ep) == blocks.end())
-            return false;
+            throw ModelManipulatorError("Could not find entry point " + std::to_string(ep));
     }
-    
-    return true;
 }
 
 void ModelManipulator::reassignIds()

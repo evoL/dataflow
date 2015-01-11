@@ -24,10 +24,10 @@ public:
     const ModelManipulator& operator=(const ModelManipulator&) = delete;
 
     void setProjectName(std::string& name);
-    
+
     void addLibrary(std::string& name);
     void deleteLibrary(std::string& name);
-    
+
     void setEntryPoint(int blockId);
     void unsetEntryPoint(int blockId);
 
@@ -43,7 +43,7 @@ public:
 
 
 private:
-    bool checkModelCorrectness();
+    void ensureModelCorrectness();
     void reassignIds();
 };
 
