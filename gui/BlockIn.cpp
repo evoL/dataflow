@@ -20,7 +20,7 @@ void BlockIn::DrawIn(QString text)
     setRect(-7, moduleNameRectHeight + 5 + index*20, 15, 15);
 
     QGraphicsTextItem *inDesc=new QGraphicsTextItem(this);
-    inDesc->setPlainText(text.mid(0,10));
+    inDesc->setPlainText(text);
     inDesc->setX(7);
     inDesc->setY(3+index*20+moduleNameRectHeight);
 }

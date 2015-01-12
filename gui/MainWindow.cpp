@@ -84,7 +84,7 @@ void MainWindow::openFile()
             }
             if (it->second->blockType() == BlockType::Operation)
             {
-                newBlock = new DiagramOperation((it->second), itemMenu);
+                newBlock = new DiagramOperation(projectModel.data(), (it->second), itemMenu);
             }
 
             scene->addItem(newBlock);

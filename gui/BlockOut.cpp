@@ -23,7 +23,7 @@ void BlockOut::DrawOut(QString text)
     setRect( static_cast< DiagramBlock* >(parentItem())->getWidth() - 8 , moduleNameRectHeight + 5 + index*20, 15, 15);
 
     QGraphicsTextItem *outDesc=new QGraphicsTextItem(this);
-    outDesc->setPlainText(text.mid(0,10));
+    outDesc->setPlainText(text);
     outDesc->setX(static_cast< DiagramBlock* >(parentItem())->getWidth() - 80);
     outDesc->setY(3+index*20+moduleNameRectHeight);
     outDesc->setTextWidth(70);

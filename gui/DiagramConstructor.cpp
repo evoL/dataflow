@@ -28,25 +28,24 @@ DiagramConstructor::DiagramConstructor(const std::shared_ptr<Block> blockPointer
     setBrush(myInputColor);
 
 
-   QLineEdit *block_input1;
-   block_input1=new QLineEdit();
-   QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget(this);
-   block_input1->setFixedWidth(100);
-   block_input1->setPlaceholderText("Input");
+    QLineEdit *block_input1;
+    block_input1=new QLineEdit();
+    QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget(this);
+    block_input1->setFixedWidth(100);
+    block_input1->setPlaceholderText("Input");
 
-   if (!constructorPointer->data.empty()) {
-       block_input1->setText(QString::fromStdString(constructorPointer->data));
-   }
+    if (!constructorPointer->data.empty()) {
+        block_input1->setText(QString::fromStdString(constructorPointer->data));
+    }
 
-   proxy->setWidget(block_input1);
-   proxy->setPos(5,40);
+    proxy->setWidget(block_input1);
+    proxy->setPos(5,40);
 
     // Output circles
     for (int i = 0; i < constructorPointer->outputs.size(); i++) {
         BlockOut * first_exit = new BlockOut(i, constructorPointer->outputs[i].id, this);
         Out.append(first_exit);
-        //first_exit->DrawOut(i,blockPtr->Out[i]);
-        first_exit->DrawOut(QString::number(constructorPointer->outputs[i].id));
+        first_exit->DrawOut(QStringLiteral("(%1)").arg(constructorPointer->outputs[i].id));
     }
 
     // Load arrows

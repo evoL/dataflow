@@ -7,7 +7,6 @@
 #include <QVector>
 #include "DataflowModel.h"
 #include "DiagramBlock.h"
-//#include "Module.h"
 #include "BlockDescription.h"
 #include "BlockIn.h"
 #include "BlockOut.h"

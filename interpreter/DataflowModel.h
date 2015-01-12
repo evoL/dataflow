@@ -97,11 +97,11 @@ class ProjectModel
     friend class ModelManipulator;
 public:
     // getters
-    const std::string & getName() { return name; }
-    const LibraryMap & getLibraries() { return libraries; }
-    const Block & getBlock(int id) { return *blocks[id]; }
-	const BlocksMap & getBlocks() { return blocks; }
-    std::vector<int> getEntryPoints() { return entryPoints; }
+    const std::string & getName() const { return name; }
+    const LibraryMap & getLibraries() const { return libraries; }
+    const Block & getBlock(int id) const { return *blocks.at(id); }
+	const BlocksMap & getBlocks() const { return blocks; }
+    std::vector<int> getEntryPoints() const { return entryPoints; }
 
 private:
     std::string name;
