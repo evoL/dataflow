@@ -41,11 +41,14 @@ private slots:
     void about();
     void execute();
     void saveFile();
+    void saveAs();
 private:
     void createModulesList();
     void createActions();
     void createMenus();
     void createToolbars();
+    
+    void saveModelAs(const QString & filename);
 
     DiagramScene * scene;
     QGraphicsView * view;
@@ -56,6 +59,7 @@ private:
     QAction * aboutAction;
     QScopedPointer<QAction> executeAction;
     QScopedPointer<QAction> saveAction;
+    QScopedPointer<QAction> saveAsAction;
 
     QMenu * fileMenu;
     QMenu * itemMenu;

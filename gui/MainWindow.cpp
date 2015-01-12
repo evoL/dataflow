@@ -181,15 +181,24 @@ void MainWindow::execute()
 void MainWindow::saveFile()
 {
     if (openedFileName.isEmpty()) {
-        // TODO: the same as "Save as"
-        return;
+        saveAs();
+    } else {
+        saveModelAs(openedFileName);
     }
+}
 
-    try {
-        XMLParser().saveModelToFile(*projectModel, openedFileName.toStdString());
-    } catch (XMLParserError e) {
-        QMessageBox::critical(this, tr("Dataflow Project"), e.what());
+void MainWindow::saveAs()
+{
+    QString dir;
+    if (!openedFileName.isEmpty()) {
+        dir = QFileInfo(openedFileName).dir().absolutePath();
     }
+    
+    QString filename = QFileDialog::getSaveFileName(this, tr("Save project"), dir, tr("Dataflow projects (*.xml)"));
+    
+    if (filename.isEmpty()) return;
+    
+    saveModelAs(filename);
 }
 
 void MainWindow::createModulesList()
@@ -237,6 +246,10 @@ void MainWindow::createActions()
     saveAction.reset(new QAction(QIcon(":/images/save.png"), tr("&Save"), this));
     saveAction->setShortcut(QKeySequence::Save);
     connect(saveAction.data(), SIGNAL(triggered()), this, SLOT(saveFile()));
+    
+    saveAsAction.reset(new QAction(QIcon(":/images/save-as.png"), tr("Save as..."), this));
+    saveAsAction->setShortcut(QKeySequence::SaveAs);
+    connect(saveAsAction.data(), SIGNAL(triggered()), this, SLOT(saveAs()));
 }
 
 void MainWindow::createMenus()
@@ -244,6 +257,7 @@ void MainWindow::createMenus()
     fileMenu = menuBar()->addMenu(tr("&File"));
     fileMenu->addAction(openFileAction);
     fileMenu->addAction(saveAction.data());
+    fileMenu->addAction(saveAsAction.data());
     fileMenu->addSeparator();
     fileMenu->addAction(executeAction.data());
     fileMenu->addSeparator();
@@ -285,3 +299,11 @@ void MainWindow::createToolbars()
     editToolBar->addAction(deleteAction);
 }
 
+void MainWindow::saveModelAs(const QString & filename)
+{
+    try {
+        XMLParser().saveModelToFile(*projectModel, filename.toStdString());
+    } catch (XMLParserError e) {
+        QMessageBox::critical(this, tr("Dataflow Project"), e.what());
+    }
+}
