@@ -111,7 +111,7 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
 			blockName = panelView->currentIndex().data().toString().toStdString();
 			typeName = panelView->currentIndex().parent().data().toString().toStdString();
 			moduleName = panelModel->getLibraryPtr(panelView->currentIndex().parent().parent())->getName();
-			Position pos = Position{ mouseEvent->scenePos().x() - 20, mouseEvent->scenePos().y() - 20 };
+			Position pos = Position{ static_cast<float>(mouseEvent->scenePos().x() - 20), static_cast<float>(mouseEvent->scenePos().y() - 20) };
 
 			if (typeName == "Constructors")
 			{
