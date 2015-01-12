@@ -20,8 +20,6 @@ add_executable(dataflow_gui WIN32
     DiagramScene.cpp
     MainWindow.h
     MainWindow.cpp
-    Module.h
-    Module.cpp
     BlockDescription.h
     BlockDescription.cpp
     BlockIn.h
