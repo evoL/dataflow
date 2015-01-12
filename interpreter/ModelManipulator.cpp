@@ -62,7 +62,7 @@ void ModelManipulator::unsetEntryPoint(int blockId)
     }
 }
 
-void ModelManipulator::addOperation(std::string& module, std::string& name, Position position)
+int ModelManipulator::addOperation(std::string& module, std::string& name, Position position)
 {
     auto libFound = model.libraries.find(module);
     if (libFound == model.libraries.end())
@@ -72,14 +72,25 @@ void ModelManipulator::addOperation(std::string& module, std::string& name, Posi
     if (outputsFound == libFound->second.getOutputs().end())
         throw ModelManipulatorError("Operation " + name + " not found in module " + module);
 
+	auto inputsFound = libFound->second.getInputs().find(name);
+	if (inputsFound == libFound->second.getInputs().end())
+		throw ModelManipulatorError("Operation " + name + " not found in module " + module);
+
     maxBlockId++;
     model.blocks[maxBlockId] = std::shared_ptr<Block>(new Operation(maxBlockId, module, name, position));
     auto& outputs = model.blocks[maxBlockId]->outputs;
     for (int i=0; i<(int)outputsFound->second.size(); ++i)
         outputs.push_back(OutputTransition {++maxOutputId});
+
+	auto& inputs = std::static_pointer_cast<Operation>(model.blocks[maxBlockId])->inputs;
+	InputTransition inputTransition = InputTransition{ -1, NULL };
+	for (int i = 0; i<(int)inputsFound->second.size(); ++i)
+		inputs.insert({ i, inputTransition });
+
+	return maxBlockId;
 }
 
-void ModelManipulator::addConstructor(std::string& module, std::string& type, Position position)
+int ModelManipulator::addConstructor(std::string& module, std::string& type, Position position)
 {
     auto libFound = model.libraries.find(module);
     if (libFound == model.libraries.end())
@@ -99,6 +110,8 @@ void ModelManipulator::addConstructor(std::string& module, std::string& type, Po
     maxBlockId++;
     model.blocks[maxBlockId] = std::shared_ptr<Block>(new Constructor(maxBlockId, module, type, position));
     model.blocks[maxBlockId]->outputs.push_back(OutputTransition {++maxOutputId});
+
+	return maxBlockId;
 }
 
 void ModelManipulator::deleteBlock(int blockId)

@@ -59,7 +59,7 @@ void MainWindow::openFile()
         projectModel.reset(XMLParser().loadModelFromFile(fileName));
         manipulator.reset(new ModelManipulator(*projectModel));
         panelModel.reset(new ModulesPanelModel(projectModel.data()));
-        scene->setProjectModel(projectModel.data(), manipulator.data());
+        scene->setModels(panelModel.data(), projectModel.data(), manipulator.data());
 
         panelView->setModel(panelModel.data());
 

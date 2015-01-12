@@ -89,6 +89,7 @@ ModulesPanelItem * ModulesPanelItem::addConstructorsLabel()
 
 ModulesPanelItem * ModulesPanelItem::addOperation(const std::string operation)
 {
+	// Have to consider if we want to keep dataPtr field in this class. Now we don't use it and pass NULL now
 	ModulesPanelItem * newOperation = new ModulesPanelItem(operation, NULL, OperationT, this);
 	children.push_back(newOperation);
 	return newOperation;

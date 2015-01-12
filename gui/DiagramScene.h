@@ -5,6 +5,8 @@
 #include "BlockIn.h"
 #include "BlockOut.h"
 #include "ModulesPanelModel.h"
+#include "DataflowModel.h"
+#include "ModelManipulator.h"
 #include <QGraphicsScene>
 #include <QTreeView>
 #include <ModelManipulator.h>
@@ -24,14 +26,14 @@ class DiagramScene : public QGraphicsScene
 public:
     enum Mode { InsertItem, InsertLine, MoveItem };
     explicit DiagramScene(ModulesPanelModel * panelModel, QTreeView * panelView, QMenu * itemMenu, QObject * parent = 0);
-    void setProjectModel(ProjectModel * projectModel, ModelManipulator * modelManipulator)
-        { this->projectModel = projectModel; this->manipulator = modelManipulator; }
+
+	void setModels(ModulesPanelModel * panelModel, ProjectModel * projectModel, ModelManipulator * modelManipulator) 
+		{ this->panelModel = panelModel; this->projectModel = projectModel; this->manipulator = modelManipulator; }
 
     //DiagramBlock * findBlockById(int id);
     BlockIn * findInput(DiagramOperation * block, int index);
     BlockOut * findOutput(DiagramBlock * block, int id);
     bool paintConnection(int inputBlockId, int inputBlockInput, int outputBlockId, int outputBlockOutputId);
-
 
 public slots:
     void setMode(Mode mode);

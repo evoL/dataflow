@@ -114,31 +114,40 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
         return;
 
     DiagramBlock * item;
-    std::shared_ptr<const Block> selectedBlockPtr;
+	std::string blockName, typeName, moduleName;
 
     switch (myMode) {
     case InsertItem:
-        /*selectedBlockPtr = panelModel->data(panelView->currentIndex());
-		if (selectedBlockPtr->blockType() == BlockType::Constructor)
+		if (panelView->currentIndex().isValid())
 		{
-            //DiagramConstructor * item = new DiagramConstructor(selectedBlockPtr, myItemMenu);
-            //addItem(item);
+			blockName = panelView->currentIndex().data().toString().toStdString();
+			typeName = panelView->currentIndex().parent().data().toString().toStdString();
+			moduleName = panelView->currentIndex().parent().parent().data().toString().toStdString();
+			Position pos = Position{ mouseEvent->scenePos().x() - 20, mouseEvent->scenePos().y() - 20 };
+
+			if (typeName == "Constructors")
+			{
+				int blockId = manipulator->addConstructor(moduleName, blockName, pos);
+				item = new DiagramConstructor(projectModel->getBlocks().at(blockId), myItemMenu);
+				//addItem(static_cast<DiagramConstructor*>(item));
+			}
+			if (typeName == "Operations")
+			{
+				int blockId = manipulator->addOperation(moduleName, blockName, pos);
+				auto temp = projectModel->getBlocks().at(blockId);
+				item = new DiagramOperation(projectModel->getBlocks().at(blockId), myItemMenu);
+				//addItem(static_cast<DiagramOperation*>(item));
+			}			
+
+			addItem(item);
+
+			item->setPos(mouseEvent->scenePos() - QPointF(20, 20));
+			if (item->pos().x() < 0) item->setX(0);
+			if (item->pos().y() < 0) item->setY(0);
+
+			emit itemInserted();
 		}
-		if (selectedBlockPtr->blockType() == BlockType::Operation)
-		{
-            //DiagramOperation * item = new DiagramOperation(selectedBlockPtr, myItemMenu);
-            //addItem(item);
-		}
-
-       
-
-        item->setPos(mouseEvent->scenePos() - QPointF(20,20));
-        if (item->pos().x() < 0) item->setX(0);
-        if (item->pos().y() < 0) item->setY(0);
-
-        emit itemInserted();
-		// Uaktualnić model!
-        break;*/
+        break;
 
     case InsertLine:
         line = new QGraphicsLineItem(QLineF(mouseEvent->scenePos(),

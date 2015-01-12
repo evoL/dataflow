@@ -31,8 +31,8 @@ public:
     void setEntryPoint(int blockId);
     void unsetEntryPoint(int blockId);
 
-    void addOperation(std::string& module, std::string& name, Position position = Position {0.0, 0.0});
-    void addConstructor(std::string& module, std::string& type, Position position = Position {0.0, 0.0});
+    int addOperation(std::string& module, std::string& name, Position position = Position {0.0, 0.0});
+    int addConstructor(std::string& module, std::string& type, Position position = Position {0.0, 0.0});
     void deleteBlock(int blockId);
 
     void setConstructorData(int blockId, std::string& data);
