@@ -116,23 +116,35 @@ void MainWindow::openFile()
 
 void MainWindow::deleteItem()
 {
-    foreach (QGraphicsItem * item, scene->selectedItems()) {
-        if (item->type() == Arrow::Type) {
-            scene->removeItem(item);
-            Arrow * arrow = qgraphicsitem_cast<Arrow *>(item);
-            arrow->startItem()->removeArrow(arrow);
-            arrow->endItem()->removeArrow(arrow);
-            delete item;
-        }
-    }
+	Arrow * arrow = NULL;
+	DiagramOperation * inputBlock = NULL;
+	BlockIn * input = NULL;
 
-    foreach (QGraphicsItem * item, scene->selectedItems()) {
-        if (item->type() == DiagramBlock::Type) {
-            qgraphicsitem_cast<DiagramBlock *>(item)->removeArrows();
-            scene->removeItem(item);
-            delete item;
-        }
-    }
+	foreach(QGraphicsItem * item, scene->selectedItems()) {
+		switch (item->type())
+		{
+		case Arrow::Type:
+			arrow = static_cast<Arrow *>(item);
+			input = static_cast<BlockIn*>(arrow->startItem());
+			inputBlock = static_cast<DiagramOperation*>(input->parentItem());
+
+			manipulator->deleteConnection(inputBlock->getId(), input->getIndex());
+
+			scene->removeItem(item);
+			arrow->startItem()->removeArrow(arrow);
+			arrow->endItem()->removeArrow(arrow);
+			delete item;
+			break;
+
+		case DiagramOperation::Type:
+		case DiagramConstructor::Type:
+			static_cast<DiagramBlock *>(item)->removeArrows();
+			manipulator->deleteBlock(static_cast<DiagramBlock *>(item)->getId());
+			scene->removeItem(item);
+			delete item;
+			break;
+		}
+	}
 }
 
 void MainWindow::pointerGroupClicked(int)
