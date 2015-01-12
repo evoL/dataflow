@@ -28,6 +28,7 @@ void XMLParser::saveModelToFile(const ProjectModel & model, const std::string fi
 {
     int error = 0;
     xmlTextWriterPtr writer = xmlNewTextWriterFilename(filePath.c_str(), 0);
+    xmlTextWriterSetIndent(writer, 4);
 
     if (writer == NULL) {
         throw XMLParserError("Error creating the xml writer");
