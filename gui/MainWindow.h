@@ -40,6 +40,7 @@ private slots:
     void itemInserted();
     void about();
     void execute();
+    void saveFile();
 private:
     void createModulesList();
     void createActions();
@@ -54,16 +55,19 @@ private:
     QAction * deleteAction;
     QAction * aboutAction;
     QScopedPointer<QAction> executeAction;
+    QScopedPointer<QAction> saveAction;
 
     QMenu * fileMenu;
     QMenu * itemMenu;
     QMenu * aboutMenu;
     QToolBar * editToolBar;
     QToolBar * pointerToolbar;
+    QToolBar * fileToolbar;
 
     QButtonGroup * pointerTypeGroup;
     QAction * lineAction;
 
+    QString openedFileName;
     QScopedPointer<ProjectModel> projectModel;
     QScopedPointer<ModelManipulator> manipulator;
 

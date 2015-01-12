@@ -53,8 +53,9 @@ void MainWindow::openFile()
                                                     "",
                                                     tr("Dataflow projects (*.xml)")).toStdString();
 
-    if (!fileName.empty())
-    {
+    if (fileName.empty()) return;
+    
+    try {
         projectModel.reset(XMLParser().loadModelFromFile(fileName));
         manipulator.reset(new ModelManipulator(*projectModel));
         panelModel.reset(new ModulesPanelModel(projectModel.data()));
@@ -62,7 +63,10 @@ void MainWindow::openFile()
 
         panelView->setModel(panelModel.data());
 
+        openedFileName = QString::fromStdString(fileName);
+
         setWindowTitle( QString(projectModel->getName().data()) + " - Dataflow Creator" );
+        executeAction->setEnabled(true);
 
         // Clear scene before redraw
         scene->clear();
@@ -116,6 +120,8 @@ void MainWindow::openFile()
             }
             it++;
         }
+    } catch (XMLParserError e) {
+        QMessageBox::critical(this, tr("Dataflow Creator"), e.what());
     }
 }
 
@@ -172,6 +178,20 @@ void MainWindow::execute()
     }
 }
 
+void MainWindow::saveFile()
+{
+    if (openedFileName.isEmpty()) {
+        // TODO: the same as "Save as"
+        return;
+    }
+
+    try {
+        XMLParser().saveModelToFile(*projectModel, openedFileName.toStdString());
+    } catch (XMLParserError e) {
+        QMessageBox::critical(this, tr("Dataflow Project"), e.what());
+    }
+}
+
 void MainWindow::createModulesList()
 {
     panelView = new QTreeView();
@@ -191,7 +211,7 @@ void MainWindow::createModulesList()
 
 void MainWindow::createActions()
 {
-    openFileAction = new QAction(tr("Open..."), this);
+    openFileAction = new QAction(QIcon(":/images/open.png"), tr("&Open..."), this);
     openFileAction->setShortcut(tr("Ctrl+O"));
     openFileAction->setStatusTip(tr("Load project file"));
     connect(openFileAction, SIGNAL(triggered()), this, SLOT(openFile()));
@@ -211,17 +231,28 @@ void MainWindow::createActions()
 
     executeAction.reset(new QAction(QIcon(":/images/run.png"), tr("&Execute"), this));
     executeAction->setShortcut(tr("Ctrl+E"));
+    executeAction->setEnabled(false);
     connect(executeAction.data(), SIGNAL(triggered()), this, SLOT(execute()));
+
+    saveAction.reset(new QAction(QIcon(":/images/save.png"), tr("&Save"), this));
+    saveAction->setShortcut(QKeySequence::Save);
+    connect(saveAction.data(), SIGNAL(triggered()), this, SLOT(saveFile()));
 }
 
 void MainWindow::createMenus()
 {
     fileMenu = menuBar()->addMenu(tr("&File"));
     fileMenu->addAction(openFileAction);
+    fileMenu->addAction(saveAction.data());
+    fileMenu->addSeparator();
+    fileMenu->addAction(executeAction.data());
+    fileMenu->addSeparator();
     fileMenu->addAction(exitAction);
+
     itemMenu = menuBar()->addMenu(tr("&Item"));
     itemMenu->addAction(deleteAction);
     itemMenu->addSeparator();
+
     aboutMenu = menuBar()->addMenu(tr("&Help"));
     aboutMenu->addAction(aboutAction);
 }
@@ -240,12 +271,17 @@ void MainWindow::createToolbars()
     pointerTypeGroup->addButton(linePointerButton, int(DiagramScene::InsertLine));
     connect(pointerTypeGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(pointerGroupClicked(int)));
+
+    fileToolbar = addToolBar(tr("File"));
+    fileToolbar->addAction(openFileAction);
+    fileToolbar->addAction(saveAction.data());
+    fileToolbar->addAction(executeAction.data());
+
     pointerToolbar = addToolBar(tr("Pointer type"));
     pointerToolbar->addWidget(pointerButton);
     pointerToolbar->addWidget(linePointerButton);
 
     editToolBar = addToolBar(tr("Edit"));
     editToolBar->addAction(deleteAction);
-    editToolBar->addAction(executeAction.data());
 }
 

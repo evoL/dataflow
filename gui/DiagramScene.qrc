@@ -4,5 +4,8 @@
         <file>images/linepointer.png</file>
         <file>images/run.png</file>
         <file>images/delete.png</file>
+        <file>images/save.png</file>
+        <file>images/save-as.png</file>
+        <file>images/open.png</file>
     </qresource>
 </RCC>

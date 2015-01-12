@@ -30,13 +30,13 @@ void XMLParser::saveModelToFile(const ProjectModel & model, const std::string fi
     xmlTextWriterPtr writer = xmlNewTextWriterFilename(filePath.c_str(), 0);
 
     if (writer == NULL) {
-        throw XMLParserError("Error creating the xml writer\n");
+        throw XMLParserError("Error creating the xml writer");
     }
 
     error = xmlTextWriterStartDocument(writer, NULL, NULL, NULL);
 
     if (error < 0) {
-        throw XMLParserError("Cannot start to write to file\n");
+        throw XMLParserError("Cannot start to write to file");
     }
 
     writeModelToFile(model, writer);
@@ -44,8 +44,10 @@ void XMLParser::saveModelToFile(const ProjectModel & model, const std::string fi
     error = xmlTextWriterEndDocument(writer);
 
     if (error < 0) {
-        throw XMLParserError("Cannot save the file\n");
+        throw XMLParserError("Cannot save the file");
     }
+    
+    xmlFreeTextWriter(writer);
 }
 
 // PRIVATE
