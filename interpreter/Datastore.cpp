@@ -13,9 +13,9 @@ void * Datastore::operator[](int dataId)
     return computedResults.at(dataId);
 }
 
-void * Datastore::createEntry(int chunkId, std::size_t sizeInBytes)
+void * Datastore::createEntry(int chunkId, std::size_t sizeInBytes, ManagedMemoryChunk::destructor_t destructor)
 {
-    return computedResults[chunkId] = ManagedMemoryChunk{ sizeInBytes };
+    return computedResults[chunkId] = ManagedMemoryChunk{ sizeInBytes, destructor };
 }
 
 void Datastore::reset()

@@ -1,7 +1,6 @@
 #include "Interpreter.h"
 #include <string>
 
-
 Interpreter::Interpreter(ProjectModel & model) : model(model)
 {
 
@@ -26,7 +25,12 @@ void Interpreter::visit(const Constructor & constructor)
         throw InterpreterError("Invalid constructor output count detected - should be 1.");
 
     auto outputId = constructor.outputs[0].id;
-    auto allocatedSpace = datastore.createEntry(outputId, typeSize);
+
+    auto libraryPtr = &library;
+    std::string typeName = constructor.type;
+    auto allocatedSpace = datastore.createEntry(outputId, typeSize, [libraryPtr, typeName](void * address) {
+        libraryPtr->destructType(typeName, address);
+    });
 
     try {
         library.constructType(constructor.type, constructor.data, allocatedSpace);
@@ -55,6 +59,7 @@ void Interpreter::allocateOutputs(const Operation & operation)
 {
     auto & library = model.getLibraries().at(operation.module);
     auto & outputTypes = library.getOutputs().at(operation.name);
+    auto libraryPtr = &library;
 
     if (outputTypes.size() != operation.outputs.size())
         throw InterpreterError("Library outputs information is inconsistent with block output information");
@@ -64,11 +69,12 @@ void Interpreter::allocateOutputs(const Operation & operation)
 
     while (currentType != outputTypes.end()) {
 
-        // BARDZO tymczasowe - wynikla jakas rozbieznosc i czasem typy maja przedrostek z nazwa modulu, a czasem nie
         std::string currentTypeName{ currentType->begin() + currentType->find_last_of('.') + 1, currentType->end() };
 
         auto currentTypeSize = library.getSizes().at(currentTypeName);
-        datastore.createEntry(currentOutput->id, currentTypeSize);
+        datastore.createEntry(currentOutput->id, currentTypeSize, [libraryPtr, currentTypeName](void * address){
+            libraryPtr->destructType(currentTypeName, address);
+        });
 
         currentType++;
         currentOutput++;

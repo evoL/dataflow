@@ -12,7 +12,7 @@ public:
     bool isComputed(int dataId);
     void * operator [](int dataId);
 
-    void * createEntry(int chunkId, std::size_t sizeInBytes);
+    void * createEntry(int chunkId, std::size_t sizeInBytes, ManagedMemoryChunk::destructor_t destructor = [](void *){});
     void removeEntry(int dataId);
 
     void reset();
