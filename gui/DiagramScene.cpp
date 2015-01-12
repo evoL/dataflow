@@ -174,13 +174,17 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
         removeItem(line);
         delete line;
 
+		BlockIn * startItem = nullptr;
+		BlockOut * endItem = nullptr;
+
         //from end to start
         if (startItems.count() > 0 && endItems.count() > 0 &&
             startItems.first()->type() == BlockIn::Type &&
             endItems.first()->type() == BlockOut::Type &&
             startItems.first() != endItems.first()) {
-            BlockIn * startItem = qgraphicsitem_cast<BlockIn *>(startItems.first());
-            BlockOut * endItem = qgraphicsitem_cast<BlockOut *>(endItems.first());
+            startItem = qgraphicsitem_cast<BlockIn *>(startItems.first());
+            endItem = qgraphicsitem_cast<BlockOut *>(endItems.first());
+
             Arrow * arrow = new Arrow(startItem, endItem);
             arrow->setColor(myLineColor);
             //startItem->removeArrows();
@@ -195,8 +199,9 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
             startItems.first()->type() == BlockOut::Type &&
             endItems.first()->type() == BlockIn::Type &&
             startItems.first() != endItems.first()) {
-            BlockIn * startItem = qgraphicsitem_cast<BlockIn *>(endItems.first());
-            BlockOut * endItem = qgraphicsitem_cast<BlockOut *>(startItems.first());
+            startItem = qgraphicsitem_cast<BlockIn *>(endItems.first());
+            endItem = qgraphicsitem_cast<BlockOut *>(startItems.first());
+
             Arrow * arrow = new Arrow(startItem, endItem);
             arrow->setColor(myLineColor);
             //startItem->removeArrows();
@@ -205,6 +210,11 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
             addItem(arrow);
             arrow->updatePosition();
         }
+
+		// Update model
+		DiagramBlock * inputBlock = static_cast<DiagramBlock*>(startItem->parentItem());
+		DiagramBlock * outputBlock = static_cast<DiagramBlock*>(endItem->parentItem());
+		manipulator->addConnection(outputBlock->getId(), endItem->getId(), inputBlock->getId(), startItem->getIndex());
     }
 
     line = 0;
