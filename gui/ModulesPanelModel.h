@@ -23,6 +23,7 @@ public:
     QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
 	Qt::ItemFlags flags(const QModelIndex &index) const;
     std::shared_ptr<const Block> getBlockPtr(const QModelIndex &index) const;
+	const Library * getLibraryPtr(const QModelIndex &index) const;
 
 private:
     ModulesPanelItem * rootItem;

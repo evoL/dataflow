@@ -34,7 +34,7 @@ void ModulesPanelModel::loadFromProjectModel(ProjectModel * projectModel)
 	LibraryMap::const_iterator it = libraries->begin();
 	while (it != libraries->end())
 	{
-		auto * libraryItem = rootItem->addLibrary(&it->second);
+		auto * libraryItem = rootItem->addLibrary(&(it->second));
 
 		// Block types
 		const std::vector<std::string> operations = (it->second.getOperations());
@@ -146,5 +146,15 @@ std::shared_ptr<const Block> ModulesPanelModel::getBlockPtr(const QModelIndex &i
 
 	ModulesPanelItem *item = static_cast<ModulesPanelItem*>(index.internalPointer());
     return std::shared_ptr<const Block>(static_cast<const Block*>(item->getDataPtr()));
+}
+
+const Library * ModulesPanelModel::getLibraryPtr(const QModelIndex &index) const
+{
+	if (!index.isValid()) return NULL;
+
+	auto * item = static_cast<ModulesPanelItem*>(index.internalPointer());
+	if (item->parent() != rootItem) return NULL;
+
+	return static_cast<const Library*>(rootItem->child(index.row())->getDataPtr());
 }
 

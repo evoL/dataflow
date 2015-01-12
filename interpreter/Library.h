@@ -34,6 +34,7 @@ class INTERPRETER_EXPORT Library
     DATAFLOW_LIBRARY dllId;
     bool ownsDll{ false };
     std::string name;
+	std::string nameToPrint;
     std::vector<std::string> types;
     std::vector<std::string> operations;
     std::unordered_map<std::string, unsigned int> typeSizes;
@@ -56,6 +57,7 @@ public:
     ~Library();
 
     const std::string & getName() const;
+	const std::string & getNameToPrint() const;
     const std::vector<std::string> & getTypes() const;
     const std::vector<std::string> & getOperations() const;
     const std::unordered_map<std::string, unsigned int> & getSizes() const;

@@ -68,7 +68,7 @@ QVariant ModulesPanelItem::data()
 
 ModulesPanelItem * ModulesPanelItem::addLibrary(const Library * library)
 {
-	ModulesPanelItem * newLibrary = new ModulesPanelItem(library->getName(), library, LibraryT, this);
+	ModulesPanelItem * newLibrary = new ModulesPanelItem(library->getNameToPrint(), library, LibraryT, this);
 	children.push_back(newLibrary);
 	return newLibrary;
 }

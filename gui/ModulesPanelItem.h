@@ -21,7 +21,7 @@ public:
 		ConstructorT,
 	};
 
-	ModulesPanelItem(const std::string name, const void * data, ItemType type, ModulesPanelItem * parent = 0);
+	ModulesPanelItem(const std::string name, const void * dataPtr, ItemType type, ModulesPanelItem * parent = 0);
 	~ModulesPanelItem();
 
 	ModulesPanelItem * child(int row);
