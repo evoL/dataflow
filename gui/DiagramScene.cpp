@@ -174,6 +174,7 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
         removeItem(line);
         delete line;
 
+		Arrow * arrow = nullptr;
 		BlockIn * startItem = nullptr;
 		BlockOut * endItem = nullptr;
 
@@ -185,7 +186,7 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
             startItem = qgraphicsitem_cast<BlockIn *>(startItems.first());
             endItem = qgraphicsitem_cast<BlockOut *>(endItems.first());
 
-            Arrow * arrow = new Arrow(startItem, endItem);
+            arrow = new Arrow(startItem, endItem);
             arrow->setColor(myLineColor);
             //startItem->removeArrows();
             startItem->addArrow(arrow);
@@ -202,7 +203,7 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
             startItem = qgraphicsitem_cast<BlockIn *>(endItems.first());
             endItem = qgraphicsitem_cast<BlockOut *>(startItems.first());
 
-            Arrow * arrow = new Arrow(startItem, endItem);
+            arrow = new Arrow(startItem, endItem);
             arrow->setColor(myLineColor);
             //startItem->removeArrows();
             startItem->addArrow(arrow);
@@ -212,9 +213,18 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
         }
 
 		// Update model
-		DiagramBlock * inputBlock = static_cast<DiagramBlock*>(startItem->parentItem());
-		DiagramBlock * outputBlock = static_cast<DiagramBlock*>(endItem->parentItem());
-		manipulator->addConnection(outputBlock->getId(), endItem->getId(), inputBlock->getId(), startItem->getIndex());
+		if (startItem != nullptr && endItem != nullptr)
+		{
+			DiagramBlock * inputBlock = static_cast<DiagramBlock*>(startItem->parentItem());
+			DiagramBlock * outputBlock = static_cast<DiagramBlock*>(endItem->parentItem());
+			try {
+				manipulator->addConnection(outputBlock->getId(), endItem->getIndex(), inputBlock->getId(), startItem->getIndex());
+			}
+			catch (ModelManipulatorError error) {
+				std::cerr << "Adding connection error: " << error.what() << std::endl;
+				removeItem(arrow);
+			}
+		}
     }
 
     line = 0;
