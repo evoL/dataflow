@@ -1,7 +1,6 @@
 #include "ModulesPanelModel.h"
 
-
-const Library * att(const LibraryMap *map, unsigned int index)
+const Library * at(const LibraryMap *map, unsigned int index)
 {
 	if (index >= map->size()) 
 		throw std::out_of_range("The given index (" + std::to_string(index) + 
@@ -59,7 +58,6 @@ void ModulesPanelModel::loadFromProjectModel(ProjectModel * projectModel)
 				operationsLabel->addOperation(operations[i]);
 			}
 		}
-
 		it++;
 	}
 }

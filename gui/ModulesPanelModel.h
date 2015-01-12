@@ -1,10 +1,12 @@
 #ifndef MODULESPANELMODEL_H
 #define MODULESPANELMODEL_H
 
+#include "DataflowModel.h"
+#include "ModulesPanelItem.h"
+
 #include <QAbstractItemModel>
 
-#include <DataflowModel.h>
-#include <ModulesPanelItem.h>
+#include <memory>
 
 class ModulesPanelModel : public QAbstractItemModel
 {
@@ -27,7 +29,6 @@ public:
 
 private:
     ModulesPanelItem * rootItem;
-
 };
 
 #endif // MODULESPANELMODEL_H

@@ -1,15 +1,4 @@
-#include "Arrow.h"
-#include "DiagramScene.h"
-#include "DiagramBlock.h"
-#include "DiagramConstructor.h"
-#include "DiagramOperation.h"
 #include "MainWindow.h"
-#include <QtWidgets>
-#include <iostream>
-#include <QVector>
-#include <QTextStream>
-#include <typeinfo>
-#include <Interpreter.h>
 
 using namespace std;
 
@@ -36,6 +25,7 @@ MainWindow::MainWindow()
     //view->verticalScrollBar()->setValue(1);
     //view->horizontalScrollBar()->setValue(1);
 }
+
 void MainWindow::panelViewClicked()
 {
     scene->setMode(DiagramScene::InsertItem);
@@ -48,7 +38,6 @@ void MainWindow::panelViewCollapsedExpanded()
 
 void MainWindow::openFile()
 {
-    //QTextStream cout(stdout);
     string fileName = QFileDialog::getOpenFileName(this, tr("Open project"),
                                                     "",
                                                     tr("Dataflow projects (*.xml)")).toStdString();
@@ -140,7 +129,6 @@ void MainWindow::deleteItem()
     foreach (QGraphicsItem * item, scene->selectedItems()) {
         if (item->type() == DiagramBlock::Type) {
             qgraphicsitem_cast<DiagramBlock *>(item)->removeArrows();
-
             scene->removeItem(item);
             delete item;
         }

@@ -1,14 +1,26 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-#include <QMainWindow>
 
+#include "Arrow.h"
+#include "DiagramScene.h"
 #include "DiagramBlock.h"
+#include "DiagramConstructor.h"
+#include "DiagramOperation.h"
 #include "ModulesPanelModel.h"
-#include <DataflowModel.h>
-#include <ModelManipulator.h>
-#include <XMLParser.h>
+#include "DataflowModel.h"
+#include "ModelManipulator.h"
+#include "XMLParser.h"
+#include "Interpreter.h"
+
+#include <QMainWindow>
 #include <QAction>
 #include <QScopedPointer>
+#include <QtWidgets>
+#include <QVector>
+#include <QTextStream>
+
+#include <iostream>
+#include <typeinfo>
 
 class DiagramScene;
 
@@ -31,6 +43,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 public:
     MainWindow();
+
 private slots:
     void panelViewClicked();
     void panelViewCollapsedExpanded();
@@ -42,6 +55,7 @@ private slots:
     void execute();
     void saveFile();
     void saveAs();
+
 private:
     void createModulesList();
     void createActions();

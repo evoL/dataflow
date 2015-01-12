@@ -1,6 +1,4 @@
 #include "ModulesPanelItem.h"
-#include <memory>
-
 
 ModulesPanelItem::ModulesPanelItem(const std::string name, const void * dataPtr, ItemType itemType, ModulesPanelItem * parent)
 {
@@ -9,7 +7,6 @@ ModulesPanelItem::ModulesPanelItem(const std::string name, const void * dataPtr,
 	this->dataPtr = dataPtr;
 	this->parentItem = parent;
 }
-
 
 ModulesPanelItem::~ModulesPanelItem()
 {

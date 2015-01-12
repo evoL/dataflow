@@ -1,12 +1,14 @@
 #ifndef _MODULESPANELITEM_H
 #define _MODULESPANELITEM_H
 
-#include <DataflowModel.h>
+#include "DataflowModel.h"
+
 #include <QList>
 #include <QVariant>
 
 #include <vector>
 #include <string>
+#include <memory>
 
 class ModulesPanelItem
 {
@@ -44,8 +46,7 @@ private:
 	ItemType itemType;
 	std::string name;
 	const void * dataPtr;
-	QList <ModulesPanelItem*> children;
-	
+	QList <ModulesPanelItem*> children;	
 };
 
 #endif
