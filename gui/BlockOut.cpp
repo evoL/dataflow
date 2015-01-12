@@ -1,12 +1,5 @@
 #include "BlockOut.h"
 #include "Arrow.h"
-#include <QPolygonF>
-#include <QColor>
-#include <QPainter>
-#include <QGraphicsScene>
-#include <QGraphicsSceneContextMenuEvent>
-#include <QTextBlockFormat>
-#include <QTextCursor>
 
 BlockOut::BlockOut(int index, int outputId, QGraphicsItem * parent) : QGraphicsEllipseItem(parent)
 {
@@ -15,7 +8,7 @@ BlockOut::BlockOut(int index, int outputId, QGraphicsItem * parent) : QGraphicsE
     //setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
 
-void BlockOut::DrawOut(QString text)
+void BlockOut::drawOut(QString text)
 {
     //index = i;
     setBrush(Qt::red);
@@ -45,9 +38,9 @@ void BlockOut::paint(QPainter * painter, const QStyleOptionGraphicsItem * option
     QGraphicsEllipseItem::paint(painter, option, widget);
 }
 
-void BlockOut::highlight(QPainter * painter, bool is_selected)
+void BlockOut::highlight(QPainter * painter, bool isSelected)
 {
-    if (is_selected) {
+    if (isSelected) {
         setBrush(Qt::green);
     } else {
         setBrush(Qt::red);
@@ -63,6 +56,7 @@ void BlockOut::removeArrow(Arrow * arrow)
     if (index != -1)
         arrows.removeAt(index);
 }
+
 void BlockOut::removeArrows()
 {
     foreach (Arrow * arrow, arrows) {
@@ -72,6 +66,7 @@ void BlockOut::removeArrows()
         delete arrow;
     }
 }
+
 void BlockOut::addArrow(Arrow * arrow)
 {
     arrows.append(arrow);

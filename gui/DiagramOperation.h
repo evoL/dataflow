@@ -1,16 +1,16 @@
 #ifndef DIAGRAMOPERATION_H
 #define DIAGRAMOPERATION_H
 
+#include "DataflowModel.h"
+#include "DiagramBlock.h"
+#include "BlockDescription.h"
+#include "BlockIn.h"
+#include "BlockOut.h"
+
 #include <QGraphicsRectItem>
 #include <QGraphicsPixmapItem>
 #include <QList>
 #include <QVector>
-#include "DataflowModel.h"
-#include "DiagramBlock.h"
-//#include "Module.h"
-#include "BlockDescription.h"
-#include "BlockIn.h"
-#include "BlockOut.h"
 
 QT_BEGIN_NAMESPACE
 class QPixmap;

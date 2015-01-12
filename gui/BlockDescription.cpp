@@ -1,26 +1,25 @@
 #include "BlockDescription.h"
+
 #include "DiagramBlock.h"
 #include "DiagramConstructor.h"
 #include "DiagramOperation.h"
-#include <QTextBlockFormat>
-#include <QTextCursor>
 
 BlockDescription::BlockDescription(QString s, QGraphicsItem * parent) : QGraphicsTextItem(parent)
 {
-    text_description = s;
-    setPlainText(text_description);
+    textDescription = s;
+    setPlainText(textDescription);
     blockHeight = this->boundingRect().height();
     //setFlag(QGraphicsItem::ItemIsSelectable, true);
-
 }
+
 BlockDescription::BlockDescription(QGraphicsItem * parent) : QGraphicsTextItem(parent)
 {
-    text_description = "";
-    setPlainText(text_description);
+    textDescription = "";
+    setPlainText(textDescription);
     blockHeight = this->boundingRect().height();
 }
 
-void BlockDescription::SetDescription(const QString desc)
+void BlockDescription::setDescription(const QString desc)
 {
     setPlainText(desc);
 }
@@ -30,9 +29,9 @@ void BlockDescription::setAlignCenter(int i)
 	setTextWidth(static_cast<DiagramBlock*>(parentItem())->getWidth() - 1);
     blockHeight = this->boundingRect().height();
 
-    if(i==0)this->setHtml("<body style='background-color:#4C6BB2;'><center>" + text_description + "</center></body>");
-    if(i==1)this->setHtml("<body style='background-color:#1FFC52;'><center>" + text_description + "</center></body>");
-    if(i==-1)this->setHtml("<body style='background-color:#D0FC1F;'><center>" + text_description + "</center></body>");
+    if(i==0)this->setHtml("<body style='background-color:#4C6BB2;'><center>" + textDescription + "</center></body>");
+    if(i==1)this->setHtml("<body style='background-color:#1FFC52;'><center>" + textDescription + "</center></body>");
+    if(i==-1)this->setHtml("<body style='background-color:#D0FC1F;'><center>" + textDescription + "</center></body>");
 
     //748DC8
     //Setting align
@@ -47,17 +46,17 @@ void BlockDescription::setAlignCenter(int i)
     setPos(1, 1);
 }
 
-bool BlockDescription::Is_text_long()
+bool BlockDescription::isLong()
 {
-    if (text_description.length() > 30) return true;
+    if (textDescription.length() > 30) return true;
     else return false;
 }
 
-qreal BlockDescription::Scale()
+qreal BlockDescription::scale()
 {
     qreal height = 1;
     qreal text_width;
-    text_width = text_description.length();
+    text_width = textDescription.length();
 
     while (text_width > 20) {
         text_width = text_width - 20;

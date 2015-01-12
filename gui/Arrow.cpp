@@ -1,14 +1,9 @@
 #include "Arrow.h"
-#include <cmath>
-#include <QPen>
-#include <QPainter>
-#include "BlockIn.h"
-#include "BlockOut.h"
-#include <iostream>
 
 using namespace std;
 
 const qreal Pi = 3.14;
+
 Arrow::Arrow(BlockIn * startItem, BlockOut * endItem, QGraphicsItem * parent)
     : QGraphicsLineItem(parent)
 {
@@ -18,6 +13,7 @@ Arrow::Arrow(BlockIn * startItem, BlockOut * endItem, QGraphicsItem * parent)
     myColor = Qt::black;
     setPen(QPen(myColor, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 }
+
 QRectF Arrow::boundingRect() const
 {
     qreal extra = (pen().width() + 20) / 2.0;
@@ -26,22 +22,24 @@ QRectF Arrow::boundingRect() const
            .normalized()
            .adjusted(-extra, -extra, extra, extra);
 }
+
 QPainterPath Arrow::shape() const
 {
     QPainterPath path = QGraphicsLineItem::shape();
     path.addPolygon(arrowHead);
     return path;
 }
+
 void Arrow::updatePosition()
 {
     QLineF line(mapFromItem(myStartItem, 0, 0), mapFromItem(myEndItem, 0, 0));
     setLine(line);
 }
+
 void Arrow::paint(QPainter * painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     //if (myStartItem->collidesWithItem(myEndItem))
     //return;
-
 
     QPen myPen = pen();
     myPen.setColor(myColor);

@@ -1,6 +1,8 @@
 #ifndef BlockDescription_H
 #define BlockDescription_H
 
+#include <QTextBlockFormat>
+#include <QTextCursor>
 #include <QGraphicsTextItem>
 #include <QString>
 
@@ -9,13 +11,13 @@ class BlockDescription : public QGraphicsTextItem
 public:
     BlockDescription(QGraphicsItem * parent = 0);
     BlockDescription(QString s, QGraphicsItem * parent = 0);
-    void SetDescription(const QString desc);
+    void setDescription(const QString desc);
     void setAlignCenter(int i);
     qreal getBlockHeight() { return blockHeight; }
-    qreal Scale();
-    bool Is_text_long();
+    qreal scale();
+    bool isLong();
 private:
-    QString text_description;
+    QString textDescription;
     qreal blockHeight;
 };
 

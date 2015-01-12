@@ -1,15 +1,16 @@
 #ifndef DIAGRAMCONSTRUCTOR_H
 #define DIAGRAMCONSTRUCTOR_H
 
-#include <QGraphicsRectItem>
-#include <QGraphicsPixmapItem>
-#include <QList>
-#include <QVector>
 #include "DataflowModel.h"
 #include "DiagramBlock.h"
 #include "BlockDescription.h"
 #include "BlockIn.h"
 #include "BlockOut.h"
+
+#include <QGraphicsRectItem>
+#include <QGraphicsPixmapItem>
+#include <QList>
+#include <QVector>
 
 QT_BEGIN_NAMESPACE
 class QPixmap;
@@ -29,7 +30,7 @@ class DiagramConstructor : public DiagramBlock
 {
 public:
     enum { Type = UserType + 31 };
-    DiagramConstructor();
+    DiagramConstructor() = delete;
     DiagramConstructor(const std::shared_ptr<Block> blockPointer, QMenu * contextMenu, QGraphicsItem * parent = 0);
     ~DiagramConstructor();
     int type() const { return Type; }

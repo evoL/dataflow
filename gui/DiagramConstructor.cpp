@@ -2,11 +2,6 @@
 #include <QGraphicsProxyWidget>
 #include <QLineEdit>
 
-
-DiagramConstructor::DiagramConstructor()
-{
-}
-
 DiagramConstructor::DiagramConstructor(const std::shared_ptr<Block> blockPointer, QMenu * contextMenu, QGraphicsItem * parent)
     : constructorPointer(std::static_pointer_cast<Constructor>(blockPointer))
 {
@@ -16,17 +11,16 @@ DiagramConstructor::DiagramConstructor(const std::shared_ptr<Block> blockPointer
     height = 100;
 
     blockName = new BlockDescription(QString::fromStdString(constructorPointer->type), this);
-    if (blockName->Is_text_long()) {
+    if (blockName->isLong()) {
         width = 200;
         blockName->setTextWidth(250);
     }
 
-    height = height + (blockName->Scale());
+    height = height + (blockName->scale());
 
     setRect(0, 0, width, height);
     blockName->setAlignCenter(-1); //to do: block types, have to do sth with argument
     setBrush(myInputColor);
-
 
     QLineEdit *block_input1;
     block_input1=new QLineEdit();
@@ -45,12 +39,8 @@ DiagramConstructor::DiagramConstructor(const std::shared_ptr<Block> blockPointer
     for (int i = 0; i < constructorPointer->outputs.size(); i++) {
         BlockOut * first_exit = new BlockOut(i, constructorPointer->outputs[i].id, this);
         Out.append(first_exit);
-        first_exit->DrawOut(QStringLiteral("(%1)").arg(constructorPointer->outputs[i].id));
+        first_exit->drawOut(QStringLiteral("(%1)").arg(constructorPointer->outputs[i].id));
     }
-
-    // Load arrows
-
-    //here
 
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);

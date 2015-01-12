@@ -1,11 +1,5 @@
 #include "BlockIn.h"
 #include "Arrow.h"
-#include <QPolygonF>
-#include <QColor>
-#include <QPainter>
-#include <QGraphicsScene>
-#include <QGraphicsSceneContextMenuEvent>
-#include <QGraphicsTextItem>
 
 BlockIn::BlockIn(int index, QGraphicsItem * parent) : QGraphicsEllipseItem(parent)
 {
@@ -13,7 +7,7 @@ BlockIn::BlockIn(int index, QGraphicsItem * parent) : QGraphicsEllipseItem(paren
     //setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
 
-void BlockIn::DrawIn(QString text)
+void BlockIn::drawIn(QString text)
 {
     setBrush(Qt::red);
     qreal moduleNameRectHeight = static_cast< DiagramBlock* >(parentItem())->blockName->getBlockHeight();
@@ -34,9 +28,9 @@ void BlockIn::paint(QPainter * painter, const QStyleOptionGraphicsItem * option,
     QGraphicsEllipseItem::paint(painter, option, widget);
 }
 
-void BlockIn::highlight(QPainter * painter, bool is_selected)
+void BlockIn::highlight(QPainter * painter, bool isSelected)
 {
-    if (is_selected) {
+    if (isSelected) {
         setBrush(Qt::green);
     } else {
         setBrush(Qt::red);
@@ -52,6 +46,7 @@ void BlockIn::removeArrow(Arrow * arrow)
     if (index != -1)
         arrows.removeAt(index);
 }
+
 void BlockIn::removeArrows()
 {
     foreach (Arrow * arrow, arrows) {
@@ -61,6 +56,7 @@ void BlockIn::removeArrows()
         delete arrow;
     }
 }
+
 void BlockIn::addArrow(Arrow * arrow)
 {
     arrows.append(arrow);

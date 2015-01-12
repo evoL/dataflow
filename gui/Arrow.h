@@ -1,9 +1,17 @@
 #ifndef ARROW_H
 #define ARROW_H
-#include <QGraphicsLineItem>
+
 #include "DiagramBlock.h"
 #include "BlockIn.h"
 #include "BlockOut.h"
+
+#include <QPen>
+#include <QPainter>
+#include <QGraphicsLineItem>
+
+#include <cmath>
+#include <iostream>
+
 QT_BEGIN_NAMESPACE
 class QGraphicsPolygonItem;
 class QGraphicsLineItem;
@@ -13,7 +21,9 @@ class QPolygonF;
 class QGraphicsSceneMouseEvent;
 class QPainterPath;
 QT_END_NAMESPACE
+
 class DiagramBlock;
+
 class Arrow : public QGraphicsLineItem
 {
 public:
@@ -27,8 +37,10 @@ public:
     BlockIn * startItem() const { return myStartItem; }
     BlockOut * endItem() const { return myEndItem; }
     void updatePosition();
+
 protected:
     void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
+
 private:
     BlockIn * myStartItem;
     BlockOut * myEndItem;

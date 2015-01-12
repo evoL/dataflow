@@ -1,15 +1,5 @@
 #include "DiagramScene.h"
 #include "Arrow.h"
-#include "BlockIn.h"
-#include "BlockOut.h"
-#include <QTextCursor>
-#include <QGraphicsSceneMouseEvent>
-#include <QColor>
-#include <QBrush>
-#include <memory>
-#include <iostream>
-#include "DiagramConstructor.h"
-#include "DiagramOperation.h"
 
 DiagramScene::DiagramScene(ModulesPanelModel * panelModel, QTreeView * panelView, QMenu * itemMenu, QObject * parent)
     : QGraphicsScene(parent)
@@ -30,7 +20,7 @@ DiagramScene::DiagramScene(ModulesPanelModel * panelModel, QTreeView * panelView
     setBackgroundBrush(QBrush(linearGrad));
 }
 
-/*DiagramBlock * DiagramScene::findBlockById(int id)
+DiagramBlock * DiagramScene::findBlockById(int id)
 {
     for (auto & item : items()) {
         if (item->type() != DiagramBlock::Type) continue;
@@ -39,9 +29,8 @@ DiagramScene::DiagramScene(ModulesPanelModel * panelModel, QTreeView * panelView
         if (block != nullptr && block->getId() == id)
             return block;
     }
-    
 	return NULL;
-}*/
+}
 
 BlockIn * DiagramScene::findInput(DiagramOperation * block, int index)
 {
@@ -129,14 +118,11 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
 			{
 				int blockId = manipulator->addConstructor(moduleName, blockName, pos);
 				item = new DiagramConstructor(projectModel->getBlocks().at(blockId), myItemMenu);
-				//addItem(static_cast<DiagramConstructor*>(item));
 			}
 			if (typeName == "Operations")
 			{
 				int blockId = manipulator->addOperation(moduleName, blockName, pos);
-				auto temp = projectModel->getBlocks().at(blockId);
-				item = new DiagramOperation(projectModel->getBlocks().at(blockId), myItemMenu);
-				//addItem(static_cast<DiagramOperation*>(item));
+                item = new DiagramOperation(projectModel, projectModel->getBlocks().at(blockId), myItemMenu);
 			}			
 
 			addItem(item);
