@@ -83,7 +83,6 @@ bool DiagramScene::paintConnection(int inputBlockId, int inputBlockInput, int ou
 	// Paint arrow
 	Arrow * arrow = new Arrow(endItem, startItem);
 	arrow->setColor(myLineColor);
-	startItem->removeArrows();
 	startItem->addArrow(arrow);
 	endItem->addArrow(arrow);
 	addItem(arrow);
@@ -184,7 +183,7 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
             BlockOut * endItem = qgraphicsitem_cast<BlockOut *>(endItems.first());
             Arrow * arrow = new Arrow(startItem, endItem);
             arrow->setColor(myLineColor);
-            startItem->removeArrows();
+            //startItem->removeArrows();
             startItem->addArrow(arrow);
             endItem->addArrow(arrow);
             addItem(arrow);
@@ -200,7 +199,7 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
             BlockOut * endItem = qgraphicsitem_cast<BlockOut *>(startItems.first());
             Arrow * arrow = new Arrow(startItem, endItem);
             arrow->setColor(myLineColor);
-            startItem->removeArrows();
+            //startItem->removeArrows();
             startItem->addArrow(arrow);
             endItem->addArrow(arrow);
             addItem(arrow);
