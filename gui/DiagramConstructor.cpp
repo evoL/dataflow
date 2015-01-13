@@ -18,6 +18,7 @@ DiagramConstructor::DiagramConstructor(const std::shared_ptr<Block> blockPointer
 
     height = height + (blockName->scale());
 
+	
     setRect(0, 0, width, height);
     blockName->setAlignCenter(-1); //to do: block types, have to do sth with argument
     setBrush(myInputColor);

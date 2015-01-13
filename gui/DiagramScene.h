@@ -35,6 +35,8 @@ class DiagramScene : public QGraphicsScene
 public:
     enum Mode { InsertItem, InsertLine, MoveItem };
     explicit DiagramScene(ModulesPanelModel * panelModel, QTreeView * panelView, QMenu * itemMenu, QObject * parent = 0);
+	void setSceneSizeAndGradient(QSize size);
+	QSize DiagramScene::getSizeHint();
 
 	void setModels(ModulesPanelModel * panelModel, ProjectModel * projectModel, ModelManipulator * modelManipulator) 
 		{ this->panelModel = panelModel; this->projectModel = projectModel; this->manipulator = modelManipulator; }
@@ -57,6 +59,8 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent);
 
 private:
+	qreal minWidth, minHeight, width, height;
+
     QMenu * myItemMenu;
     QTreeView * panelView;
     ModulesPanelModel * panelModel;

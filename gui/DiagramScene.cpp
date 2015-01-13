@@ -2,7 +2,7 @@
 #include "Arrow.h"
 
 DiagramScene::DiagramScene(ModulesPanelModel * panelModel, QTreeView * panelView, QMenu * itemMenu, QObject * parent)
-    : QGraphicsScene(parent)
+	: QGraphicsScene(parent)
 {
     myItemMenu = itemMenu;
     this->panelView = panelView;
@@ -13,11 +13,42 @@ DiagramScene::DiagramScene(ModulesPanelModel * panelModel, QTreeView * panelView
     myTextColor = Qt::black;
     myLineColor = Qt::black;
 
-    QLinearGradient linearGrad(QPointF(0, 0), QPointF(3000, 3000));
-    linearGrad.setColorAt(0, QColor(175, 175, 175));
-    linearGrad.setColorAt(1, QColor(230, 230, 230));
+	minWidth = 800;
+	minHeight = 400;
+	width = minWidth;
+	height = minHeight;
+	setSceneSizeAndGradient(QSize(width, height));    
+}
 
-    setBackgroundBrush(QBrush(linearGrad));
+void DiagramScene::setSceneSizeAndGradient(QSize size)
+{
+	setSceneRect(QRectF(0, 0, size.width(), size.height()));
+
+	QLinearGradient linearGrad(QPointF(0, 0), QPointF(size.width(), size.height()));
+	linearGrad.setColorAt(0, QColor(175, 175, 175));
+	linearGrad.setColorAt(1, QColor(230, 230, 230));
+	setBackgroundBrush(QBrush(linearGrad));
+}
+
+QSize DiagramScene::getSizeHint()
+{
+	qreal maxWidth = 0, maxHeight = 0;
+	for (QGraphicsItem * item : items()) {
+		if (item->type() == DiagramConstructor::Type || item->type() == DiagramOperation::Type) {
+			DiagramBlock * block = static_cast<DiagramBlock*>(item);
+			if (block->x() + block->getWidth() > maxWidth)
+				maxWidth = block->x() + block->getWidth();
+			if (block->y() + block->getHeight() > maxHeight)
+				maxHeight = block->y() + block->getHeight();
+		}
+	}
+
+	maxWidth += 20;
+	maxHeight += 20;
+	if (maxWidth < minWidth) maxWidth = minWidth;
+	if (maxHeight < minHeight) maxHeight = minHeight;
+
+	return QSize(maxWidth, maxHeight);
 }
 
 DiagramBlock * DiagramScene::findBlockById(int id)
@@ -35,11 +66,8 @@ DiagramBlock * DiagramScene::findBlockById(int id)
 BlockIn * DiagramScene::findInput(DiagramOperation * block, int index)
 {
 	auto inputs = block->getBlockInputs();
-	auto it = inputs->begin();
-	while (it != inputs->end())
-	{
+	for (auto it = inputs->begin(); it != inputs->end(); it++) {
 		if ((*it)->getIndex() == index) return *it;
-		it++;
 	}
 	return NULL;
 }
@@ -47,11 +75,8 @@ BlockIn * DiagramScene::findInput(DiagramOperation * block, int index)
 BlockOut * DiagramScene::findOutput(DiagramBlock * block, int id)
 {
 	auto outputs = block->getBlockOutputs();
-	auto it = outputs->begin();
-	while (it != outputs->end())
-	{
+	for (auto it = outputs->begin(); it != outputs->end(); it++) {
 		if ((*it)->getId() == id) return *it;
-		it++;
 	}
 	return NULL;
 }
@@ -60,10 +85,8 @@ bool DiagramScene::paintConnection(int inputBlockId, int inputBlockInput, int ou
 {
 	DiagramOperation * inputBlock = NULL;
 	DiagramBlock * outputBlock = NULL;
-	for (int i = 0; i < items().size() && (inputBlock == nullptr || outputBlock == nullptr); i++)
-	{
-		if ((items()[i])->type() == DiagramConstructor::Type || (items()[i])->type() == DiagramOperation::Type)
-		{
+	for (int i = 0; i < items().size() && (inputBlock == nullptr || outputBlock == nullptr); i++) {
+		if ((items()[i])->type() == DiagramConstructor::Type || (items()[i])->type() == DiagramOperation::Type) {
 			DiagramBlock * item = static_cast<DiagramBlock*>(items()[i]);
 			if (item->getId() == inputBlockId)
 				inputBlock = static_cast<DiagramOperation*>(item);
@@ -106,8 +129,7 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
 
     switch (myMode) {
     case InsertItem:
-		if (panelView->currentIndex().isValid())
-		{
+		if (panelView->currentIndex().isValid()) {
 			blockName = panelView->currentIndex().data().toString().toStdString();
 			typeName = panelView->currentIndex().parent().data().toString().toStdString();
 			moduleName = panelModel->getLibraryPtr(panelView->currentIndex().parent().parent())->getName();
@@ -188,7 +210,6 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
 
             arrow = new Arrow(startItem, endItem);
             arrow->setColor(myLineColor);
-            //startItem->removeArrows();
             startItem->addArrow(arrow);
             endItem->addArrow(arrow);
             addItem(arrow);
@@ -205,7 +226,6 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
 
             arrow = new Arrow(startItem, endItem);
             arrow->setColor(myLineColor);
-            //startItem->removeArrows();
             startItem->addArrow(arrow);
             endItem->addArrow(arrow);
             addItem(arrow);
@@ -213,8 +233,7 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
         }
 
 		// Update model
-		if (startItem != nullptr && endItem != nullptr)
-		{
+		if (startItem != nullptr && endItem != nullptr) {
 			DiagramBlock * inputBlock = static_cast<DiagramBlock*>(startItem->parentItem());
 			DiagramBlock * outputBlock = static_cast<DiagramBlock*>(endItem->parentItem());
 			try {
@@ -226,6 +245,21 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
 			}
 		}
     }
+	else if (myMode == MoveItem) {
+		for (QGraphicsItem * item : selectedItems()){
+			if (item->type() == DiagramConstructor::Type || item->type() == DiagramOperation::Type) {
+				DiagramBlock * blockItem = static_cast<DiagramBlock*>(item);
+				Position newPosition = Position{ blockItem->pos().x() , blockItem->pos().y() };
+
+				if (newPosition.x < 0) newPosition.x = 0;
+				if (newPosition.y < 0) newPosition.y = 0;
+				blockItem->setPos(newPosition.x, newPosition.y);
+				setSceneSizeAndGradient(getSizeHint());
+
+				manipulator->setBlockPosition(blockItem->getId(), newPosition);
+			}
+		}
+	}
 
     line = 0;
     QGraphicsScene::mouseReleaseEvent(mouseEvent);

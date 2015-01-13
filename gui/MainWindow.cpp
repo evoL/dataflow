@@ -8,13 +8,11 @@ MainWindow::MainWindow()
     createModulesList();
     createMenus();
     scene = new DiagramScene(panelModel.data(), panelView, itemMenu, this);
-    scene->setSceneRect(QRectF(0, 0, 1000, 1000));
     connect(scene, SIGNAL(itemInserted()), this, SLOT(itemInserted()));
     createToolbars();
     QSplitter * splitter = new QSplitter;
     splitter->addWidget(panelView);
     view = new QGraphicsView(scene);
-
     splitter->addWidget(view);
     setCentralWidget(splitter);
     setWindowTitle(tr("Dataflow Creator"));
