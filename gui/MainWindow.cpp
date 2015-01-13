@@ -7,21 +7,33 @@ MainWindow::MainWindow()
     createActions();
     createModulesList();
     createMenus();
+
     scene = new DiagramScene(panelModel.data(), panelView, itemMenu, this);
     connect(scene, SIGNAL(itemInserted()), this, SLOT(itemInserted()));
+
     createToolbars();
     QSplitter * splitter = new QSplitter;
     splitter->addWidget(panelView);
-    view = new QGraphicsView(scene);
-    splitter->addWidget(view);
+    sceneView = new QGraphicsView(scene);
+	sceneView->setSizeAdjustPolicy(QAbstractScrollArea::SizeAdjustPolicy::AdjustToContentsOnFirstShow);
+    splitter->addWidget(sceneView);
     setCentralWidget(splitter);
+	splitter->setSizes({ 190, 805 });
+	connect(splitter, SIGNAL(splitterMoved(int, int)), this, SLOT(splitterMovedEvent(int,int)));
+
     setWindowTitle(tr("Dataflow Creator"));
     setUnifiedTitleAndToolBarOnMac(true);
-    //openFile();
-    //view->verticalScrollBar()->setSliderPosition(0);
-    //view->horizontalScrollBar()->setSliderPosition(0);
-    //view->verticalScrollBar()->setValue(1);
-    //view->horizontalScrollBar()->setValue(1);
+}
+
+void MainWindow::resizeEvent(QResizeEvent* event)
+{
+	QMainWindow::resizeEvent(event);
+	scene->setSceneSizeAndGradient(scene->getSizeHint());
+}
+
+void MainWindow::splitterMovedEvent(int pos, int index)
+{
+	scene->setSceneSizeAndGradient(scene->getSizeHint());
 }
 
 void MainWindow::panelViewClicked()
@@ -107,6 +119,10 @@ void MainWindow::openFile()
             }
             it++;
         }
+
+		scene->setSceneSizeAndGradient(scene->getSizeHint());
+		sceneView->horizontalScrollBar()->setValue(0);
+		sceneView->verticalScrollBar()->setValue(0);
     } catch (XMLParserError e) {
         QMessageBox::critical(this, tr("Dataflow Creator"), e.what());
     }
@@ -206,7 +222,7 @@ void MainWindow::createModulesList()
     panelView->setHeaderHidden(true);
     panelView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     panelView->setSelectionMode(QAbstractItemView::SingleSelection);
-    panelView->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Ignored);
+    panelView->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Ignored);
     panelView->setMinimumWidth(150);
     connect(panelView, SIGNAL(clicked(const QModelIndex &)),
         this, SLOT(panelViewClicked()));
@@ -304,4 +320,9 @@ void MainWindow::saveModelAs(const QString & filename)
     } catch (XMLParserError e) {
         QMessageBox::critical(this, tr("Dataflow Project"), e.what());
     }
+}
+
+QSize MainWindow::getSceneViewSize() 
+{
+	return sceneView->size();
 }

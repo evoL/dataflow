@@ -4,20 +4,21 @@
 DiagramScene::DiagramScene(ModulesPanelModel * panelModel, QTreeView * panelView, QMenu * itemMenu, QObject * parent)
 	: QGraphicsScene(parent)
 {
+	mainWindow = static_cast<MainWindow*>(parent);
     myItemMenu = itemMenu;
     this->panelView = panelView;
     this->panelModel = panelModel;
     myMode = MoveItem;
     line = 0;
-    
+
     myTextColor = Qt::black;
     myLineColor = Qt::black;
 
-	minWidth = 800;
-	minHeight = 400;
+	/*minWidth = 50;
+	minHeight = 50;
 	width = minWidth;
-	height = minHeight;
-	setSceneSizeAndGradient(QSize(width, height));    
+	height = minHeight;*/
+	setSceneSizeAndGradient(QSize(50,50));    
 }
 
 void DiagramScene::setSceneSizeAndGradient(QSize size)
@@ -27,7 +28,7 @@ void DiagramScene::setSceneSizeAndGradient(QSize size)
 	QLinearGradient linearGrad(QPointF(0, 0), QPointF(size.width(), size.height()));
 	linearGrad.setColorAt(0, QColor(175, 175, 175));
 	linearGrad.setColorAt(1, QColor(230, 230, 230));
-	setBackgroundBrush(QBrush(linearGrad));
+	setBackgroundBrush(QBrush(linearGrad));	
 }
 
 QSize DiagramScene::getSizeHint()
@@ -45,8 +46,10 @@ QSize DiagramScene::getSizeHint()
 
 	maxWidth += 20;
 	maxHeight += 20;
-	if (maxWidth < minWidth) maxWidth = minWidth;
-	if (maxHeight < minHeight) maxHeight = minHeight;
+	
+	QSize widgetSize = mainWindow->getSceneViewSize();
+	if (maxWidth < widgetSize.width()) maxWidth = widgetSize.width();
+	if (maxHeight < widgetSize.height()) maxHeight = widgetSize.height();
 
 	return QSize(maxWidth, maxHeight);
 }

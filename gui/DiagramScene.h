@@ -1,6 +1,7 @@
 #ifndef DIAGRAMSCENE_H
 #define DIAGRAMSCENE_H
 
+#include "MainWindow.h"
 #include "DiagramBlock.h"
 #include "DiagramOperation.h"
 #include "DiagramConstructor.h"
@@ -29,6 +30,8 @@ class QColor;
 class QTreeView;
 QT_END_NAMESPACE
 
+class MainWindow;
+
 class DiagramScene : public QGraphicsScene
 {
     Q_OBJECT
@@ -36,7 +39,7 @@ public:
     enum Mode { InsertItem, InsertLine, MoveItem };
     explicit DiagramScene(ModulesPanelModel * panelModel, QTreeView * panelView, QMenu * itemMenu, QObject * parent = 0);
 	void setSceneSizeAndGradient(QSize size);
-	QSize DiagramScene::getSizeHint();
+    QSize getSizeHint();
 
 	void setModels(ModulesPanelModel * panelModel, ProjectModel * projectModel, ModelManipulator * modelManipulator) 
 		{ this->panelModel = panelModel; this->projectModel = projectModel; this->manipulator = modelManipulator; }
@@ -59,8 +62,9 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent);
 
 private:
-	qreal minWidth, minHeight, width, height;
+	//qreal minWidth, minHeight, width, height;
 
+	MainWindow * mainWindow;
     QMenu * myItemMenu;
     QTreeView * panelView;
     ModulesPanelModel * panelModel;

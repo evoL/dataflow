@@ -40,11 +40,14 @@ QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
     MainWindow();
+	QSize getSceneViewSize();
 
 private slots:
+	void splitterMovedEvent(int pos, int index);
+	void resizeEvent(QResizeEvent* event);
     void panelViewClicked();
     void panelViewCollapsedExpanded();
     void openFile();
@@ -65,7 +68,7 @@ private:
     void saveModelAs(const QString & filename);
 
     DiagramScene * scene;
-    QGraphicsView * view;
+    QGraphicsView * sceneView;
 
     QAction * openFileAction;
     QAction * exitAction;
