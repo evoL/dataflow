@@ -35,7 +35,7 @@ class DiagramConstructor : public DiagramBlock
 public:
     enum { Type = UserType + 31 };
     DiagramConstructor() = delete;
-	DiagramConstructor(const std::shared_ptr<Block> blockPointer, const LibraryMap & libraries, QMenu * contextMenu, QGraphicsItem * parent = 0);
+    DiagramConstructor(const std::shared_ptr<Block> blockPointer, const LibraryMap & libraries, QMenu * contextMenu, QGraphicsItem * parent = 0);
     ~DiagramConstructor();
     int type() const { return Type; }
 
@@ -44,6 +44,9 @@ public:
     virtual qreal getWidth() { return width; }
     virtual float getX() { return constructorPointer->position.x; }
     virtual float getY() { return constructorPointer->position.y; }
+
+protected:
+    virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent * event);
 
 private:
     const std::shared_ptr<Constructor> constructorPointer;

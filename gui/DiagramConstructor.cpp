@@ -34,9 +34,9 @@ DiagramConstructor::DiagramConstructor(const std::shared_ptr<Block> blockPointer
     proxy->setPos(5, 30);
 
     // Output circle
-	// Assumption: Constructors have only one output
-	BlockOut * exit = new BlockOut(0, constructorPointer->outputs[0].id, this); 
-    Out.append(exit); 
+    // Assumption: Constructors have only one output
+    BlockOut * exit = new BlockOut(0, constructorPointer->outputs[0].id, this);
+    Out.append(exit);
 
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);
@@ -46,4 +46,14 @@ DiagramConstructor::DiagramConstructor(const std::shared_ptr<Block> blockPointer
 
 DiagramConstructor::~DiagramConstructor()
 {
+}
+
+void DiagramConstructor::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+{
+    // See the comment in DiagramOperation.cpp
+    QAction *firstAction = myContextMenu->actions().first();
+    firstAction->setChecked(false);
+    firstAction->setEnabled(false);
+
+    DiagramBlock::contextMenuEvent(event);
 }

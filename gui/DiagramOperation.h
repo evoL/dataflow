@@ -29,22 +29,27 @@ class Arrow;
 class DiagramOperation : public DiagramBlock
 {
 public:
-	enum { Type = UserType + 32 };
-	DiagramOperation();
-	DiagramOperation(const ProjectModel * model, const std::shared_ptr<Block> blockPtr, QMenu * contextMenu, QGraphicsItem * parent = 0);
-	~DiagramOperation();
-	int type() const { return Type; }
+    enum { Type = UserType + 32 };
+    DiagramOperation();
+    DiagramOperation(const ProjectModel * model, const std::shared_ptr<Block> operationPointer, QMenu * contextMenu, QGraphicsItem * parent = 0);
+    ~DiagramOperation();
+    int type() const { return Type; }
 
-	virtual int getId() { return blockPtr->id; }
+    virtual int getId() { return operationPointer->id; }
     virtual qreal getHeight() { return height; }
     virtual qreal getWidth() { return width; }
-	virtual float getX() { return blockPtr->position.x;  }
-	virtual float getY() { return blockPtr->position.y; }
+    virtual float getX() { return operationPointer->position.x;  }
+    virtual float getY() { return operationPointer->position.y; }
+
+    bool isEntryPoint();
+    void updateAppearance();
+
+protected:
+    virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent * event);
 
 private:
-	const std::shared_ptr<Operation> blockPtr;
-
-
+    const ProjectModel * model;
+    const std::shared_ptr<Operation> operationPointer;
 };
 
 #endif

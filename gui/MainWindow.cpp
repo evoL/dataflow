@@ -3,6 +3,7 @@
 using namespace std;
 
 MainWindow::MainWindow()
+    : projectModel(new ProjectModel())
 {
     createActions();
     createModulesList();
@@ -15,11 +16,11 @@ MainWindow::MainWindow()
     QSplitter * splitter = new QSplitter;
     splitter->addWidget(panelView);
     sceneView = new QGraphicsView(scene);
-	sceneView->setSizeAdjustPolicy(QAbstractScrollArea::SizeAdjustPolicy::AdjustToContentsOnFirstShow);
+    sceneView->setSizeAdjustPolicy(QAbstractScrollArea::SizeAdjustPolicy::AdjustToContentsOnFirstShow);
     splitter->addWidget(sceneView);
     setCentralWidget(splitter);
-	splitter->setSizes({ 190, 805 });
-	connect(splitter, SIGNAL(splitterMoved(int, int)), this, SLOT(splitterMovedEvent(int,int)));
+    splitter->setSizes({ 190, 805 });
+    connect(splitter, SIGNAL(splitterMoved(int, int)), this, SLOT(splitterMovedEvent(int,int)));
 
     setWindowTitle(tr("Dataflow Creator"));
     setUnifiedTitleAndToolBarOnMac(true);
@@ -27,13 +28,13 @@ MainWindow::MainWindow()
 
 void MainWindow::resizeEvent(QResizeEvent* event)
 {
-	QMainWindow::resizeEvent(event);
-	scene->setSceneSizeAndGradient(scene->getSizeHint());
+    QMainWindow::resizeEvent(event);
+    scene->setSceneSizeAndGradient(scene->getSizeHint());
 }
 
 void MainWindow::splitterMovedEvent(int pos, int index)
 {
-	scene->setSceneSizeAndGradient(scene->getSizeHint());
+    scene->setSceneSizeAndGradient(scene->getSizeHint());
 }
 
 void MainWindow::panelViewClicked()
@@ -46,6 +47,16 @@ void MainWindow::panelViewCollapsedExpanded()
     panelView->resizeColumnToContents(0);
 }
 
+void MainWindow::newProject()
+{
+    // TODO: if a project is open, ask to save
+
+    projectModel.reset(new ProjectModel());
+    manipulator.reset(new ModelManipulator(*projectModel));
+    panelModel.reset(new ModulesPanelModel(projectModel.data()));
+    updateModels();
+}
+
 void MainWindow::openFile()
 {
     string fileName = QFileDialog::getOpenFileName(this, tr("Open project"),
@@ -53,19 +64,17 @@ void MainWindow::openFile()
                                                     tr("Dataflow projects (*.xml)")).toStdString();
 
     if (fileName.empty()) return;
-    
+
     try {
         projectModel.reset(XMLParser().loadModelFromFile(fileName));
         manipulator.reset(new ModelManipulator(*projectModel));
         panelModel.reset(new ModulesPanelModel(projectModel.data()));
-        scene->setModels(panelModel.data(), projectModel.data(), manipulator.data());
-
-        panelView->setModel(panelModel.data());
+        updateModels();
+        updateExecute();
 
         openedFileName = QString::fromStdString(fileName);
 
         setWindowTitle( QString(projectModel->getName().data()) + " - Dataflow Creator" );
-        executeAction->setEnabled(true);
 
         // Clear scene before redraw
         scene->clear();
@@ -118,51 +127,53 @@ void MainWindow::openFile()
             it++;
         }
 
-		scene->setSceneSizeAndGradient(scene->getSizeHint());
-		sceneView->horizontalScrollBar()->setValue(0);
-		sceneView->verticalScrollBar()->setValue(0);
+        scene->setSceneSizeAndGradient(scene->getSizeHint());
+        sceneView->horizontalScrollBar()->setValue(0);
+        sceneView->verticalScrollBar()->setValue(0);
     } catch (XMLParserError e) {
         QMessageBox::critical(this, tr("Dataflow Creator"), e.what());
     }
-	catch (ModelManipulatorError e) {
-		QMessageBox::critical(this, tr("Dataflow Creator"), e.what());
-	}
-	catch (std::string e){
-		QMessageBox::critical(this, tr("Dataflow Creator"), QString::fromStdString(e));
-	}
+    catch (ModelManipulatorError e) {
+        QMessageBox::critical(this, tr("Dataflow Creator"), e.what());
+    }
+    catch (std::string e){
+        QMessageBox::critical(this, tr("Dataflow Creator"), QString::fromStdString(e));
+    }
 }
 
 void MainWindow::deleteItem()
 {
-	Arrow * arrow = NULL;
-	DiagramOperation * inputBlock = NULL;
-	BlockIn * input = NULL;
+    Arrow * arrow = NULL;
+    DiagramOperation * inputBlock = NULL;
+    BlockIn * input = NULL;
 
-	foreach(QGraphicsItem * item, scene->selectedItems()) {
-		switch (item->type())
-		{
-		case Arrow::Type:
-			arrow = static_cast<Arrow *>(item);
-			input = static_cast<BlockIn*>(arrow->startItem());
-			inputBlock = static_cast<DiagramOperation*>(input->parentItem());
+    foreach(QGraphicsItem * item, scene->selectedItems()) {
+        switch (item->type())
+        {
+        case Arrow::Type:
+            arrow = static_cast<Arrow *>(item);
+            input = static_cast<BlockIn*>(arrow->startItem());
+            inputBlock = static_cast<DiagramOperation*>(input->parentItem());
 
-			manipulator->deleteConnection(inputBlock->getId(), input->getIndex());
+            manipulator->deleteConnection(inputBlock->getId(), input->getIndex());
 
-			scene->removeItem(item);
-			arrow->startItem()->removeArrow(arrow);
-			arrow->endItem()->removeArrow(arrow);
-			delete item;
-			break;
+            scene->removeItem(item);
+            arrow->startItem()->removeArrow(arrow);
+            arrow->endItem()->removeArrow(arrow);
+            delete item;
+            break;
 
-		case DiagramOperation::Type:
-		case DiagramConstructor::Type:
-			static_cast<DiagramBlock *>(item)->removeArrows();
-			manipulator->deleteBlock(static_cast<DiagramBlock *>(item)->getId());
-			scene->removeItem(item);
-			delete item;
-			break;
-		}
-	}
+        case DiagramOperation::Type:
+        case DiagramConstructor::Type:
+            static_cast<DiagramBlock *>(item)->removeArrows();
+            manipulator->deleteBlock(static_cast<DiagramBlock *>(item)->getId());
+            scene->removeItem(item);
+            delete item;
+            break;
+        default:
+            break;
+        }
+    }
 }
 
 void MainWindow::pointerGroupClicked(int)
@@ -211,12 +222,34 @@ void MainWindow::saveAs()
     if (!openedFileName.isEmpty()) {
         dir = QFileInfo(openedFileName).dir().absolutePath();
     }
-    
+
     QString filename = QFileDialog::getSaveFileName(this, tr("Save project"), dir, tr("Dataflow projects (*.xml)"));
-    
+
     if (filename.isEmpty()) return;
-    
+
     saveModelAs(filename);
+}
+
+void MainWindow::toggleEntryPoint()
+{
+    // FIXME: This actually makes no sense for multiple selected blocks.
+    // When implementing multiple selections, change this to toggle
+    // according to the first selected item.
+
+    foreach (QGraphicsItem * item, scene->selectedItems()) {
+        // Only operations can be entry points
+        if (item->type() != DiagramOperation::Type) continue;
+
+        auto operation = qgraphicsitem_cast<DiagramOperation *>(item);
+        if (operation->isEntryPoint()) {
+            manipulator->unsetEntryPoint(operation->getId());
+        } else {
+            manipulator->setEntryPoint(operation->getId());
+        }
+        operation->updateAppearance();
+    }
+
+    updateExecute();
 }
 
 void MainWindow::createModulesList()
@@ -264,10 +297,15 @@ void MainWindow::createActions()
     saveAction.reset(new QAction(QIcon(":/images/save.png"), tr("&Save"), this));
     saveAction->setShortcut(QKeySequence::Save);
     connect(saveAction.data(), SIGNAL(triggered()), this, SLOT(saveFile()));
-    
+
     saveAsAction.reset(new QAction(QIcon(":/images/save-as.png"), tr("Save as..."), this));
     saveAsAction->setShortcut(QKeySequence::SaveAs);
     connect(saveAsAction.data(), SIGNAL(triggered()), this, SLOT(saveAs()));
+
+    entryPointAction.reset(new QAction(tr("Entry point"), this));
+    entryPointAction->setCheckable(true);
+    entryPointAction->setEnabled(false);
+    connect(entryPointAction.data(), SIGNAL(triggered()), this, SLOT(toggleEntryPoint()));
 }
 
 void MainWindow::createMenus()
@@ -282,8 +320,9 @@ void MainWindow::createMenus()
     fileMenu->addAction(exitAction);
 
     itemMenu = menuBar()->addMenu(tr("&Item"));
-    itemMenu->addAction(deleteAction);
+    itemMenu->addAction(entryPointAction.data());
     itemMenu->addSeparator();
+    itemMenu->addAction(deleteAction);
 
     aboutMenu = menuBar()->addMenu(tr("&Help"));
     aboutMenu->addAction(aboutAction);
@@ -326,7 +365,20 @@ void MainWindow::saveModelAs(const QString & filename)
     }
 }
 
-QSize MainWindow::getSceneViewSize() 
+void MainWindow::updateModels()
 {
-	return sceneView->size();
+    scene->setModels(panelModel.data(), projectModel.data(), manipulator.data());
+    panelView->setModel(panelModel.data());
+}
+
+void MainWindow::updateExecute()
+{
+    bool entryPointsExist = !projectModel->getEntryPoints().empty();
+
+    executeAction->setEnabled(entryPointsExist);
+}
+
+QSize MainWindow::getSceneViewSize()
+{
+    return sceneView->size();
 }

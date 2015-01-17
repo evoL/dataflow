@@ -36,15 +36,15 @@ class DiagramBlock : public QGraphicsRectItem
 {
 public:
     DiagramBlock() {}
-	virtual int getId() = 0;
+    virtual int getId() = 0;
     virtual qreal getHeight() = 0;
     virtual qreal getWidth() = 0;
-	virtual float getX() = 0;
-	virtual float getY() = 0;
-	QVector <BlockIn *> * getBlockInputs() { return &In; }
-	QVector <BlockOut *> * getBlockOutputs() { return &Out; }
-	BlockIn * findInputByIndex(int index);
-	BlockOut * findOutputById(int id);
+    virtual float getX() = 0;
+    virtual float getY() = 0;
+    QVector <BlockIn *> * getBlockInputs() { return &In; }
+    QVector <BlockOut *> * getBlockOutputs() { return &Out; }
+    BlockIn * findInputByIndex(int index);
+    BlockOut * findOutputById(int id);
 
     void addArrow(Arrow * arrow);
     void removeArrow(Arrow * arrow);
@@ -53,7 +53,7 @@ public:
     BlockDescription * blockName;
 
 protected:
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent * event);
+    virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent * event);
     QVariant itemChange(GraphicsItemChange change, const QVariant & value);
 
     qreal height;
@@ -63,7 +63,7 @@ protected:
     QMenu * myContextMenu;
     QList<Arrow *> arrows;
 
-	static QColor myItemColor;
-	static QColor myInputColor;
+    static QColor myItemColor;
+    static QColor myInputColor;
 };
 #endif // DIAGRAMBLOCK_H

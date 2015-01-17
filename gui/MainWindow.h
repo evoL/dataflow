@@ -40,16 +40,17 @@ QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
     MainWindow();
-	QSize getSceneViewSize();
+    QSize getSceneViewSize();
 
 private slots:
-	void splitterMovedEvent(int pos, int index);
-	void resizeEvent(QResizeEvent* event);
+    void splitterMovedEvent(int pos, int index);
+    void resizeEvent(QResizeEvent* event);
     void panelViewClicked();
     void panelViewCollapsedExpanded();
+    void newProject();
     void openFile();
     void deleteItem();
     void pointerGroupClicked(int id);
@@ -58,14 +59,17 @@ private slots:
     void execute();
     void saveFile();
     void saveAs();
+    void toggleEntryPoint();
 
 private:
     void createModulesList();
     void createActions();
     void createMenus();
     void createToolbars();
-    
+
     void saveModelAs(const QString & filename);
+    void updateModels();
+    void updateExecute();
 
     DiagramScene * scene;
     QGraphicsView * sceneView;
@@ -77,6 +81,7 @@ private:
     QScopedPointer<QAction> executeAction;
     QScopedPointer<QAction> saveAction;
     QScopedPointer<QAction> saveAsAction;
+    QScopedPointer<QAction> entryPointAction;
 
     QMenu * fileMenu;
     QMenu * itemMenu;
