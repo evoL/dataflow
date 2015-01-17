@@ -47,7 +47,7 @@ public:
     DiagramBlock * findBlockById(int id);
     BlockIn * findInput(DiagramOperation * block, int index);
     BlockOut * findOutput(DiagramBlock * block, int id);
-    bool paintConnection(int inputBlockId, int inputBlockInput, int outputBlockId, int outputBlockOutputId);
+	bool paintConnectionWhenLoadingProject(int inputBlockId, int inputBlockInput, int outputBlockId, int outputBlockOutputId);
 
 public slots:
     void setMode(Mode mode);

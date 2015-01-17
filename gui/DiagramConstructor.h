@@ -11,6 +11,10 @@
 #include <QGraphicsPixmapItem>
 #include <QList>
 #include <QVector>
+#include <QGraphicsProxyWidget>
+#include <QLineEdit>
+
+#include <iostream>
 
 QT_BEGIN_NAMESPACE
 class QPixmap;
@@ -31,7 +35,7 @@ class DiagramConstructor : public DiagramBlock
 public:
     enum { Type = UserType + 31 };
     DiagramConstructor() = delete;
-    DiagramConstructor(const std::shared_ptr<Block> blockPointer, QMenu * contextMenu, QGraphicsItem * parent = 0);
+	DiagramConstructor(const std::shared_ptr<Block> blockPointer, const LibraryMap & libraries, QMenu * contextMenu, QGraphicsItem * parent = 0);
     ~DiagramConstructor();
     int type() const { return Type; }
 

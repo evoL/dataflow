@@ -1,14 +1,12 @@
 #include "DiagramConstructor.h"
-#include <QGraphicsProxyWidget>
-#include <QLineEdit>
 
-DiagramConstructor::DiagramConstructor(const std::shared_ptr<Block> blockPointer, QMenu * contextMenu, QGraphicsItem * parent)
+DiagramConstructor::DiagramConstructor(const std::shared_ptr<Block> blockPointer, const LibraryMap & libraries, QMenu * contextMenu, QGraphicsItem * parent)
     : constructorPointer(std::static_pointer_cast<Constructor>(blockPointer))
 {
     myContextMenu = contextMenu;
 
     width = 170;
-    height = 100;
+    height = 50;
 
     blockName = new BlockDescription(QString::fromStdString(constructorPointer->type), this);
     if (blockName->isLong()) {
@@ -18,7 +16,6 @@ DiagramConstructor::DiagramConstructor(const std::shared_ptr<Block> blockPointer
 
     height = height + (blockName->scale());
 
-	
     setRect(0, 0, width, height);
     blockName->setAlignCenter(-1); //to do: block types, have to do sth with argument
     setBrush(myInputColor);
@@ -34,14 +31,12 @@ DiagramConstructor::DiagramConstructor(const std::shared_ptr<Block> blockPointer
     }
 
     proxy->setWidget(block_input1);
-    proxy->setPos(5,40);
+    proxy->setPos(5, 30);
 
-    // Output circles
-    for (int i = 0; i < constructorPointer->outputs.size(); i++) {
-        BlockOut * first_exit = new BlockOut(i, constructorPointer->outputs[i].id, this);
-        Out.append(first_exit);
-        first_exit->drawOut(QStringLiteral("(%1)").arg(constructorPointer->outputs[i].id));
-    }
+    // Output circle
+	// Assumption: Constructors have only one output
+	BlockOut * exit = new BlockOut(0, constructorPointer->outputs[0].id, this); 
+    Out.append(exit); 
 
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);

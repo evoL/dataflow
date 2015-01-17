@@ -79,7 +79,7 @@ void MainWindow::openFile()
         {
             if (it->second->blockType() == BlockType::Constructor)
             {
-                newBlock = new DiagramConstructor((it->second), itemMenu);
+                newBlock = new DiagramConstructor((it->second), projectModel->getLibraries(), itemMenu);
             }
             if (it->second->blockType() == BlockType::Operation)
             {
@@ -106,14 +106,12 @@ void MainWindow::openFile()
                 InputTransitionMap::const_iterator transition = transitions.cbegin();
                 while (transition != transitions.cend())
                 {
-                    if (transition->second.outputBlock != nullptr) // Assumption: not connected input has nullptr as outputBlock
-                    {
-                        bool paintingOK = scene->paintConnection(currentBlock->id,
-                            transition->first,
-                            transition->second.outputBlock->id,
-                            transition->second.outputId);
-                        if (!paintingOK) throw std::string("Can't connect blocks!");
-                    }
+                    bool paintingOK = scene->paintConnectionWhenLoadingProject(currentBlock->id,
+                        transition->first,
+                        transition->second.outputBlock->id,
+                        transition->second.outputId);
+                    if (!paintingOK) throw std::string("Can't connect blocks!");
+
                     transition++;
                 }
             }
@@ -126,6 +124,12 @@ void MainWindow::openFile()
     } catch (XMLParserError e) {
         QMessageBox::critical(this, tr("Dataflow Creator"), e.what());
     }
+	catch (ModelManipulatorError e) {
+		QMessageBox::critical(this, tr("Dataflow Creator"), e.what());
+	}
+	catch (std::string e){
+		QMessageBox::critical(this, tr("Dataflow Creator"), QString::fromStdString(e));
+	}
 }
 
 void MainWindow::deleteItem()

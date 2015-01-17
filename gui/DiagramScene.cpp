@@ -84,7 +84,7 @@ BlockOut * DiagramScene::findOutput(DiagramBlock * block, int id)
 	return NULL;
 }
 
-bool DiagramScene::paintConnection(int inputBlockId, int inputBlockInput, int outputBlockId, int outputBlockOutputId)
+bool DiagramScene::paintConnectionWhenLoadingProject(int inputBlockId, int inputBlockInput, int outputBlockId, int outputBlockOutputId)
 {
 	DiagramOperation * inputBlock = NULL;
 	DiagramBlock * outputBlock = NULL;
@@ -138,24 +138,30 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
 			moduleName = panelModel->getLibraryPtr(panelView->currentIndex().parent().parent())->getName();
 			Position pos = Position{ static_cast<float>(mouseEvent->scenePos().x() - 20), static_cast<float>(mouseEvent->scenePos().y() - 20) };
 
-			if (typeName == "Constructors")
+			try
 			{
-				int blockId = manipulator->addConstructor(moduleName, blockName, pos);
-				item = new DiagramConstructor(projectModel->getBlocks().at(blockId), myItemMenu);
+				if (typeName == "Constructors")
+				{
+					int blockId = manipulator->addConstructor(moduleName, blockName, pos);
+					item = new DiagramConstructor(projectModel->getBlocks().at(blockId), projectModel->getLibraries(), myItemMenu);
+				}
+				if (typeName == "Operations")
+				{
+					int blockId = manipulator->addOperation(moduleName, blockName, pos);
+					item = new DiagramOperation(projectModel, projectModel->getBlocks().at(blockId), myItemMenu);
+				}
+
+				addItem(item);
+
+				item->setPos(mouseEvent->scenePos() - QPointF(20, 20));
+				if (item->pos().x() < 0) item->setX(0);
+				if (item->pos().y() < 0) item->setY(0);
+
+				emit itemInserted();
 			}
-			if (typeName == "Operations")
-			{
-				int blockId = manipulator->addOperation(moduleName, blockName, pos);
-                item = new DiagramOperation(projectModel, projectModel->getBlocks().at(blockId), myItemMenu);
-			}			
-
-			addItem(item);
-
-			item->setPos(mouseEvent->scenePos() - QPointF(20, 20));
-			if (item->pos().x() < 0) item->setX(0);
-			if (item->pos().y() < 0) item->setY(0);
-
-			emit itemInserted();
+			catch (ModelManipulatorError e) {
+				QMessageBox::critical(mainWindow, tr("Dataflow Creator"), e.what());
+			}
 		}
         break;
 
@@ -203,49 +209,58 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
 		BlockIn * startItem = nullptr;
 		BlockOut * endItem = nullptr;
 
-        //from end to start
-        if (startItems.count() > 0 && endItems.count() > 0 &&
-            startItems.first()->type() == BlockIn::Type &&
-            endItems.first()->type() == BlockOut::Type &&
-            startItems.first() != endItems.first()) {
-            startItem = qgraphicsitem_cast<BlockIn *>(startItems.first());
-            endItem = qgraphicsitem_cast<BlockOut *>(endItems.first());
+		try {
+			//from end to start
+			if (startItems.count() > 0 && endItems.count() > 0 &&
+				startItems.first()->type() == BlockIn::Type &&
+				endItems.first()->type() == BlockOut::Type &&
+				startItems.first() != endItems.first()) {
+				startItem = qgraphicsitem_cast<BlockIn *>(startItems.first());
+				endItem = qgraphicsitem_cast<BlockOut *>(endItems.first());
 
-            arrow = new Arrow(startItem, endItem);
-            arrow->setColor(myLineColor);
-            startItem->addArrow(arrow);
-            endItem->addArrow(arrow);
-            addItem(arrow);
-            arrow->updatePosition();
-        }
+				if (startItem->parentItem() == endItem->parentItem())
+					throw ModelManipulatorError("Can't connect input with output of the same block");
 
-        //from start to end
-        if (startItems.count() > 0 && endItems.count() > 0 &&
-            startItems.first()->type() == BlockOut::Type &&
-            endItems.first()->type() == BlockIn::Type &&
-            startItems.first() != endItems.first()) {
-            startItem = qgraphicsitem_cast<BlockIn *>(endItems.first());
-            endItem = qgraphicsitem_cast<BlockOut *>(startItems.first());
+				arrow = new Arrow(startItem, endItem);
+				arrow->setColor(myLineColor);
+				startItem->addArrow(arrow);
+				endItem->addArrow(arrow);
+				addItem(arrow);
+				arrow->updatePosition();
+			}
 
-            arrow = new Arrow(startItem, endItem);
-            arrow->setColor(myLineColor);
-            startItem->addArrow(arrow);
-            endItem->addArrow(arrow);
-            addItem(arrow);
-            arrow->updatePosition();
-        }
+			//from start to end
+			if (startItems.count() > 0 && endItems.count() > 0 &&
+				startItems.first()->type() == BlockOut::Type &&
+				endItems.first()->type() == BlockIn::Type &&
+				startItems.first() != endItems.first()) {
+				startItem = qgraphicsitem_cast<BlockIn *>(endItems.first());
+				endItem = qgraphicsitem_cast<BlockOut *>(startItems.first());
 
-		// Update model
-		if (startItem != nullptr && endItem != nullptr) {
-			DiagramBlock * inputBlock = static_cast<DiagramBlock*>(startItem->parentItem());
-			DiagramBlock * outputBlock = static_cast<DiagramBlock*>(endItem->parentItem());
-			try {
+				if (startItem->parentItem() == endItem->parentItem())
+					throw ModelManipulatorError("Can't connect input with output of the same block");
+
+				arrow = new Arrow(startItem, endItem);
+				arrow->setColor(myLineColor);
+				startItem->addArrow(arrow);
+				endItem->addArrow(arrow);
+				addItem(arrow);
+				arrow->updatePosition();
+
+			}
+
+			// Update model
+			if (startItem != nullptr && endItem != nullptr) {
+				DiagramBlock * inputBlock = static_cast<DiagramBlock*>(startItem->parentItem());
+				DiagramBlock * outputBlock = static_cast<DiagramBlock*>(endItem->parentItem());
+
 				manipulator->addConnection(outputBlock->getId(), endItem->getIndex(), inputBlock->getId(), startItem->getIndex());
 			}
-			catch (ModelManipulatorError error) {
-				std::cerr << "Adding connection error: " << error.what() << std::endl;
-				removeItem(arrow);
-			}
+		}
+		catch (ModelManipulatorError error) {
+			std::cerr << error.what() << std::endl;
+			QMessageBox::warning(mainWindow, "Connecting error", error.what());
+			if (arrow) removeItem(arrow);
 		}
     }
 	else if (myMode == MoveItem) {

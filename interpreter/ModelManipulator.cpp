@@ -72,20 +72,11 @@ int ModelManipulator::addOperation(std::string& module, std::string& name, Posit
     if (outputsFound == libFound->second.getOutputs().end())
         throw ModelManipulatorError("Operation " + name + " not found in module " + module);
 
-	auto inputsFound = libFound->second.getInputs().find(name);
-	if (inputsFound == libFound->second.getInputs().end())
-		throw ModelManipulatorError("Operation " + name + " not found in module " + module);
-
     maxBlockId++;
     model.blocks[maxBlockId] = std::shared_ptr<Block>(new Operation(maxBlockId, module, name, position));
     auto& outputs = model.blocks[maxBlockId]->outputs;
     for (int i=0; i<(int)outputsFound->second.size(); ++i)
         outputs.push_back(OutputTransition {++maxOutputId});
-
-	auto& inputs = std::static_pointer_cast<Operation>(model.blocks[maxBlockId])->inputs;
-	InputTransition inputTransition = InputTransition{ -1, NULL };
-	for (int i = 0; i<(int)inputsFound->second.size(); ++i)
-		inputs.insert({ i, inputTransition });
 
 	return maxBlockId;
 }
