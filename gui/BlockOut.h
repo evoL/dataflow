@@ -21,9 +21,9 @@ public:
     BlockOut(int index, int outputId, QGraphicsItem * parent = 0);
 	int getIndex() { return index; }
 	int getId() { return outputId; }
-    void drawOut(QString text);
-    void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
-    void highlight(QPainter * painter, bool isSelected);
+    void drawOut(QString text = "");
+    //void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
+    //void highlight(QPainter * painter, bool isSelected);
     int type() const { return Type;}
     void addArrow(Arrow * arrow);
     void removeArrow(Arrow * arrow);

@@ -6,18 +6,10 @@ DiagramOperation::DiagramOperation(const ProjectModel * model, const std::shared
 {
     myContextMenu = contextMenu;
 
-    width = 170;
+    width = 150;
     height = 100;
 
     blockName = new BlockDescription(QString::fromStdString(operationPointer->name), this);
-    if (blockName->isLong()) {
-        width = 200;
-        blockName->setTextWidth(250);
-    }
-
-    height = height + (blockName->scale());
-
-    setRect(0, 0, width, height);
     blockName->setAlignCenter(0); //to do: block types, have to do sth with argument
     setBrush(myItemColor);
     updateAppearance();
@@ -43,6 +35,16 @@ DiagramOperation::DiagramOperation(const ProjectModel * model, const std::shared
 
         exit->drawOut(QStringLiteral("%2").arg(QString::fromStdString(outputs.at(i)).section('.', 1)));
     }
+
+	/*if (blockName->isLong()) {
+			width = 200;
+			blockName->setTextWidth(250);
+		}
+
+	height = height + (blockName->scale());*/
+
+	height = blockName->getHeight() + (In.size() > Out.size() ? In.size() * 20 : Out.size() * 20) + 5;
+	setRect(0, 0, width, height);
 
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);

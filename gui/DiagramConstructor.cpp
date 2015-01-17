@@ -5,25 +5,17 @@ DiagramConstructor::DiagramConstructor(const std::shared_ptr<Block> blockPointer
 {
     myContextMenu = contextMenu;
 
-    width = 170;
-    height = 50;
+	width = 150;
+	height = 46;
 
-    blockName = new BlockDescription(QString::fromStdString(constructorPointer->type), this);
-    if (blockName->isLong()) {
-        width = 200;
-        blockName->setTextWidth(250);
-    }
-
-    height = height + (blockName->scale());
-
-    setRect(0, 0, width, height);
+	blockName = new BlockDescription(QString::fromStdString(constructorPointer->type), this);
     blockName->setAlignCenter(-1); //to do: block types, have to do sth with argument
     setBrush(myInputColor);
 
     QLineEdit *block_input1;
     block_input1=new QLineEdit();
     QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget(this);
-    block_input1->setFixedWidth(100);
+    block_input1->setFixedWidth(this->width - 15);
     block_input1->setPlaceholderText("Input");
 
     if (!constructorPointer->data.empty()) {
@@ -31,12 +23,21 @@ DiagramConstructor::DiagramConstructor(const std::shared_ptr<Block> blockPointer
     }
 
     proxy->setWidget(block_input1);
-    proxy->setPos(5, 30);
+    proxy->setPos(3, blockName->getHeight() + 3);
 
     // Output circle
     // Assumption: Constructors have only one output
     BlockOut * exit = new BlockOut(0, constructorPointer->outputs[0].id, this);
     Out.append(exit);
+	exit->drawOut(); 
+
+	/*if (blockName->isLong()) {
+		width = 200;
+		blockName->setTextWidth(250);
+	}*/
+
+	height = blockName->getHeight() + proxy->boundingRect().height() + 6; // 6 = 3 + 3 spacing for input
+	setRect(0, 0, width, height);
 
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);

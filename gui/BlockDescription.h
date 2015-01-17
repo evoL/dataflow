@@ -13,7 +13,7 @@ public:
     BlockDescription(QString s, QGraphicsItem * parent = 0);
     void setDescription(const QString desc);
     void setAlignCenter(int i);
-    qreal getBlockHeight() { return blockHeight; }
+    qreal getHeight() { return blockHeight; }
     qreal scale();
     bool isLong();
 private:

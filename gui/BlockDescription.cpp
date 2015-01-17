@@ -9,7 +9,6 @@ BlockDescription::BlockDescription(QString s, QGraphicsItem * parent) : QGraphic
     textDescription = s;
     setPlainText(textDescription);
     blockHeight = this->boundingRect().height();
-    //setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
 
 BlockDescription::BlockDescription(QGraphicsItem * parent) : QGraphicsTextItem(parent)
@@ -48,8 +47,7 @@ void BlockDescription::setAlignCenter(int i)
 
 bool BlockDescription::isLong()
 {
-    if (textDescription.length() > 30) return true;
-    else return false;
+	return textDescription.length() > 30;
 }
 
 qreal BlockDescription::scale()
