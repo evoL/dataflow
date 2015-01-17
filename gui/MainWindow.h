@@ -60,6 +60,7 @@ private slots:
     void saveFile();
     void saveAs();
     void toggleEntryPoint();
+    void openPanelMenu(const QPoint &);
 
 private:
     void createModulesList();
@@ -68,8 +69,10 @@ private:
     void createToolbars();
 
     void saveModelAs(const QString & filename);
-    void updateModels();
+    void updateInterfaceState();
     void updateExecute();
+
+    void addLibrary(const QString & name);
 
     DiagramScene * scene;
     QGraphicsView * sceneView;

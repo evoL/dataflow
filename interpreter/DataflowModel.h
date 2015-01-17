@@ -96,11 +96,14 @@ class ProjectModel
     friend class XMLParser;
     friend class ModelManipulator;
 public:
+    ProjectModel() {}
+    ProjectModel(const std::string & name): name(name) {}
+
     // getters
     const std::string & getName() const { return name; }
     const LibraryMap & getLibraries() const { return libraries; }
     const Block & getBlock(int id) const { return *blocks.at(id); }
-	const BlocksMap & getBlocks() const { return blocks; }
+    const BlocksMap & getBlocks() const { return blocks; }
     std::vector<int> getEntryPoints() const { return entryPoints; }
 
 private:

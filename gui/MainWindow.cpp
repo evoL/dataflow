@@ -3,7 +3,6 @@
 using namespace std;
 
 MainWindow::MainWindow()
-    : projectModel(new ProjectModel())
 {
     createActions();
     createModulesList();
@@ -24,6 +23,8 @@ MainWindow::MainWindow()
 
     setWindowTitle(tr("Dataflow Creator"));
     setUnifiedTitleAndToolBarOnMac(true);
+
+    newProject();
 }
 
 void MainWindow::resizeEvent(QResizeEvent* event)
@@ -51,10 +52,10 @@ void MainWindow::newProject()
 {
     // TODO: if a project is open, ask to save
 
-    projectModel.reset(new ProjectModel());
+    projectModel.reset(new ProjectModel(tr("Untitled").toStdString()));
     manipulator.reset(new ModelManipulator(*projectModel));
     panelModel.reset(new ModulesPanelModel(projectModel.data()));
-    updateModels();
+    updateInterfaceState();
 }
 
 void MainWindow::openFile()
@@ -69,12 +70,10 @@ void MainWindow::openFile()
         projectModel.reset(XMLParser().loadModelFromFile(fileName));
         manipulator.reset(new ModelManipulator(*projectModel));
         panelModel.reset(new ModulesPanelModel(projectModel.data()));
-        updateModels();
+        updateInterfaceState();
         updateExecute();
 
         openedFileName = QString::fromStdString(fileName);
-
-        setWindowTitle( QString(projectModel->getName().data()) + " - Dataflow Creator" );
 
         // Clear scene before redraw
         scene->clear();
@@ -252,10 +251,45 @@ void MainWindow::toggleEntryPoint()
     updateExecute();
 }
 
+void MainWindow::openPanelMenu(const QPoint & pos)
+{
+    static QList<QString> libraries{ "basicmath", "dstring", "io_module", "ppm" };
+    auto & includedLibraries = projectModel->getLibraries();
+
+    QMenu libraryMenu;
+    libraryMenu.setTitle("Add library");
+    foreach (auto &libraryName, libraries) {
+        QAction * action = libraryMenu.addAction(libraryName);
+
+        if (includedLibraries.find(libraryName.toStdString()) != includedLibraries.end()) {
+            action->setEnabled(false);
+        }
+
+        connect(action, &QAction::triggered, [&]{ addLibrary(libraryName); });
+    }
+
+    QMenu menu;
+    menu.addMenu(&libraryMenu);
+    menu.exec(panelView->mapToGlobal(pos));
+}
+
+void MainWindow::addLibrary(const QString & name)
+{
+    try {
+        std::string stdName = name.toStdString();
+        manipulator->addLibrary(stdName);
+
+        const Library &library = projectModel->getLibraries().at(stdName);
+        panelModel->addLibrary(library);
+    } catch (ModelManipulatorError e) {
+        QMessageBox::critical(this, tr("Dataflow Creator"), QString::fromUtf8(e.what()));
+    }
+}
+
 void MainWindow::createModulesList()
 {
     panelView = new QTreeView();
-    //panelView->setModel(panelModel);
+    panelView->setContextMenuPolicy(Qt::CustomContextMenu);
     panelView->setHeaderHidden(true);
     panelView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     panelView->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -267,6 +301,8 @@ void MainWindow::createModulesList()
         this, SLOT(panelViewCollapsedExpanded()));
     connect(panelView, SIGNAL(expanded(const QModelIndex &)),
         this, SLOT(panelViewCollapsedExpanded()));
+    connect(panelView, SIGNAL(customContextMenuRequested(const QPoint &)),
+            this, SLOT(openPanelMenu(const QPoint &)));
 }
 
 void MainWindow::createActions()
@@ -365,10 +401,12 @@ void MainWindow::saveModelAs(const QString & filename)
     }
 }
 
-void MainWindow::updateModels()
+void MainWindow::updateInterfaceState()
 {
     scene->setModels(panelModel.data(), projectModel.data(), manipulator.data());
     panelView->setModel(panelModel.data());
+
+    setWindowTitle( QString::fromStdString(projectModel->getName()) + " - Dataflow Creator" );
 }
 
 void MainWindow::updateExecute()

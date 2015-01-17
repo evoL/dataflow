@@ -2,157 +2,172 @@
 
 const Library * at(const LibraryMap *map, unsigned int index)
 {
-	if (index >= map->size()) 
-		throw std::out_of_range("The given index (" + std::to_string(index) + 
-								") is out of range. Map size = " + std::to_string(map->size()));
+    if (index >= map->size())
+        throw std::out_of_range("The given index (" + std::to_string(index) +
+                                ") is out of range. Map size = " + std::to_string(map->size()));
 
-	LibraryMap::const_iterator it = map->begin();
-	while (it != map->end() && index > 0)
-	{
-		index--;
-		it++;
-	}
-	return &it->second;
+    LibraryMap::const_iterator it = map->begin();
+    while (it != map->end() && index > 0)
+    {
+        index--;
+        it++;
+    }
+    return &it->second;
 }
 
 ModulesPanelModel::ModulesPanelModel(ProjectModel * projectModel, QObject * parent) : QAbstractItemModel(parent)
 {
-	this->rootItem = new ModulesPanelItem("root", projectModel, ModulesPanelItem::RootT);
-	loadFromProjectModel(projectModel);
+    this->rootItem = new ModulesPanelItem("root", projectModel, ModulesPanelItem::RootT);
+    loadFromProjectModel(projectModel);
 }
 
 ModulesPanelModel::~ModulesPanelModel()
 {
-	delete rootItem;
+    delete rootItem;
 }
 
 void ModulesPanelModel::loadFromProjectModel(ProjectModel * projectModel)
 {
-	// Libraries
-	const LibraryMap * libraries = &(projectModel->getLibraries());
-	LibraryMap::const_iterator it = libraries->begin();
-	while (it != libraries->end())
-	{
-		auto * libraryItem = rootItem->addLibrary(&(it->second));
+    beginResetModel();
 
-		// Block types
-		const std::vector<std::string> operations = (it->second.getOperations());
-		const std::vector<std::string> constructors = (it->second.getTypes());
+    const LibraryMap & libraries = projectModel->getLibraries();
+    for (const auto &pair : libraries) {
+        appendLibrary(pair.second);
+    }
 
-		// Constructors
-		if (constructors.size() > 0)
-		{
-			auto * constructorsLabel = libraryItem->addConstructorsLabel();
-			for (int i = 0; i < constructors.size(); i++)
-			{
-				constructorsLabel->addConstructor(constructors[i]);
-			}
-		}
+    endResetModel();
+}
 
-		// Operations
-		if (operations.size() > 0)
-		{
-			auto * operationsLabel = libraryItem->addOperationsLabel();
-			for (int i = 0; i < operations.size(); i++)
-			{
-				operationsLabel->addOperation(operations[i]);
-			}
-		}
-		it++;
-	}
+void ModulesPanelModel::addLibrary(const Library &library)
+{
+    int count = rootItem->childCount();
+    beginInsertRows(QModelIndex(), count, count+1);
+
+    appendLibrary(library);
+
+    endInsertRows();
 }
 
 QModelIndex ModulesPanelModel::index(int row, int column, const QModelIndex & parent) const
 {
-	ModulesPanelItem *parentItem;
-	if (!parent.isValid())
-		parentItem = rootItem;
-	else
-		parentItem = static_cast<ModulesPanelItem*>(parent.internalPointer());
+    ModulesPanelItem *parentItem;
+    if (!parent.isValid())
+        parentItem = rootItem;
+    else
+        parentItem = static_cast<ModulesPanelItem*>(parent.internalPointer());
 
-	ModulesPanelItem *childItem = parentItem->child(row);
-	if (childItem)
-		return createIndex(row, column, childItem);
-	else
-		return QModelIndex();
+    ModulesPanelItem *childItem = parentItem->child(row);
+    if (childItem)
+        return createIndex(row, column, childItem);
+    else
+        return QModelIndex();
 }
 
 QModelIndex ModulesPanelModel::parent(const QModelIndex & index) const
 {
-	if (!index.isValid())
-		return QModelIndex();
+    if (!index.isValid())
+        return QModelIndex();
 
-	auto * childItem = static_cast<ModulesPanelItem*>(index.internalPointer());
-	auto * parentItem = childItem->parent();
+    auto * childItem = static_cast<ModulesPanelItem*>(index.internalPointer());
+    auto * parentItem = childItem->parent();
 
-	if (parentItem == rootItem)
-		return QModelIndex();
+    if (parentItem == rootItem)
+        return QModelIndex();
 
-	return createIndex(parentItem->row(), 0, parentItem);
+    return createIndex(parentItem->row(), 0, parentItem);
 }
 
 int ModulesPanelModel::rowCount(const QModelIndex & parent) const
 {
-	ModulesPanelItem *parentItem;
-	if (parent.column() > 0)
-		return 0;
+    ModulesPanelItem *parentItem;
+    if (parent.column() > 0)
+        return 0;
 
-	if (!parent.isValid())
-		parentItem = rootItem;
-	else
-		parentItem = static_cast<ModulesPanelItem*>(parent.internalPointer());
+    if (!parent.isValid())
+        parentItem = rootItem;
+    else
+        parentItem = static_cast<ModulesPanelItem*>(parent.internalPointer());
 
-	return parentItem->childCount();
+    return parentItem->childCount();
 }
 
 int ModulesPanelModel::columnCount(const QModelIndex & parent) const
 {
-	if (parent.isValid())
-		return static_cast<ModulesPanelItem*>(parent.internalPointer())->columnCount();
-	else
-		return rootItem->columnCount();
+    if (parent.isValid())
+        return static_cast<ModulesPanelItem*>(parent.internalPointer())->columnCount();
+    else
+        return rootItem->columnCount();
 }
 
 QVariant ModulesPanelModel::data(const QModelIndex & index, int role) const
 {
-	if (!index.isValid())
-		return QVariant();
+    if (!index.isValid())
+        return QVariant();
 
-	if (role != Qt::DisplayRole)
-		return QVariant();
-	
-	ModulesPanelItem *item = static_cast<ModulesPanelItem*>(index.internalPointer());
+    if (role != Qt::DisplayRole)
+        return QVariant();
 
-	return item->data();
+    ModulesPanelItem *item = static_cast<ModulesPanelItem*>(index.internalPointer());
+
+    return item->data();
 }
 
 Qt::ItemFlags ModulesPanelModel::flags(const QModelIndex &index) const
 {
-	if (!index.isValid())
-		return 0;
+    if (!index.isValid())
+        return 0;
 
-	if (static_cast<ModulesPanelItem*>(index.internalPointer())->getItemType() == ModulesPanelItem::ItemType::OperationT ||  
-		static_cast<ModulesPanelItem*>(index.internalPointer())->getItemType() == ModulesPanelItem::ItemType::ConstructorT)
-		return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    if (static_cast<ModulesPanelItem*>(index.internalPointer())->getItemType() == ModulesPanelItem::ItemType::OperationT ||
+        static_cast<ModulesPanelItem*>(index.internalPointer())->getItemType() == ModulesPanelItem::ItemType::ConstructorT)
+        return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 
-	return Qt::ItemIsEnabled;
+    return Qt::ItemIsEnabled;
 }
 
 std::shared_ptr<const Block> ModulesPanelModel::getBlockPtr(const QModelIndex &index) const
 {
-	if (!index.isValid()) return NULL;
+    if (!index.isValid()) return NULL;
 
-	ModulesPanelItem *item = static_cast<ModulesPanelItem*>(index.internalPointer());
+    ModulesPanelItem *item = static_cast<ModulesPanelItem*>(index.internalPointer());
     return std::shared_ptr<const Block>(static_cast<const Block*>(item->getDataPtr()));
 }
 
 const Library * ModulesPanelModel::getLibraryPtr(const QModelIndex &index) const
 {
-	if (!index.isValid()) return NULL;
+    if (!index.isValid()) return NULL;
 
-	auto * item = static_cast<ModulesPanelItem*>(index.internalPointer());
-	if (item->parent() != rootItem) return NULL;
+    auto * item = static_cast<ModulesPanelItem*>(index.internalPointer());
+    if (item->parent() != rootItem) return NULL;
 
-	return static_cast<const Library*>(rootItem->child(index.row())->getDataPtr());
+    return static_cast<const Library*>(rootItem->child(index.row())->getDataPtr());
+}
+
+void ModulesPanelModel::appendLibrary(const Library &library)
+{
+    auto * libraryItem = rootItem->addLibrary(&library);
+
+    // Block types
+    const std::vector<std::string> & operations = library.getOperations();
+    const std::vector<std::string> & constructors = library.getTypes();
+
+    // Constructors
+    if (constructors.size() > 0)
+    {
+        auto * constructorsLabel = libraryItem->addConstructorsLabel();
+        for (int i = 0; i < constructors.size(); i++)
+        {
+            constructorsLabel->addConstructor(constructors[i]);
+        }
+    }
+
+    // Operations
+    if (operations.size() > 0)
+    {
+        auto * operationsLabel = libraryItem->addOperationsLabel();
+        for (int i = 0; i < operations.size(); i++)
+        {
+            operationsLabel->addOperation(operations[i]);
+        }
+    }
 }
 
