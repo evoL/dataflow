@@ -13,6 +13,7 @@
 #include "Interpreter.h"
 
 #include <QMainWindow>
+#include <QScopedPointer>
 #include <QAction>
 #include <QScopedPointer>
 #include <QtWidgets>
@@ -77,33 +78,33 @@ private:
 
     void addLibrary(const QString & name);
 
-    DiagramScene * scene;
-    QGraphicsView * sceneView;
+    QScopedPointer<DiagramScene> scene;
+	QScopedPointer<QGraphicsView> sceneView;
 
-    QAction * openFileAction;
-    QAction * exitAction;
-    QAction * deleteAction;
-    QAction * aboutAction;
+	QScopedPointer<QAction> openFileAction;
+	QScopedPointer<QAction> exitAction;
+	QScopedPointer<QAction> deleteAction;
+	QScopedPointer<QAction> aboutAction;
     QScopedPointer<QAction> executeAction;
     QScopedPointer<QAction> saveAction;
     QScopedPointer<QAction> saveAsAction;
     QScopedPointer<QAction> entryPointAction;
 
-    QMenu * fileMenu;
-    QMenu * itemMenu;
-    QMenu * aboutMenu;
-    QToolBar * editToolBar;
-    QToolBar * pointerToolbar;
-    QToolBar * fileToolbar;
+    QScopedPointer<QMenu> fileMenu;
+	QScopedPointer<QMenu> itemMenu;
+	QScopedPointer<QMenu> aboutMenu;
+	QScopedPointer<QToolBar> editToolBar;
+	QScopedPointer<QToolBar> pointerToolbar;
+	QScopedPointer<QToolBar> fileToolbar;
 
-    QButtonGroup * pointerTypeGroup;
-    QAction * lineAction;
+    QScopedPointer<QButtonGroup> pointerTypeGroup;
+	//QScopedPointer<QAction> lineAction;
 
     QString openedFileName;
     QScopedPointer<ProjectModel> projectModel;
     QScopedPointer<ModelManipulator> manipulator;
 
     QScopedPointer<ModulesPanelModel> panelModel;
-    QTreeView * panelView;
+    QScopedPointer<QTreeView> panelView;
 };
 #endif // MAINWINDOW_H

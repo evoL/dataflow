@@ -8,15 +8,15 @@ MainWindow::MainWindow()
     createModulesList();
     createMenus();
 
-    scene = new DiagramScene(panelModel.data(), panelView, itemMenu, this);
-    connect(scene, SIGNAL(itemInserted()), this, SLOT(itemInserted()));
+    scene.reset(new DiagramScene(panelModel.data(), panelView.data(), itemMenu.data(), this));
+    connect(scene.data(), SIGNAL(itemInserted()), this, SLOT(itemInserted()));
 
     createToolbars();
     QSplitter * splitter = new QSplitter;
-    splitter->addWidget(panelView);
-    sceneView = new QGraphicsView(scene);
+    splitter->addWidget(panelView.data());
+    sceneView.reset(new QGraphicsView(scene.data()));
     sceneView->setSizeAdjustPolicy(QAbstractScrollArea::SizeAdjustPolicy::AdjustToContentsOnFirstShow);
-    splitter->addWidget(sceneView);
+    splitter->addWidget(sceneView.data());
     setCentralWidget(splitter);
     splitter->setSizes({ 190, 805 });
     connect(splitter, SIGNAL(splitterMoved(int, int)), this, SLOT(splitterMovedEvent(int,int)));
@@ -87,12 +87,12 @@ void MainWindow::openFile()
         {
             if (it->second->blockType() == BlockType::Constructor)
             {
-                newBlock = new DiagramConstructor((it->second), projectModel->getLibraries(), itemMenu);
+                newBlock = new DiagramConstructor((it->second), projectModel->getLibraries(), itemMenu.data());
                 connect(static_cast<DiagramConstructor *>(newBlock), &DiagramConstructor::valueChanged, this, &MainWindow::updateConstructorValue);
             }
             if (it->second->blockType() == BlockType::Operation)
             {
-                newBlock = new DiagramOperation(projectModel.data(), (it->second), itemMenu);
+                newBlock = new DiagramOperation(projectModel.data(), (it->second), itemMenu.data());
             }
 
             scene->addItem(newBlock);
@@ -300,42 +300,42 @@ void MainWindow::addLibrary(const QString & name)
 
 void MainWindow::createModulesList()
 {
-    panelView = new QTreeView();
+    panelView.reset(new QTreeView());
     panelView->setContextMenuPolicy(Qt::CustomContextMenu);
     panelView->setHeaderHidden(true);
     panelView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     panelView->setSelectionMode(QAbstractItemView::SingleSelection);
     panelView->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Ignored);
     panelView->setMinimumWidth(150);
-    connect(panelView, SIGNAL(clicked(const QModelIndex &)),
+    connect(panelView.data(), SIGNAL(clicked(const QModelIndex &)),
         this, SLOT(panelViewClicked()));
-    connect(panelView, SIGNAL(collapsed(const QModelIndex &)),
+    connect(panelView.data(), SIGNAL(collapsed(const QModelIndex &)),
         this, SLOT(panelViewCollapsedExpanded()));
-    connect(panelView, SIGNAL(expanded(const QModelIndex &)),
+    connect(panelView.data(), SIGNAL(expanded(const QModelIndex &)),
         this, SLOT(panelViewCollapsedExpanded()));
-    connect(panelView, SIGNAL(customContextMenuRequested(const QPoint &)),
+    connect(panelView.data(), SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(openPanelMenu(const QPoint &)));
 }
 
 void MainWindow::createActions()
 {
-    openFileAction = new QAction(QIcon(":/images/open.png"), tr("&Open..."), this);
+    openFileAction.reset(new QAction(QIcon(":/images/open.png"), tr("&Open..."), this));
     openFileAction->setShortcut(tr("Ctrl+O"));
     openFileAction->setStatusTip(tr("Load project file"));
-    connect(openFileAction, SIGNAL(triggered()), this, SLOT(openFile()));
+    connect(openFileAction.data(), SIGNAL(triggered()), this, SLOT(openFile()));
 
-    deleteAction = new QAction(QIcon(":/images/delete.png"), tr("&Delete"), this);
+    deleteAction.reset(new QAction(QIcon(":/images/delete.png"), tr("&Delete"), this));
     deleteAction->setShortcuts(QList<QKeySequence>{ tr("Delete"), tr("Backspace") });
     deleteAction->setStatusTip(tr("Delete item from diagram"));
-    connect(deleteAction, SIGNAL(triggered()), this, SLOT(deleteItem()));
+    connect(deleteAction.data(), SIGNAL(triggered()), this, SLOT(deleteItem()));
 
-    exitAction = new QAction(tr("E&xit"), this);
+    exitAction.reset(new QAction(tr("E&xit"), this));
     exitAction->setShortcuts(QKeySequence::Quit);
     exitAction->setStatusTip(tr("Quit"));
-    connect(exitAction, SIGNAL(triggered()), this, SLOT(close()));
+    connect(exitAction.data(), SIGNAL(triggered()), this, SLOT(close()));
 
-    aboutAction = new QAction(tr("A&bout"), this);
-    connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
+    aboutAction.reset(new QAction(tr("A&bout"), this));
+    connect(aboutAction.data(), SIGNAL(triggered()), this, SLOT(about()));
 
     executeAction.reset(new QAction(QIcon(":/images/run.png"), tr("&Execute"), this));
     executeAction->setShortcut(tr("Ctrl+E"));
@@ -358,22 +358,22 @@ void MainWindow::createActions()
 
 void MainWindow::createMenus()
 {
-    fileMenu = menuBar()->addMenu(tr("&File"));
-    fileMenu->addAction(openFileAction);
+    fileMenu.reset(menuBar()->addMenu(tr("&File")));
+    fileMenu->addAction(openFileAction.data());
     fileMenu->addAction(saveAction.data());
     fileMenu->addAction(saveAsAction.data());
     fileMenu->addSeparator();
     fileMenu->addAction(executeAction.data());
     fileMenu->addSeparator();
-    fileMenu->addAction(exitAction);
+    fileMenu->addAction(exitAction.data());
 
-    itemMenu = menuBar()->addMenu(tr("&Item"));
+    itemMenu.reset(menuBar()->addMenu(tr("&Item")));
     itemMenu->addAction(entryPointAction.data());
     itemMenu->addSeparator();
-    itemMenu->addAction(deleteAction);
+    itemMenu->addAction(deleteAction.data());
 
-    aboutMenu = menuBar()->addMenu(tr("&Help"));
-    aboutMenu->addAction(aboutAction);
+    aboutMenu.reset(menuBar()->addMenu(tr("&Help")));
+    aboutMenu->addAction(aboutAction.data());
 }
 
 void MainWindow::createToolbars()
@@ -385,23 +385,23 @@ void MainWindow::createToolbars()
     QToolButton * linePointerButton = new QToolButton;
     linePointerButton->setCheckable(true);
     linePointerButton->setIcon(QIcon(":/images/linepointer.png"));
-    pointerTypeGroup = new QButtonGroup(this);
+    pointerTypeGroup.reset(new QButtonGroup(this));
     pointerTypeGroup->addButton(pointerButton, int(DiagramScene::MoveItem));
     pointerTypeGroup->addButton(linePointerButton, int(DiagramScene::InsertLine));
-    connect(pointerTypeGroup, SIGNAL(buttonClicked(int)),
+    connect(pointerTypeGroup.data(), SIGNAL(buttonClicked(int)),
             this, SLOT(pointerGroupClicked(int)));
 
-    fileToolbar = addToolBar(tr("File"));
-    fileToolbar->addAction(openFileAction);
+    fileToolbar.reset(addToolBar(tr("File")));
+    fileToolbar->addAction(openFileAction.data());
     fileToolbar->addAction(saveAction.data());
     fileToolbar->addAction(executeAction.data());
 
-    pointerToolbar = addToolBar(tr("Pointer type"));
+    pointerToolbar.reset(addToolBar(tr("Pointer type")));
     pointerToolbar->addWidget(pointerButton);
     pointerToolbar->addWidget(linePointerButton);
 
-    editToolBar = addToolBar(tr("Edit"));
-    editToolBar->addAction(deleteAction);
+    editToolBar.reset(addToolBar(tr("Edit")));
+    editToolBar->addAction(deleteAction.data());
 }
 
 void MainWindow::saveModelAs(const QString & filename)
