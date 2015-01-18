@@ -88,6 +88,7 @@ void MainWindow::openFile()
             if (it->second->blockType() == BlockType::Constructor)
             {
                 newBlock = new DiagramConstructor((it->second), projectModel->getLibraries(), itemMenu);
+                connect(static_cast<DiagramConstructor *>(newBlock), &DiagramConstructor::valueChanged, this, &MainWindow::updateConstructorValue);
             }
             if (it->second->blockType() == BlockType::Operation)
             {
@@ -271,6 +272,15 @@ void MainWindow::openPanelMenu(const QPoint & pos)
     QMenu menu;
     menu.addMenu(&libraryMenu);
     menu.exec(panelView->mapToGlobal(pos));
+}
+
+void MainWindow::updateConstructorValue(int blockId, const QString & value)
+{
+    try {
+        manipulator->setConstructorData(blockId, value.toStdString());
+    } catch (ModelManipulatorError e) {
+        QMessageBox::critical(this, tr("Dataflow Creator"), QString::fromUtf8(e.what()));
+    }
 }
 
 void MainWindow::addLibrary(const QString & name)

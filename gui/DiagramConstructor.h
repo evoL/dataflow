@@ -32,7 +32,7 @@ class Arrow;
 
 class DiagramConstructor : public DiagramBlock
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
     enum { Type = UserType + 31 };
     DiagramConstructor() = delete;
@@ -46,16 +46,18 @@ public:
     virtual float getX() { return constructorPointer->position.x; }
     virtual float getY() { return constructorPointer->position.y; }
 
-public slots:
-	virtual void inputChanged(const QString &);
+signals:
+    void valueChanged(int blockId, const QString & value);
 
 protected:
     virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent * event);
-	
+
+private slots:
+    virtual void inputChanged(const QString &);
 
 private:
     const std::shared_ptr<Constructor> constructorPointer;
-	QLineEdit *inputBox;
+    QLineEdit *inputBox;
 };
 
 #endif

@@ -45,6 +45,9 @@ public:
     MainWindow();
     QSize getSceneViewSize();
 
+public slots:
+    void updateConstructorValue(int blockId, const QString & value);
+
 private slots:
     void splitterMovedEvent(int pos, int index);
     void resizeEvent(QResizeEvent* event);

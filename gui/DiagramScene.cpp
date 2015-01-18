@@ -144,6 +144,7 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
                 {
                     int blockId = manipulator->addConstructor(moduleName, blockName, pos);
                     item = new DiagramConstructor(projectModel->getBlocks().at(blockId), projectModel->getLibraries(), myItemMenu);
+                    connect(static_cast<DiagramConstructor *>(item), &DiagramConstructor::valueChanged, static_cast<MainWindow *>(parent()), &MainWindow::updateConstructorValue);
                 }
                 if (typeName == "Operations")
                 {
