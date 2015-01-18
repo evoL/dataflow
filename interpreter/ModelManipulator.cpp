@@ -23,7 +23,7 @@ void ModelManipulator::addLibrary(std::string& name)
         return;
 
     try {
-        model.libraries[name] = LibraryLoader::load(name);
+        model.libraries.insert(std::make_pair(name, LibraryLoader::load(name)));
     }
     catch (LibraryLoadError& error)
     {
@@ -78,7 +78,7 @@ int ModelManipulator::addOperation(std::string& module, std::string& name, Posit
     for (int i=0; i<(int)outputsFound->second.size(); ++i)
         outputs.push_back(OutputTransition {++maxOutputId});
 
-	return maxBlockId;
+    return maxBlockId;
 }
 
 int ModelManipulator::addConstructor(std::string& module, std::string& type, Position position)
@@ -102,7 +102,7 @@ int ModelManipulator::addConstructor(std::string& module, std::string& type, Pos
     model.blocks[maxBlockId] = std::shared_ptr<Block>(new Constructor(maxBlockId, module, type, position));
     model.blocks[maxBlockId]->outputs.push_back(OutputTransition {++maxOutputId});
 
-	return maxBlockId;
+    return maxBlockId;
 }
 
 void ModelManipulator::deleteBlock(int blockId)
@@ -132,7 +132,7 @@ void ModelManipulator::deleteBlock(int blockId)
     model.blocks.erase(blockId);
 }
 
-void ModelManipulator::setConstructorData(int blockId, std::string& data)
+void ModelManipulator::setConstructorData(int blockId, const std::string & data)
 {
     auto foundBlock = model.blocks.find(blockId);
     if (foundBlock == model.blocks.end() || foundBlock->second->blockType() != BlockType::Constructor)

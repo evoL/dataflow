@@ -35,7 +35,7 @@ public:
     int addConstructor(std::string& module, std::string& type, Position position = Position {0.0, 0.0});
     void deleteBlock(int blockId);
 
-    void setConstructorData(int blockId, std::string& data);
+    void setConstructorData(int blockId, const std::string & data);
     void setBlockPosition(int blockId, Position position);
 
     void addConnection(int outputBlockId, int outputIndex, int inputBlockId, int inputIndex);
