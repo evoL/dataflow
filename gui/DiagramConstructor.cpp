@@ -12,17 +12,17 @@ DiagramConstructor::DiagramConstructor(const std::shared_ptr<Block> blockPointer
     blockName->setAlignCenter(-1); //to do: block types, have to do sth with argument
     setBrush(myInputColor);
 
-    QLineEdit *block_input1;
-    block_input1=new QLineEdit();
+    inputBox = new QLineEdit();
     QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget(this);
-    block_input1->setFixedWidth(this->width - 15);
-    block_input1->setPlaceholderText("Input");
+    inputBox->setFixedWidth(this->width - 15);
+    inputBox->setPlaceholderText("Input");
+	inputBox->connect(inputBox, SIGNAL(textChanged(const QString &)), this, SLOT(inputChanged(const QString &)));
 
     if (!constructorPointer->data.empty()) {
-        block_input1->setText(QString::fromStdString(constructorPointer->data));
+        inputBox->setText(QString::fromStdString(constructorPointer->data));
     }
 
-    proxy->setWidget(block_input1);
+    proxy->setWidget(inputBox);
     proxy->setPos(3, blockName->getHeight() + 3);
 
     // Output circle
@@ -57,4 +57,9 @@ void DiagramConstructor::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     firstAction->setEnabled(false);
 
     DiagramBlock::contextMenuEvent(event);
+}
+
+void DiagramConstructor::inputChanged(const QString & newText)
+{
+	constructorPointer->data = newText.toStdString();
 }

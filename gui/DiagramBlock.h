@@ -32,8 +32,9 @@ QT_END_NAMESPACE
 
 class Arrow;
 
-class DiagramBlock : public QGraphicsRectItem
+class DiagramBlock : public QObject, public QGraphicsRectItem
 {
+	Q_OBJECT
 public:
     DiagramBlock() {}
     virtual int getId() = 0;
