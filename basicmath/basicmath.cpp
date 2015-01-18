@@ -68,7 +68,7 @@ extern "C"
     {
         dComplex& z = *(dComplex *)output;
 
-        if (sscanf(data, "%d %d", &z.re, &z.im) < 2)
+        if (sscanf(data, "%f %f", &z.re, &z.im) < 2)
             return false;
 
         return true;
