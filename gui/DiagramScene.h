@@ -57,6 +57,8 @@ signals:
     void itemSelected(QGraphicsItem * item);
 
 protected:
+	void keyPressEvent(QKeyEvent * keyEvent);
+	void keyReleaseEvent(QKeyEvent * keyEvent);
     void mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent);
     void mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent);
@@ -77,5 +79,7 @@ private:
     QGraphicsLineItem * line;
     QColor myTextColor;
     QColor myLineColor;
+
+	bool shiftIsDown;
 };
 #endif // DIAGRAMSCENE_H

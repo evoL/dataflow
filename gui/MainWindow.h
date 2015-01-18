@@ -46,6 +46,8 @@ class MainWindow : public QMainWindow
 public:
     MainWindow();
     QSize getSceneViewSize();
+	void clickPointerButton() { pointerButton->click(); }
+	void clickLinePointerButton() { linePointerButton->click(); }
 
 public slots:
     void updateConstructorValue(int blockId, const QString & value);
@@ -98,6 +100,8 @@ private:
 	QScopedPointer<QMenu> aboutMenu;
 	QScopedPointer<QToolBar> editToolBar;
 	QScopedPointer<QToolBar> pointerToolbar;
+	QScopedPointer<QToolButton> pointerButton;
+	QScopedPointer<QToolButton> linePointerButton;
 	QScopedPointer<QToolBar> fileToolbar;
 
     QScopedPointer<QButtonGroup> pointerTypeGroup;

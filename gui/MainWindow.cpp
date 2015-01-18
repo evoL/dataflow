@@ -391,16 +391,16 @@ void MainWindow::createMenus()
 
 void MainWindow::createToolbars()
 {
-    QToolButton * pointerButton = new QToolButton;
+    pointerButton.reset(new QToolButton);
     pointerButton->setCheckable(true);
     pointerButton->setChecked(true);
     pointerButton->setIcon(QIcon(":/images/pointer.png"));
-    QToolButton * linePointerButton = new QToolButton;
+    linePointerButton.reset(new QToolButton);
     linePointerButton->setCheckable(true);
     linePointerButton->setIcon(QIcon(":/images/linepointer.png"));
     pointerTypeGroup.reset(new QButtonGroup(this));
-    pointerTypeGroup->addButton(pointerButton, int(DiagramScene::MoveItem));
-    pointerTypeGroup->addButton(linePointerButton, int(DiagramScene::InsertLine));
+    pointerTypeGroup->addButton(pointerButton.data(), int(DiagramScene::MoveItem));
+    pointerTypeGroup->addButton(linePointerButton.data(), int(DiagramScene::InsertLine));
     connect(pointerTypeGroup.data(), SIGNAL(buttonClicked(int)),
             this, SLOT(pointerGroupClicked(int)));
 
@@ -410,8 +410,8 @@ void MainWindow::createToolbars()
     fileToolbar->addAction(executeAction.data());
 
     pointerToolbar.reset(addToolBar(tr("Pointer type")));
-    pointerToolbar->addWidget(pointerButton);
-    pointerToolbar->addWidget(linePointerButton);
+    pointerToolbar->addWidget(pointerButton.data());
+    pointerToolbar->addWidget(linePointerButton.data());
 
     editToolBar.reset(addToolBar(tr("Edit")));
     editToolBar->addAction(deleteAction.data());
