@@ -110,6 +110,8 @@ void ModelManipulator::deleteBlock(int blockId)
     if (model.blocks.find(blockId) == model.blocks.end())
         return;
 
+    unsetEntryPoint(blockId);
+
     auto& blockPtr = model.blocks[blockId];
 
     for (auto& it : model.blocks) {

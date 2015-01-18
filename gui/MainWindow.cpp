@@ -174,6 +174,8 @@ void MainWindow::deleteItem()
             break;
         }
     }
+
+    updateExecute();
 }
 
 void MainWindow::pointerGroupClicked(int)
