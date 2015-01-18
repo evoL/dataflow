@@ -11,6 +11,7 @@
 #include "ModelManipulator.h"
 #include "XMLParser.h"
 #include "Interpreter.h"
+#include "PreferencesDialog.h"
 
 #include <QMainWindow>
 #include <QScopedPointer>
@@ -64,6 +65,7 @@ private slots:
     void saveFile();
     void saveAs();
     void toggleEntryPoint();
+	void showProjectProperties();
     void openPanelMenu(const QPoint &);
 
 private:
@@ -89,6 +91,7 @@ private:
     QScopedPointer<QAction> saveAction;
     QScopedPointer<QAction> saveAsAction;
     QScopedPointer<QAction> entryPointAction;
+	QScopedPointer<QAction> projectPropertiesAction;
 
     QScopedPointer<QMenu> fileMenu;
 	QScopedPointer<QMenu> itemMenu;
@@ -98,7 +101,6 @@ private:
 	QScopedPointer<QToolBar> fileToolbar;
 
     QScopedPointer<QButtonGroup> pointerTypeGroup;
-	//QScopedPointer<QAction> lineAction;
 
     QString openedFileName;
     QScopedPointer<ProjectModel> projectModel;

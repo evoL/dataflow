@@ -7,5 +7,6 @@
         <file>images/save.png</file>
         <file>images/save-as.png</file>
         <file>images/open.png</file>
+        <file>images/gear.png</file>
     </qresource>
 </RCC>

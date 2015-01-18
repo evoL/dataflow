@@ -31,6 +31,8 @@ add_executable(dataflow_gui WIN32
     ModulesPanelModel.h
     ModulesPanelModel.cpp
     main.cpp
+	PreferencesDialog.h
+	PreferencesDialog.cpp
 )
 
 include_directories(

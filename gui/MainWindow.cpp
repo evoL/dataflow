@@ -254,6 +254,14 @@ void MainWindow::toggleEntryPoint()
     updateExecute();
 }
 
+void MainWindow::showProjectProperties()
+{
+	PreferencesDialog window(projectModel.data(), manipulator.data(), this);
+	if (window.exec() == QDialog::Accepted)
+		updateInterfaceState();
+}
+
+
 void MainWindow::openPanelMenu(const QPoint & pos)
 {
     static QList<QString> libraries{ "basicmath", "dstring", "io_module", "ppm" };
@@ -354,6 +362,10 @@ void MainWindow::createActions()
     entryPointAction->setCheckable(true);
     entryPointAction->setEnabled(false);
     connect(entryPointAction.data(), SIGNAL(triggered()), this, SLOT(toggleEntryPoint()));
+
+	projectPropertiesAction.reset(new QAction(QIcon(":/images/gear.png"), tr("Project properties"), this));
+	projectPropertiesAction->setShortcut(QKeySequence::Preferences);
+	connect(projectPropertiesAction.data(), SIGNAL(triggered()), this, SLOT(showProjectProperties()));
 }
 
 void MainWindow::createMenus()
@@ -364,6 +376,7 @@ void MainWindow::createMenus()
     fileMenu->addAction(saveAsAction.data());
     fileMenu->addSeparator();
     fileMenu->addAction(executeAction.data());
+	fileMenu->addAction(projectPropertiesAction.data());
     fileMenu->addSeparator();
     fileMenu->addAction(exitAction.data());
 
