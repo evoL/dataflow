@@ -9,7 +9,7 @@ DiagramOperation::DiagramOperation(const ProjectModel * model, const std::shared
     width = 150;
     height = 100;
 
-    blockName = new BlockDescription(QString::fromStdString(operationPointer->name), this);
+    blockName = new BlockDescription(QString::fromStdString(operationPointer->name).replace(QRegExp("([A-Z])"), " \\1"), this);
     blockName->setAlignCenter(0); //to do: block types, have to do sth with argument
     setBrush(myItemColor);
     updateAppearance();

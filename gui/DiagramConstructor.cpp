@@ -8,7 +8,7 @@ DiagramConstructor::DiagramConstructor(const std::shared_ptr<Block> blockPointer
     width = 150;
     height = 46;
 
-    blockName = new BlockDescription(QString::fromStdString(constructorPointer->type), this);
+    blockName = new BlockDescription(QString::fromStdString(constructorPointer->type).replace(QRegExp("([A-Z])"), " \\1"), this);
     blockName->setAlignCenter(-1); //to do: block types, have to do sth with argument
     setBrush(myInputColor);
 
