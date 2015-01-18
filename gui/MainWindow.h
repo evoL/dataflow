@@ -46,8 +46,8 @@ class MainWindow : public QMainWindow
 public:
     MainWindow();
     QSize getSceneViewSize();
-	void clickPointerButton() { pointerButton->click(); }
-	void clickLinePointerButton() { linePointerButton->click(); }
+    void clickPointerButton() { pointerButton->click(); }
+    void clickLinePointerButton() { linePointerButton->click(); }
 
 public slots:
     void updateConstructorValue(int blockId, const QString & value);
@@ -67,7 +67,7 @@ private slots:
     void saveFile();
     void saveAs();
     void toggleEntryPoint();
-	void showProjectProperties();
+    void showProjectProperties();
     void openPanelMenu(const QPoint &);
 
 private:
@@ -83,26 +83,27 @@ private:
     void addLibrary(const QString & name);
 
     QScopedPointer<DiagramScene> scene;
-	QScopedPointer<QGraphicsView> sceneView;
+    QScopedPointer<QGraphicsView> sceneView;
 
-	QScopedPointer<QAction> openFileAction;
-	QScopedPointer<QAction> exitAction;
-	QScopedPointer<QAction> deleteAction;
-	QScopedPointer<QAction> aboutAction;
+    QScopedPointer<QAction> newProjectAction;
+    QScopedPointer<QAction> openFileAction;
+    QScopedPointer<QAction> exitAction;
+    QScopedPointer<QAction> deleteAction;
+    QScopedPointer<QAction> aboutAction;
     QScopedPointer<QAction> executeAction;
     QScopedPointer<QAction> saveAction;
     QScopedPointer<QAction> saveAsAction;
     QScopedPointer<QAction> entryPointAction;
-	QScopedPointer<QAction> projectPropertiesAction;
+    QScopedPointer<QAction> projectPropertiesAction;
 
     QScopedPointer<QMenu> fileMenu;
-	QScopedPointer<QMenu> itemMenu;
-	QScopedPointer<QMenu> aboutMenu;
-	QScopedPointer<QToolBar> editToolBar;
-	QScopedPointer<QToolBar> pointerToolbar;
-	QScopedPointer<QToolButton> pointerButton;
-	QScopedPointer<QToolButton> linePointerButton;
-	QScopedPointer<QToolBar> fileToolbar;
+    QScopedPointer<QMenu> itemMenu;
+    QScopedPointer<QMenu> aboutMenu;
+    QScopedPointer<QToolBar> editToolBar;
+    QScopedPointer<QToolBar> pointerToolbar;
+    QScopedPointer<QToolButton> pointerButton;
+    QScopedPointer<QToolButton> linePointerButton;
+    QScopedPointer<QToolBar> fileToolbar;
 
     QScopedPointer<QButtonGroup> pointerTypeGroup;
 

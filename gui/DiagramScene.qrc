@@ -8,5 +8,6 @@
         <file>images/save-as.png</file>
         <file>images/open.png</file>
         <file>images/gear.png</file>
+        <file>images/new.png</file>
     </qresource>
 </RCC>

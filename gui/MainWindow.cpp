@@ -50,12 +50,15 @@ void MainWindow::panelViewCollapsedExpanded()
 
 void MainWindow::newProject()
 {
-    // TODO: if a project is open, ask to save
-
     projectModel.reset(new ProjectModel(tr("Untitled").toStdString()));
     manipulator.reset(new ModelManipulator(*projectModel));
     panelModel.reset(new ModulesPanelModel(projectModel.data()));
     updateInterfaceState();
+    updateExecute();
+
+    openedFileName = "";
+
+    scene->clear();
 }
 
 void MainWindow::openFile()
@@ -256,9 +259,9 @@ void MainWindow::toggleEntryPoint()
 
 void MainWindow::showProjectProperties()
 {
-	PreferencesDialog window(projectModel.data(), manipulator.data(), this);
-	if (window.exec() == QDialog::Accepted)
-		updateInterfaceState();
+    PreferencesDialog window(projectModel.data(), manipulator.data(), this);
+    if (window.exec() == QDialog::Accepted)
+        updateInterfaceState();
 }
 
 
@@ -327,8 +330,13 @@ void MainWindow::createModulesList()
 
 void MainWindow::createActions()
 {
+    newProjectAction.reset(new QAction(QIcon(":/images/new.png"), tr("&New"), this));
+    newProjectAction->setShortcut(QKeySequence::New);
+    newProjectAction->setStatusTip(tr("New project"));
+    connect(newProjectAction.data(), SIGNAL(triggered()), this, SLOT(newProject()));
+
     openFileAction.reset(new QAction(QIcon(":/images/open.png"), tr("&Open..."), this));
-    openFileAction->setShortcut(tr("Ctrl+O"));
+    openFileAction->setShortcut(QKeySequence::Open);
     openFileAction->setStatusTip(tr("Load project file"));
     connect(openFileAction.data(), SIGNAL(triggered()), this, SLOT(openFile()));
 
@@ -363,20 +371,21 @@ void MainWindow::createActions()
     entryPointAction->setEnabled(false);
     connect(entryPointAction.data(), SIGNAL(triggered()), this, SLOT(toggleEntryPoint()));
 
-	projectPropertiesAction.reset(new QAction(QIcon(":/images/gear.png"), tr("Project properties"), this));
-	projectPropertiesAction->setShortcut(QKeySequence::Preferences);
-	connect(projectPropertiesAction.data(), SIGNAL(triggered()), this, SLOT(showProjectProperties()));
+    projectPropertiesAction.reset(new QAction(QIcon(":/images/gear.png"), tr("Project properties"), this));
+    projectPropertiesAction->setShortcut(QKeySequence::Preferences);
+    connect(projectPropertiesAction.data(), SIGNAL(triggered()), this, SLOT(showProjectProperties()));
 }
 
 void MainWindow::createMenus()
 {
     fileMenu.reset(menuBar()->addMenu(tr("&File")));
+    fileMenu->addAction(newProjectAction.data());
     fileMenu->addAction(openFileAction.data());
     fileMenu->addAction(saveAction.data());
     fileMenu->addAction(saveAsAction.data());
     fileMenu->addSeparator();
     fileMenu->addAction(executeAction.data());
-	fileMenu->addAction(projectPropertiesAction.data());
+    fileMenu->addAction(projectPropertiesAction.data());
     fileMenu->addSeparator();
     fileMenu->addAction(exitAction.data());
 
@@ -405,6 +414,7 @@ void MainWindow::createToolbars()
             this, SLOT(pointerGroupClicked(int)));
 
     fileToolbar.reset(addToolBar(tr("File")));
+    fileToolbar->addAction(newProjectAction.data());
     fileToolbar->addAction(openFileAction.data());
     fileToolbar->addAction(saveAction.data());
     fileToolbar->addAction(executeAction.data());
