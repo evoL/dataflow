@@ -219,12 +219,19 @@ void MainWindow::execute()
     // TODO: we're assuming the Manipulator will be constantly checking for
     //       correctness, so I don't add it here
 
+	streambuf* oldCoutStreamBuf = cout.rdbuf();
+	ostringstream strCout;
+	cout.rdbuf(strCout.rdbuf());
+
     try {
         Interpreter interpreter(*projectModel);
         interpreter.interpret();
     } catch (InterpreterError e) {
         QMessageBox::critical(this, tr("Runtime error"), e.what());
     }
+
+	cout.rdbuf(oldCoutStreamBuf);
+	programOutputTextbox->setPlainText(QString::fromStdString(strCout.str()));
 }
 
 void MainWindow::saveFile()
