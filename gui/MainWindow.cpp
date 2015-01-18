@@ -1,4 +1,5 @@
 #include "MainWindow.h"
+#include <sstream>
 
 using namespace std;
 
@@ -16,10 +17,24 @@ MainWindow::MainWindow()
     splitter->addWidget(panelView.data());
     sceneView.reset(new QGraphicsView(scene.data()));
     sceneView->setSizeAdjustPolicy(QAbstractScrollArea::SizeAdjustPolicy::AdjustToContentsOnFirstShow);
-    splitter->addWidget(sceneView.data());
+
+    QSplitter * subSplitter = new QSplitter;
+    subSplitter->setOrientation(Qt::Vertical);
+    subSplitter->addWidget(sceneView.data());
+
+    programOutputTextbox.reset(new QPlainTextEdit());
+	programOutputTextbox->setReadOnly(true);
+
+    subSplitter->addWidget(sceneView.data());
+    subSplitter->addWidget(programOutputTextbox.data());
+    subSplitter->setSizes({ 450, 50 });
+	
+    splitter->addWidget(subSplitter);
     setCentralWidget(splitter);
     splitter->setSizes({ 190, 805 });
-    connect(splitter, SIGNAL(splitterMoved(int, int)), this, SLOT(splitterMovedEvent(int,int)));
+
+    connect(splitter, SIGNAL(splitterMoved(int, int)), this, SLOT(splitterMovedEvent(int, int)));
+    connect(subSplitter, SIGNAL(splitterMoved(int, int)), this, SLOT(splitterMovedEvent(int, int)));
 
     setWindowTitle(tr("Dataflow Creator"));
     setUnifiedTitleAndToolBarOnMac(true);

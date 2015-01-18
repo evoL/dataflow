@@ -113,5 +113,7 @@ private:
 
     QScopedPointer<ModulesPanelModel> panelModel;
     QScopedPointer<QTreeView> panelView;
+
+    QScopedPointer<QPlainTextEdit> programOutputTextbox;
 };
 #endif // MAINWINDOW_H
