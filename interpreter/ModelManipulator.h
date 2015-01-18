@@ -23,16 +23,16 @@ public:
     ModelManipulator(const ModelManipulator&) = delete;
     const ModelManipulator& operator=(const ModelManipulator&) = delete;
 
-    void setProjectName(std::string& name);
+    void setProjectName(const std::string & name);
 
-    void addLibrary(std::string& name);
-    void deleteLibrary(std::string& name);
+    void addLibrary(const std::string & name);
+    void deleteLibrary(const std::string & name);
 
     void setEntryPoint(int blockId);
     void unsetEntryPoint(int blockId);
 
-    int addOperation(std::string& module, std::string& name, Position position = Position {0.0, 0.0});
-    int addConstructor(std::string& module, std::string& type, Position position = Position {0.0, 0.0});
+    int addOperation(const std::string & module, const std::string & name, Position position = Position {0.0, 0.0});
+    int addConstructor(const std::string & module, const std::string & type, Position position = Position {0.0, 0.0});
     void deleteBlock(int blockId);
 
     void setConstructorData(int blockId, const std::string & data);

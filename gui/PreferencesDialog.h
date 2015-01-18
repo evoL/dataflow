@@ -10,27 +10,27 @@
 
 class PreferencesDialog : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	PreferencesDialog(ProjectModel * projectModel, ModelManipulator * manipulator, QWidget * parent);
-	~PreferencesDialog();
+    PreferencesDialog(ProjectModel * projectModel, ModelManipulator * manipulator, QWidget * parent);
+    ~PreferencesDialog();
 
 private slots:
-	virtual void savePreferencesClicked();
+    virtual void savePreferencesClicked();
 
 private:
-	ModelManipulator * manipulator;
+    ModelManipulator * manipulator;
 
-	QScopedPointer<QVBoxLayout> mainLayout;
+    QScopedPointer<QVBoxLayout> mainLayout;
 
-	QScopedPointer<QHBoxLayout> nameLayout;
-	QScopedPointer<QLabel> nameLabel;
-	QScopedPointer<QLineEdit> nameEdit;
+    QScopedPointer<QHBoxLayout> nameLayout;
+    QScopedPointer<QLabel> nameLabel;
+    QScopedPointer<QLineEdit> nameEdit;
 
-	QScopedPointer<QHBoxLayout> buttonsLayout;
-	QScopedPointer<QPushButton> okButton;
-	QScopedPointer<QPushButton> cancelButton;
+    QScopedPointer<QHBoxLayout> buttonsLayout;
+    QScopedPointer<QPushButton> okButton;
+    QScopedPointer<QPushButton> cancelButton;
 
 };
 
-#endif PREFERENCESDIALOG_H
+#endif

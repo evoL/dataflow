@@ -12,12 +12,12 @@ ModelManipulator::ModelManipulator(ProjectModel& model)
 }
 
 
-void ModelManipulator::setProjectName(std::string& name)
+void ModelManipulator::setProjectName(const std::string & name)
 {
     model.name = name;
 }
 
-void ModelManipulator::addLibrary(std::string& name)
+void ModelManipulator::addLibrary(const std::string & name)
 {
     if (model.libraries.find(name) != model.libraries.end())
         return;
@@ -31,7 +31,7 @@ void ModelManipulator::addLibrary(std::string& name)
     }
 }
 
-void ModelManipulator::deleteLibrary(std::string& name)
+void ModelManipulator::deleteLibrary(const std::string & name)
 {
     for (auto& it : model.blocks) {
         if (it.second->module == name)
@@ -62,7 +62,7 @@ void ModelManipulator::unsetEntryPoint(int blockId)
     }
 }
 
-int ModelManipulator::addOperation(std::string& module, std::string& name, Position position)
+int ModelManipulator::addOperation(const std::string & module, const std::string & name, Position position)
 {
     auto libFound = model.libraries.find(module);
     if (libFound == model.libraries.end())
@@ -81,7 +81,7 @@ int ModelManipulator::addOperation(std::string& module, std::string& name, Posit
     return maxBlockId;
 }
 
-int ModelManipulator::addConstructor(std::string& module, std::string& type, Position position)
+int ModelManipulator::addConstructor(const std::string & module, const std::string & type, Position position)
 {
     auto libFound = model.libraries.find(module);
     if (libFound == model.libraries.end())
@@ -175,14 +175,14 @@ void ModelManipulator::addConnection(int outputBlockId, int outputIndex, int inp
     auto inputTypes = inputLib.getInputs().find(inputBlock.name);
     if (inputIndex >= inputTypes->second.size() || inputIndex < 0)
         throw ModelManipulatorError("Invalid input index");
-    const std::string& inputType = inputTypes->second[inputIndex];
+    const std::string & inputType = inputTypes->second[inputIndex];
 
     if (outputBlock.blockType() == BlockType::Operation) {
         Operation& outputOperation = dynamic_cast<Operation&>(outputBlock);
         auto outputTypes = outputLib.getOutputs().find(outputOperation.name);
         if (outputIndex > outputTypes->second.size() || outputIndex < 0)
             throw ModelManipulatorError("Invalid output index");
-        const std::string& outputType = outputTypes->second[outputIndex];
+        const std::string & outputType = outputTypes->second[outputIndex];
         if (outputType != inputType)
             throw ModelManipulatorError("Connection does not type itself");
 
@@ -283,7 +283,7 @@ void ModelManipulator::ensureModelCorrectness()
                                                 + ") is not connected");
 
                 // get the type of input
-                const std::string& inputType = inputs->second[it2.first];
+                const std::string & inputType = inputs->second[it2.first];
 
                 // get the type of output
                 auto foundOutputLib = libraries.find(outputBlock->module);
