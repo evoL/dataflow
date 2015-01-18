@@ -162,7 +162,7 @@ extern "C"
     
     PPM_API const char * DATAFLOW_MODULE ApplyFilterPpm_inputs()
     {
-        return "ppm.Ppm\0ppm.ImageFilter\0basicmath.Integer";
+        return "ppm.Ppm\0ppm.ImageFilter\0basicmath.Integer\0";
     }
     
     PPM_API const char * DATAFLOW_MODULE SavePpm_outputs()
