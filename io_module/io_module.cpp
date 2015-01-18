@@ -1,6 +1,5 @@
 #include "io_module.h"
-#include <cstdlib>
-#include <cstdio>
+#include <iostream>
 
 extern "C"
 {
@@ -74,7 +73,7 @@ extern "C"
         if (inputs == NULL) return false;
 
         dInteger& value = *(dInteger *)(inputs[0]);
-        printf("%d\n", value);
+        std::cout << value << "\n";
         return true;
     }
 
@@ -83,7 +82,7 @@ extern "C"
         if (inputs == NULL) return false;
 
         dReal& value = *(dReal *)(inputs[0]);
-        printf("%f\n", value);
+        std::cout << value << "\n";
         return true;
     }
 
@@ -92,7 +91,7 @@ extern "C"
         if (inputs == NULL) return false;
 
         dComplex& value = *(dComplex *)(inputs[0]);
-        printf("%f %fi\n", value.re, value.im);
+        std::cout << value.re << " " << value.im << "i\n";
         return true;
     }
 
@@ -101,7 +100,7 @@ extern "C"
         if (inputs == NULL) return false;
 
         dRational& value = *(dRational *)(inputs[0]);
-        printf("%d / %d\n", value.numerator, value.denominator);
+        std::cout << value.numerator << " / " << value.denominator << "\n";
         return true;
     }
 
@@ -110,7 +109,7 @@ extern "C"
         if (inputs == NULL) return false;
 
         dString& value = *(dString *)(inputs[0]);
-        printf("%s\n", value);
+        std::cout << value << "\n";
         return true;
     }
 }
