@@ -20,7 +20,7 @@ DiagramScene::DiagramScene(ModulesPanelModel * panelModel, QTreeView * panelView
     height = minHeight;*/
     setSceneSizeAndGradient(QSize(50,50));
 
-	shiftIsDown = false;
+    shiftIsDown = false;
 }
 
 void DiagramScene::setSceneSizeAndGradient(QSize size)
@@ -126,24 +126,24 @@ void DiagramScene::setMode(Mode mode)
 
 void DiagramScene::keyPressEvent(QKeyEvent * keyEvent)
 {
-	if (keyEvent->key() == Qt::Key_Shift)
-	{
-		mainWindow->clickLinePointerButton();
-		shiftIsDown = true;
-	}
-	QGraphicsScene::keyPressEvent(keyEvent);
+    if (keyEvent->key() == Qt::Key_Shift)
+    {
+        mainWindow->clickLinePointerButton();
+        shiftIsDown = true;
+    }
+    QGraphicsScene::keyPressEvent(keyEvent);
 }
 
 void DiagramScene::keyReleaseEvent(QKeyEvent * keyEvent)
 {
-	if (keyEvent->key() == Qt::Key_Shift)
-	{
-		mainWindow->clickPointerButton();
-		if (line) removeItem(line);
-		line = NULL;
-		shiftIsDown = false;
-	}
-	QGraphicsScene::keyReleaseEvent(keyEvent);
+    if (keyEvent->key() == Qt::Key_Shift)
+    {
+        mainWindow->clickPointerButton();
+        if (line) removeItem(line);
+        line = NULL;
+        shiftIsDown = false;
+    }
+    QGraphicsScene::keyReleaseEvent(keyEvent);
 }
 
 void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
@@ -157,6 +157,9 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
     switch (myMode) {
     case InsertItem:
         if (panelView->currentIndex().isValid()) {
+            // Only allow deeper levels
+            if (!panelView->currentIndex().parent().isValid()) break;
+
             blockName = panelView->currentIndex().data().toString().toStdString();
             typeName = panelView->currentIndex().parent().data().toString().toStdString();
             moduleName = panelModel->getLibraryPtr(panelView->currentIndex().parent().parent())->getName();
@@ -190,7 +193,7 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
         }
         break;
 
-	case InsertLine:
+    case InsertLine:
         line = new QGraphicsLineItem(QLineF(mouseEvent->scenePos(),
                                             mouseEvent->scenePos()));
         line->setPen(QPen(myLineColor, 2));
@@ -210,7 +213,7 @@ void DiagramScene::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
         QLineF newLine(line->line().p1(), mouseEvent->scenePos());
         line->setLine(newLine);
     } else if (myMode == MoveItem) {
-		QGraphicsScene::mouseMoveEvent(mouseEvent);
+        QGraphicsScene::mouseMoveEvent(mouseEvent);
     }
 }
 
@@ -229,7 +232,7 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
 
         removeItem(line);
         delete line;
-		line = NULL;
+        line = NULL;
 
         Arrow * arrow = nullptr;
         BlockIn * startItem = nullptr;
@@ -285,13 +288,13 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
         }
         catch (ModelManipulatorError error) {
             std::cerr << error.what() << std::endl;
-			if (shiftIsDown) {
-				mainWindow->clickPointerButton();
-				shiftIsDown = false;
-			}
+            if (shiftIsDown) {
+                mainWindow->clickPointerButton();
+                shiftIsDown = false;
+            }
             QMessageBox::warning(mainWindow, "Connecting error", error.what());
             if (arrow) removeItem(arrow);
-			
+
         }
     }
     else if (myMode == MoveItem) {
@@ -310,6 +313,6 @@ void DiagramScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
         }
     }
 
-	if (line) removeItem(line);
+    if (line) removeItem(line);
     QGraphicsScene::mouseReleaseEvent(mouseEvent);
 }

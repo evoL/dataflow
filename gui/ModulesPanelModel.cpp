@@ -48,6 +48,13 @@ void ModulesPanelModel::addLibrary(const Library &library)
     endInsertRows();
 }
 
+void ModulesPanelModel::removeLibraryAtRow(int row)
+{
+    beginRemoveRows(QModelIndex(), row, row);
+    rootItem->removeAt(row);
+    endRemoveRows();
+}
+
 QModelIndex ModulesPanelModel::index(int row, int column, const QModelIndex & parent) const
 {
     ModulesPanelItem *parentItem;
@@ -117,11 +124,20 @@ Qt::ItemFlags ModulesPanelModel::flags(const QModelIndex &index) const
     if (!index.isValid())
         return 0;
 
-    if (static_cast<ModulesPanelItem*>(index.internalPointer())->getItemType() == ModulesPanelItem::ItemType::OperationT ||
-        static_cast<ModulesPanelItem*>(index.internalPointer())->getItemType() == ModulesPanelItem::ItemType::ConstructorT)
-        return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    Qt::ItemFlags flags = Qt::ItemIsEnabled;
+    auto type = static_cast<ModulesPanelItem *>(index.internalPointer())->getItemType();
 
-    return Qt::ItemIsEnabled;
+    switch (type) {
+    case ModulesPanelItem::ItemType::OperationT:
+    case ModulesPanelItem::ItemType::ConstructorT:
+    case ModulesPanelItem::ItemType::LibraryT:
+        flags |= Qt::ItemIsSelectable;
+        break;
+    default:
+        break;
+    }
+
+    return flags;
 }
 
 std::shared_ptr<const Block> ModulesPanelModel::getBlockPtr(const QModelIndex &index) const

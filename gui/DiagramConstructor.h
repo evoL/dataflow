@@ -46,6 +46,8 @@ public:
     virtual float getX() { return constructorPointer->position.x; }
     virtual float getY() { return constructorPointer->position.y; }
 
+    virtual QString moduleName();
+
 signals:
     void valueChanged(int blockId, const QString & value);
 

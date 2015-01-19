@@ -34,15 +34,15 @@ DiagramOperation::DiagramOperation(const ProjectModel * model, const std::shared
         exit->drawOut(QStringLiteral("%2").arg(QString::fromStdString(outputs.at(i)).section('.', 1)));
     }
 
-	/*if (blockName->isLong()) {
-			width = 200;
-			blockName->setTextWidth(250);
-		}
+    /*if (blockName->isLong()) {
+            width = 200;
+            blockName->setTextWidth(250);
+        }
 
-	height = height + (blockName->scale());*/
+    height = height + (blockName->scale());*/
 
-	height = blockName->getHeight() + (In.size() > Out.size() ? In.size() * 20 : Out.size() * 20) + 5;
-	setRect(0, 0, width, height);
+    height = blockName->getHeight() + (In.size() > Out.size() ? In.size() * 20 : Out.size() * 20) + 5;
+    setRect(0, 0, width, height);
 
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);
@@ -52,6 +52,11 @@ DiagramOperation::DiagramOperation(const ProjectModel * model, const std::shared
 
 DiagramOperation::~DiagramOperation()
 {
+}
+
+QString DiagramOperation::moduleName()
+{
+    return QString::fromStdString(operationPointer->module);
 }
 
 void DiagramOperation::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)

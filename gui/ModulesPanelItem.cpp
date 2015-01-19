@@ -65,9 +65,14 @@ QVariant ModulesPanelItem::data()
     }
 }
 
+void ModulesPanelItem::removeAt(int row)
+{
+    children.removeAt(row);
+}
+
 ModulesPanelItem * ModulesPanelItem::addLibrary(const Library * library)
 {
-    ModulesPanelItem * newLibrary = new ModulesPanelItem(library->getNameToPrint(), library, LibraryT, this);
+    ModulesPanelItem * newLibrary = new ModulesPanelItem(library->getName(), library, LibraryT, this);
     children.push_back(newLibrary);
     return newLibrary;
 }

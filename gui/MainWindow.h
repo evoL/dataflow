@@ -69,6 +69,7 @@ private slots:
     void toggleEntryPoint();
     void showProjectProperties();
     void openPanelMenu(const QPoint &);
+    void removeLibrary();
 
 private:
     void createModulesList();

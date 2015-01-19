@@ -41,6 +41,8 @@ public:
     virtual float getX() { return operationPointer->position.x;  }
     virtual float getY() { return operationPointer->position.y; }
 
+    virtual QString moduleName();
+
     bool isEntryPoint();
     void updateAppearance();
 

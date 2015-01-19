@@ -23,12 +23,12 @@ MainWindow::MainWindow()
     subSplitter->addWidget(sceneView.data());
 
     programOutputTextbox.reset(new QPlainTextEdit());
-	programOutputTextbox->setReadOnly(true);
+    programOutputTextbox->setReadOnly(true);
 
     subSplitter->addWidget(sceneView.data());
     subSplitter->addWidget(programOutputTextbox.data());
     subSplitter->setSizes({ 450, 50 });
-	
+
     splitter->addWidget(subSplitter);
     setCentralWidget(splitter);
     splitter->setSizes({ 190, 805 });
@@ -216,12 +216,9 @@ void MainWindow::about()
 
 void MainWindow::execute()
 {
-    // TODO: we're assuming the Manipulator will be constantly checking for
-    //       correctness, so I don't add it here
-
-	streambuf* oldCoutStreamBuf = cout.rdbuf();
-	ostringstream strCout;
-	cout.rdbuf(strCout.rdbuf());
+    streambuf* oldCoutStreamBuf = cout.rdbuf();
+    ostringstream strCout;
+    cout.rdbuf(strCout.rdbuf());
 
     try {
         Interpreter interpreter(*projectModel);
@@ -230,8 +227,8 @@ void MainWindow::execute()
         QMessageBox::critical(this, tr("Runtime error"), e.what());
     }
 
-	cout.rdbuf(oldCoutStreamBuf);
-	programOutputTextbox->setPlainText(QString::fromStdString(strCout.str()));
+    cout.rdbuf(oldCoutStreamBuf);
+    programOutputTextbox->setPlainText(QString::fromStdString(strCout.str()));
 }
 
 void MainWindow::saveFile()
@@ -306,7 +303,43 @@ void MainWindow::openPanelMenu(const QPoint & pos)
 
     QMenu menu;
     menu.addMenu(&libraryMenu);
+
+    QModelIndex index = panelView->currentIndex();
+    if (index.isValid() && !index.parent().isValid()) {
+        QAction * action = menu.addAction(tr("Remove library"));
+        connect(action, SIGNAL(triggered()), this, SLOT(removeLibrary()));
+    }
+
     menu.exec(panelView->mapToGlobal(pos));
+}
+
+void MainWindow::removeLibrary()
+{
+    QModelIndex index = panelView->currentIndex();
+    auto moduleName = index.data().toString();
+
+    panelModel->removeLibraryAtRow(index.row());
+
+    QList<QGraphicsItem *> itemsToRemove;
+
+    // As we cannot rerender, let's delete blocks and hope we don't introduce
+    // inconsistencies.
+    foreach (QGraphicsItem * item, scene->items()) {
+        if (item->type() != DiagramConstructor::Type && item->type() != DiagramOperation::Type)
+            continue;
+
+        auto block = static_cast<DiagramBlock *>(item);
+        if (block->moduleName() != moduleName) continue;
+
+        block->removeArrows();
+        itemsToRemove.append(item);
+    }
+
+    manipulator->deleteLibrary(moduleName.toStdString());
+
+    foreach (QGraphicsItem * item, itemsToRemove) {
+        scene->removeItem(item);
+    }
 }
 
 void MainWindow::updateConstructorValue(int blockId, const QString & value)

@@ -49,6 +49,11 @@ DiagramConstructor::~DiagramConstructor()
 {
 }
 
+QString DiagramConstructor::moduleName()
+{
+    return QString::fromStdString(constructorPointer->module);
+}
+
 void DiagramConstructor::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
     // See the comment in DiagramOperation.cpp

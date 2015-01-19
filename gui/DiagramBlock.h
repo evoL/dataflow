@@ -34,7 +34,7 @@ class Arrow;
 
 class DiagramBlock : public QObject, public QGraphicsRectItem
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
     DiagramBlock() {}
     virtual int getId() = 0;
@@ -50,6 +50,8 @@ public:
     void addArrow(Arrow * arrow);
     void removeArrow(Arrow * arrow);
     void removeArrows();
+
+    virtual QString moduleName() = 0;
 
     BlockDescription * blockName;
 

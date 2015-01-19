@@ -18,6 +18,7 @@ public:
 
     void loadFromProjectModel(ProjectModel * projectModel);
     void addLibrary(const Library & library);
+    void removeLibraryAtRow(int row);
 
     QModelIndex index(int row, int column, const QModelIndex & parent = QModelIndex()) const;
     QModelIndex parent(const QModelIndex & index) const;
