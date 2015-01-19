@@ -27,11 +27,11 @@ MainWindow::MainWindow()
 
     subSplitter->addWidget(sceneView.data());
     subSplitter->addWidget(programOutputTextbox.data());
-    subSplitter->setSizes({ 450, 50 });
+	subSplitter->setSizes(QList<int>() << 450 << 50);
 
     splitter->addWidget(subSplitter);
     setCentralWidget(splitter);
-    splitter->setSizes({ 190, 805 });
+    splitter->setSizes(QList<int>() << 190 << 805);
 
     connect(splitter, SIGNAL(splitterMoved(int, int)), this, SLOT(splitterMovedEvent(int, int)));
     connect(subSplitter, SIGNAL(splitterMoved(int, int)), this, SLOT(splitterMovedEvent(int, int)));
@@ -291,7 +291,8 @@ void MainWindow::showProjectProperties()
 
 void MainWindow::openPanelMenu(const QPoint & pos)
 {
-    static QList<QString> libraries{ "basicmath", "dstring", "io_module", "ppm" };
+    static QList<QString> libraries = QList<QString>() << "basicmath" << "dstring" << "io_module" << "ppm";
+	//static QList<QString> libraries{ "basicmath", "dstring", "io_module", "ppm" };
     auto & includedLibraries = projectModel->getLibraries();
 
     QMenu libraryMenu;
@@ -404,7 +405,7 @@ void MainWindow::createActions()
     connect(openFileAction.data(), SIGNAL(triggered()), this, SLOT(openFile()));
 
     deleteAction.reset(new QAction(QIcon(":/images/delete.png"), tr("&Delete"), this));
-    deleteAction->setShortcuts(QList<QKeySequence> { tr("Delete"), tr("Backspace") });
+    deleteAction->setShortcuts(QList<QKeySequence>() << tr("Delete") << tr("Backspace"));
     deleteAction->setStatusTip(tr("Delete item from diagram"));
     connect(deleteAction.data(), SIGNAL(triggered()), this, SLOT(deleteItem()));
 
