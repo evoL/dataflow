@@ -13,7 +13,7 @@ DiagramConstructor::DiagramConstructor(const std::shared_ptr<Block> blockPointer
     setBrush(myInputColor);
 
     inputBox = new QLineEdit();
-    QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget(this);
+    QGraphicsProxyWidget * proxy = new QGraphicsProxyWidget(this);
     inputBox->setFixedWidth(this->width - 15);
     inputBox->setPlaceholderText("Input");
     inputBox->connect(inputBox, SIGNAL(textChanged(const QString &)), this, SLOT(inputChanged(const QString &)));
@@ -54,10 +54,10 @@ QString DiagramConstructor::moduleName()
     return QString::fromStdString(constructorPointer->module);
 }
 
-void DiagramConstructor::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+void DiagramConstructor::contextMenuEvent(QGraphicsSceneContextMenuEvent * event)
 {
     // See the comment in DiagramOperation.cpp
-    QAction *firstAction = myContextMenu->actions().first();
+    QAction * firstAction = myContextMenu->actions().first();
     firstAction->setChecked(false);
     firstAction->setEnabled(false);
 

@@ -53,7 +53,7 @@ extern "C"
 
     BASIC_MATH_API bool DATAFLOW_MODULE Rational_construct(const char * data, void * output)
     {
-        dRational& r = *(dRational *)output;
+        dRational & r = *(dRational *)output;
 
         if (sscanf(data, "%d %d", &r.numerator, &r.denominator) < 2)
             return false;
@@ -66,7 +66,7 @@ extern "C"
 
     BASIC_MATH_API bool DATAFLOW_MODULE Complex_construct(const char * data, void * output)
     {
-        dComplex& z = *(dComplex *)output;
+        dComplex & z = *(dComplex *)output;
 
         if (sscanf(data, "%f %f", &z.re, &z.im) < 2)
             return false;
@@ -308,9 +308,9 @@ extern "C"
 
     BASIC_MATH_API bool AddRationals_execute(void * const * inputs, void * const * outputs)
     {
-        dRational& r1 = *(dRational *)(inputs[0]);
-        dRational& r2 = *(dRational *)(inputs[1]);
-        dRational& res = *(dRational *)(outputs[0]);
+        dRational & r1 = *(dRational *)(inputs[0]);
+        dRational & r2 = *(dRational *)(inputs[1]);
+        dRational & res = *(dRational *)(outputs[0]);
 
         res.numerator = r1.numerator * r2.denominator + r2.numerator * r1.denominator;
         res.denominator = r1.denominator * r2.denominator;
@@ -321,9 +321,9 @@ extern "C"
 
     BASIC_MATH_API bool AddComplex_execute(void * const * inputs, void * const * outputs)
     {
-        dComplex& z1 = *(dComplex *)(inputs[0]);
-        dComplex& z2 = *(dComplex *)(inputs[1]);
-        dComplex& res = *(dComplex *)(outputs[0]);
+        dComplex & z1 = *(dComplex *)(inputs[0]);
+        dComplex & z2 = *(dComplex *)(inputs[1]);
+        dComplex & res = *(dComplex *)(outputs[0]);
 
         res.re = z1.re + z2.re;
         res.im = z1.im + z2.im;
@@ -345,9 +345,9 @@ extern "C"
 
     BASIC_MATH_API bool SubRationals_execute(void * const * inputs, void * const * outputs)
     {
-        dRational& r1 = *(dRational *)(inputs[0]);
-        dRational& r2 = *(dRational *)(inputs[1]);
-        dRational& res = *(dRational *)(outputs[0]);
+        dRational & r1 = *(dRational *)(inputs[0]);
+        dRational & r2 = *(dRational *)(inputs[1]);
+        dRational & res = *(dRational *)(outputs[0]);
 
         res.numerator = r1.numerator * r2.denominator - r2.numerator * r1.denominator;
         res.denominator = r1.denominator * r2.denominator;
@@ -358,9 +358,9 @@ extern "C"
 
     BASIC_MATH_API bool SubComplex_execute(void * const * inputs, void * const * outputs)
     {
-        dComplex& z1 = *(dComplex *)(inputs[0]);
-        dComplex& z2 = *(dComplex *)(inputs[1]);
-        dComplex& res = *(dComplex *)(outputs[0]);
+        dComplex & z1 = *(dComplex *)(inputs[0]);
+        dComplex & z2 = *(dComplex *)(inputs[1]);
+        dComplex & res = *(dComplex *)(outputs[0]);
 
         res.re = z1.re - z2.re;
         res.im = z1.im - z2.im;
@@ -382,9 +382,9 @@ extern "C"
 
     BASIC_MATH_API bool MultRationals_execute(void * const * inputs, void * const * outputs)
     {
-        dRational& r1 = *(dRational *)(inputs[0]);
-        dRational& r2 = *(dRational *)(inputs[1]);
-        dRational& res = *(dRational *)(outputs[0]);
+        dRational & r1 = *(dRational *)(inputs[0]);
+        dRational & r2 = *(dRational *)(inputs[1]);
+        dRational & res = *(dRational *)(outputs[0]);
 
         res.numerator = r1.numerator * r2.numerator;
         res.denominator = r1.denominator * r2.denominator;
@@ -395,9 +395,9 @@ extern "C"
 
     BASIC_MATH_API bool MultComplex_execute(void * const * inputs, void * const * outputs)
     {
-        dComplex& z1 = *(dComplex *)(inputs[0]);
-        dComplex& z2 = *(dComplex *)(inputs[1]);
-        dComplex& res = *(dComplex *)(outputs[0]);
+        dComplex & z1 = *(dComplex *)(inputs[0]);
+        dComplex & z2 = *(dComplex *)(inputs[1]);
+        dComplex & res = *(dComplex *)(outputs[0]);
 
         res.re = z1.re * z2.re - z1.im * z2.im;
         res.im = z1.im * z2.re + z2.im * z1.re;
@@ -419,11 +419,12 @@ extern "C"
 
     BASIC_MATH_API bool DivRationals_execute(void * const * inputs, void * const * outputs)
     {
-        dRational& r1 = *(dRational *)(inputs[0]);
-        dRational& r2 = *(dRational *)(inputs[1]);
-        dRational& res = *(dRational *)(outputs[0]);
+        dRational & r1 = *(dRational *)(inputs[0]);
+        dRational & r2 = *(dRational *)(inputs[1]);
+        dRational & res = *(dRational *)(outputs[0]);
 
         res.numerator = r1.numerator * r2.denominator;
+
         if ((res.denominator = r1.denominator * r2.numerator) < 0)
             return false;
 
@@ -434,9 +435,9 @@ extern "C"
 
     BASIC_MATH_API bool DivComplex_execute(void * const * inputs, void * const * outputs)
     {
-        dComplex& z1 = *(dComplex *)(inputs[0]);
-        dComplex& z2 = *(dComplex *)(inputs[1]);
-        dComplex& res = *(dComplex *)(outputs[0]);
+        dComplex & z1 = *(dComplex *)(inputs[0]);
+        dComplex & z2 = *(dComplex *)(inputs[1]);
+        dComplex & res = *(dComplex *)(outputs[0]);
 
         dReal divisor = z2.re * z2.re + z2.im * z2.im;
         res.re = (z1.re * z2.re + z1.im * z2.im) / divisor;
@@ -447,8 +448,8 @@ extern "C"
 
     BASIC_MATH_API bool DATAFLOW_MODULE RealFromInteger_execute(void * const * inputs, void * const * outputs)
     {
-        dInteger& i = *(dInteger *)(inputs[0]);
-        dReal& r = *(dReal *)(outputs[0]);
+        dInteger & i = *(dInteger *)(inputs[0]);
+        dReal & r = *(dReal *)(outputs[0]);
         r = (dReal)i;
 
         return true;
@@ -456,8 +457,8 @@ extern "C"
 
     BASIC_MATH_API bool DATAFLOW_MODULE IntegerFromReal_execute(void * const * inputs, void * const * outputs)
     {
-        dReal& r = *(dReal *)(inputs[0]);
-        dInteger& i = *(dInteger *)(outputs[0]);
+        dReal & r = *(dReal *)(inputs[0]);
+        dInteger & i = *(dInteger *)(outputs[0]);
         i = (dInteger)r;
 
         return true;
@@ -465,8 +466,8 @@ extern "C"
 
     BASIC_MATH_API bool DATAFLOW_MODULE RealFromRational_execute(void * const * inputs, void * const * outputs)
     {
-        dRational& ratio = *(dRational *)(inputs[0]);
-        dReal& r = *(dReal *)(outputs[0]);
+        dRational & ratio = *(dRational *)(inputs[0]);
+        dReal & r = *(dReal *)(outputs[0]);
 
         r = (dReal)ratio.numerator / (dReal)ratio.denominator;
         return true;
@@ -474,8 +475,8 @@ extern "C"
 
     BASIC_MATH_API bool DATAFLOW_MODULE ComplexFromInteger_execute(void * const * inputs, void * const * outputs)
     {
-        dInteger& i = *(dInteger *)(inputs[0]);
-        dComplex& z = *(dComplex *)(outputs[0]);
+        dInteger & i = *(dInteger *)(inputs[0]);
+        dComplex & z = *(dComplex *)(outputs[0]);
 
         z.re = (dReal)i;
         z.im = 0.0;
@@ -484,8 +485,8 @@ extern "C"
 
     BASIC_MATH_API bool DATAFLOW_MODULE ComplexFromReal_execute(void * const * inputs, void * const * outputs)
     {
-        dReal& r = *(dReal *)(inputs[0]);
-        dComplex& z = *(dComplex *)(outputs[0]);
+        dReal & r = *(dReal *)(inputs[0]);
+        dComplex & z = *(dComplex *)(outputs[0]);
 
         z.re = r;
         z.im = 0.0;
@@ -494,8 +495,8 @@ extern "C"
 
     BASIC_MATH_API bool DATAFLOW_MODULE ComplexFromRational_execute(void * const * inputs, void * const * outputs)
     {
-        dRational& ratio = *(dRational *)(inputs[0]);
-        dComplex& z = *(dComplex *)(outputs[0]);
+        dRational & ratio = *(dRational *)(inputs[0]);
+        dComplex & z = *(dComplex *)(outputs[0]);
 
         z.re = (dReal)ratio.numerator / (dReal)ratio.denominator;
         z.im = 0.0;
@@ -503,13 +504,15 @@ extern "C"
     }
 
 
-    void normalize_rational(dRational& r)
+    void normalize_rational(dRational & r)
     {
         int sgn = 1;
+
         if (r.numerator < 0) {
             sgn = -1;
             r.numerator *= -1;
         }
+
         if (r.denominator < 0) {
             sgn = - sgn;
             r.denominator *= -1;
@@ -529,6 +532,7 @@ extern "C"
                 a = b;
                 b = temp;
             }
+
             a = a % b;
         } while (a);
 

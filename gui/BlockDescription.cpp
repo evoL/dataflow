@@ -25,12 +25,14 @@ void BlockDescription::setDescription(const QString desc)
 
 void BlockDescription::setAlignCenter(int i)
 {
-	setTextWidth(static_cast<DiagramBlock*>(parentItem())->getWidth() - 1);
+    setTextWidth(static_cast<DiagramBlock *>(parentItem())->getWidth() - 1);
     blockHeight = this->boundingRect().height();
 
-    if(i==0)this->setHtml("<body style='background-color:#4C6BB2;'><center>" + textDescription + "</center></body>");
-    if(i==1)this->setHtml("<body style='background-color:#1FFC52;'><center>" + textDescription + "</center></body>");
-    if(i==-1)this->setHtml("<body style='background-color:#D0FC1F;'><center>" + textDescription + "</center></body>");
+    if (i == 0)this->setHtml("<body style='background-color:#4C6BB2;'><center>" + textDescription + "</center></body>");
+
+    if (i == 1)this->setHtml("<body style='background-color:#1FFC52;'><center>" + textDescription + "</center></body>");
+
+    if (i == -1)this->setHtml("<body style='background-color:#D0FC1F;'><center>" + textDescription + "</center></body>");
 
     //748DC8
     //Setting align
@@ -47,7 +49,7 @@ void BlockDescription::setAlignCenter(int i)
 
 bool BlockDescription::isLong()
 {
-	return textDescription.length() > 30;
+    return textDescription.length() > 30;
 }
 
 qreal BlockDescription::scale()

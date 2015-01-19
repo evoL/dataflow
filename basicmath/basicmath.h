@@ -11,14 +11,12 @@
 
 #pragma pack(1)
 
-struct dComplex
-{
+struct dComplex {
     dReal re;
     dReal im;
 };
 
-struct dRational
-{
+struct dRational {
     dInteger numerator;
     dInteger denominator;
 };
@@ -106,7 +104,7 @@ extern "C"
     BASIC_MATH_API bool DATAFLOW_MODULE ComplexFromRational_execute(void * const * inputs, void * const * outputs);
 
     // private functions
-    void normalize_rational(dRational& n);
+    void normalize_rational(dRational & n);
     unsigned int gcd(unsigned int a, unsigned int b);
     unsigned int lcm(unsigned int a, unsigned int b);
 }

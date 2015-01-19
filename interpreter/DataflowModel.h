@@ -15,33 +15,28 @@ struct Block;
 typedef std::unordered_map<int, std::shared_ptr<Block>> BlocksMap;
 typedef std::unordered_map<std::string, Library> LibraryMap;
 
-enum class INTERPRETER_EXPORT BlockType
-{
+enum class INTERPRETER_EXPORT BlockType {
     Operation,
     Constructor
 };
 
-struct Position
-{
+struct Position {
     float x;
     float y;
 };
 
-struct InputTransition
-{
+struct InputTransition {
     int outputId;
     std::shared_ptr<Block> outputBlock;
 };
 
-struct OutputTransition
-{
+struct OutputTransition {
     int id;
 };
 
 typedef std::map<int, InputTransition> InputTransitionMap;
 
-struct Block
-{
+struct Block {
     // constructor
     Block(int id, std::string module = "", Position position = Position {0.0, 0.0}, const std::vector<OutputTransition> & outputs = std::vector<OutputTransition>())
         : id(id), module(module), position(position), outputs(outputs) {}
@@ -57,8 +52,7 @@ struct Block
     std::vector<OutputTransition> outputs;
 };
 
-struct Constructor : Block
-{
+struct Constructor : Block {
     // constructor
     Constructor(int id, std::string module = "", std::string type = "", Position position = Position {0.0, 0.0}, const std::vector<OutputTransition> & outputs = std::vector<OutputTransition>(), const char * data = "")
         : Block(id, module, position, outputs)
@@ -74,8 +68,7 @@ struct Constructor : Block
     std::string data;
 };
 
-struct Operation : Block
-{
+struct Operation : Block {
     // constructor
     Operation(int id, std::string module = "",  std::string name = "", Position position = Position {0.0, 0.0}, const std::vector<OutputTransition> & outputs = std::vector<OutputTransition>(), const InputTransitionMap inputs = InputTransitionMap())
         : Block(id, module, position, outputs)

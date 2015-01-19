@@ -14,14 +14,14 @@ ModulesPanelItem::~ModulesPanelItem()
 
 ModulesPanelItem * ModulesPanelItem::child(int row)
 {
-    switch (itemType)
-    {
+    switch (itemType) {
     case RootT:
     case LibraryT:
     case OperationsLabelT:
     case ConstructorsLabelT:
         if (row >= 0 && row < children.size())
             return children.at(row);
+
     default:
         return NULL;
     }
@@ -35,7 +35,7 @@ ModulesPanelItem * ModulesPanelItem::parent()
 int ModulesPanelItem::row() const
 {
     if (parentItem)
-        return parentItem->children.indexOf(const_cast<ModulesPanelItem*>(this));
+        return parentItem->children.indexOf(const_cast<ModulesPanelItem *>(this));
 
     return 0;
 }
@@ -52,14 +52,14 @@ int ModulesPanelItem::columnCount()
 
 QVariant ModulesPanelItem::data()
 {
-    switch (itemType)
-    {
+    switch (itemType) {
     case LibraryT:
     case OperationsLabelT:
     case OperationT:
     case ConstructorsLabelT:
     case ConstructorT:
         return QString::fromStdString(name);
+
     default:
         return QString("No data");
     }

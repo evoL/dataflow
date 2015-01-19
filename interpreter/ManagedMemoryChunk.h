@@ -10,7 +10,7 @@ public:
     using destructor_t = std::function<void(void *)>;
 
     ManagedMemoryChunk() {};
-    explicit ManagedMemoryChunk(std::size_t chunkSize, destructor_t destructor = [](void *){});
+    explicit ManagedMemoryChunk(std::size_t chunkSize, destructor_t destructor = [](void *) {});
     ~ManagedMemoryChunk();
 
     /*ManagedMemoryChunk(const ManagedMemoryChunk &) = delete;

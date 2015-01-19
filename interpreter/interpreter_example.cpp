@@ -4,7 +4,7 @@
 #include "Interpreter.h"
 #include "ModelManipulator.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char * argv[])
 {
     if (argc == 1) {
         std::cerr << "Usage: " << argv[0] << " file.xml" << std::endl;

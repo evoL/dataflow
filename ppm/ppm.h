@@ -12,20 +12,17 @@
 
 #pragma pack(1)
 
-struct dColor
-{
+struct dColor {
     unsigned char r, g, b;
 };
 
-struct dPpm
-{
+struct dPpm {
     uint32_t width;
     uint32_t height;
     dColor * data;
 };
 
-struct dImageFilter
-{
+struct dImageFilter {
     uint32_t size;
     int32_t * data;
 };

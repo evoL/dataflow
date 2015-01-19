@@ -42,7 +42,7 @@ MainWindow::MainWindow()
     newProject();
 }
 
-void MainWindow::resizeEvent(QResizeEvent* event)
+void MainWindow::resizeEvent(QResizeEvent * event)
 {
     QMainWindow::resizeEvent(event);
     scene->setSceneSizeAndGradient(scene->getSizeHint());
@@ -79,8 +79,8 @@ void MainWindow::newProject()
 void MainWindow::openFile()
 {
     string fileName = QFileDialog::getOpenFileName(this, tr("Open project"),
-                                                    "",
-                                                    tr("Dataflow projects (*.xml)")).toStdString();
+                      "",
+                      tr("Dataflow projects (*.xml)")).toStdString();
 
     if (fileName.empty()) return;
 
@@ -100,23 +100,25 @@ void MainWindow::openFile()
         const BlocksMap blocks = projectModel->getBlocks();
         BlocksMap::const_iterator it = blocks.cbegin();
 
-        DiagramBlock *newBlock;
-        while (it != blocks.cend())
-        {
-            if (it->second->blockType() == BlockType::Constructor)
-            {
+        DiagramBlock * newBlock;
+
+        while (it != blocks.cend()) {
+            if (it->second->blockType() == BlockType::Constructor) {
                 newBlock = new DiagramConstructor((it->second), projectModel->getLibraries(), itemMenu.data());
                 connect(static_cast<DiagramConstructor *>(newBlock), &DiagramConstructor::valueChanged, this, &MainWindow::updateConstructorValue);
             }
-            if (it->second->blockType() == BlockType::Operation)
-            {
+
+            if (it->second->blockType() == BlockType::Operation) {
                 newBlock = new DiagramOperation(projectModel.data(), (it->second), itemMenu.data());
             }
 
             scene->addItem(newBlock);
             newBlock->setPos(newBlock->getX(), newBlock->getY());
+
             if (newBlock->pos().x() < 0) newBlock->setX(0);
+
             if (newBlock->pos().y() < 0) newBlock->setY(0);
+
             emit itemInserted();
 
             it++;
@@ -124,24 +126,25 @@ void MainWindow::openFile()
 
         // Load connections
         it = blocks.cbegin();
-        while (it != blocks.cend())
-        {
-            if (it->second->blockType() == BlockType::Operation)
-            {
+
+        while (it != blocks.cend()) {
+            if (it->second->blockType() == BlockType::Operation) {
                 std::shared_ptr<Operation> currentBlock = std::static_pointer_cast<Operation>(it->second);
                 const InputTransitionMap transitions = currentBlock->inputs;
                 InputTransitionMap::const_iterator transition = transitions.cbegin();
-                while (transition != transitions.cend())
-                {
+
+                while (transition != transitions.cend()) {
                     bool paintingOK = scene->paintConnectionWhenLoadingProject(currentBlock->id,
-                        transition->first,
-                        transition->second.outputBlock->id,
-                        transition->second.outputId);
+                                      transition->first,
+                                      transition->second.outputBlock->id,
+                                      transition->second.outputId);
+
                     if (!paintingOK) throw std::string("Can't connect blocks!");
 
                     transition++;
                 }
             }
+
             it++;
         }
 
@@ -150,11 +153,9 @@ void MainWindow::openFile()
         sceneView->verticalScrollBar()->setValue(0);
     } catch (XMLParserError e) {
         QMessageBox::critical(this, tr("Dataflow Creator"), e.what());
-    }
-    catch (ModelManipulatorError e) {
+    } catch (ModelManipulatorError e) {
         QMessageBox::critical(this, tr("Dataflow Creator"), e.what());
-    }
-    catch (std::string e){
+    } catch (std::string e) {
         QMessageBox::critical(this, tr("Dataflow Creator"), QString::fromStdString(e));
     }
 }
@@ -165,13 +166,12 @@ void MainWindow::deleteItem()
     DiagramOperation * inputBlock = NULL;
     BlockIn * input = NULL;
 
-    foreach(QGraphicsItem * item, scene->selectedItems()) {
-        switch (item->type())
-        {
+    foreach (QGraphicsItem * item, scene->selectedItems()) {
+        switch (item->type()) {
         case Arrow::Type:
             arrow = static_cast<Arrow *>(item);
-            input = static_cast<BlockIn*>(arrow->startItem());
-            inputBlock = static_cast<DiagramOperation*>(input->parentItem());
+            input = static_cast<BlockIn *>(arrow->startItem());
+            inputBlock = static_cast<DiagramOperation *>(input->parentItem());
 
             manipulator->deleteConnection(inputBlock->getId(), input->getIndex());
 
@@ -188,6 +188,7 @@ void MainWindow::deleteItem()
             scene->removeItem(item);
             delete item;
             break;
+
         default:
             break;
         }
@@ -216,7 +217,7 @@ void MainWindow::about()
 
 void MainWindow::execute()
 {
-    streambuf* oldCoutStreamBuf = cout.rdbuf();
+    streambuf * oldCoutStreamBuf = cout.rdbuf();
     ostringstream strCout;
     cout.rdbuf(strCout.rdbuf());
 
@@ -243,6 +244,7 @@ void MainWindow::saveFile()
 void MainWindow::saveAs()
 {
     QString dir;
+
     if (!openedFileName.isEmpty()) {
         dir = QFileInfo(openedFileName).dir().absolutePath();
     }
@@ -265,11 +267,13 @@ void MainWindow::toggleEntryPoint()
         if (item->type() != DiagramOperation::Type) continue;
 
         auto operation = qgraphicsitem_cast<DiagramOperation *>(item);
+
         if (operation->isEntryPoint()) {
             manipulator->unsetEntryPoint(operation->getId());
         } else {
             manipulator->setEntryPoint(operation->getId());
         }
+
         operation->updateAppearance();
     }
 
@@ -279,6 +283,7 @@ void MainWindow::toggleEntryPoint()
 void MainWindow::showProjectProperties()
 {
     PreferencesDialog window(projectModel.data(), manipulator.data(), this);
+
     if (window.exec() == QDialog::Accepted)
         updateInterfaceState();
 }
@@ -291,20 +296,22 @@ void MainWindow::openPanelMenu(const QPoint & pos)
 
     QMenu libraryMenu;
     libraryMenu.setTitle("Add library");
-    foreach (auto &libraryName, libraries) {
+
+    foreach (auto & libraryName, libraries) {
         QAction * action = libraryMenu.addAction(libraryName);
 
         if (includedLibraries.find(libraryName.toStdString()) != includedLibraries.end()) {
             action->setEnabled(false);
         }
 
-        connect(action, &QAction::triggered, [&]{ addLibrary(libraryName); });
+        connect(action, &QAction::triggered, [&] { addLibrary(libraryName); });
     }
 
     QMenu menu;
     menu.addMenu(&libraryMenu);
 
     QModelIndex index = panelView->currentIndex();
+
     if (index.isValid() && !index.parent().isValid()) {
         QAction * action = menu.addAction(tr("Remove library"));
         connect(action, SIGNAL(triggered()), this, SLOT(removeLibrary()));
@@ -329,6 +336,7 @@ void MainWindow::removeLibrary()
             continue;
 
         auto block = static_cast<DiagramBlock *>(item);
+
         if (block->moduleName() != moduleName) continue;
 
         block->removeArrows();
@@ -357,7 +365,7 @@ void MainWindow::addLibrary(const QString & name)
         std::string stdName = name.toStdString();
         manipulator->addLibrary(stdName);
 
-        const Library &library = projectModel->getLibraries().at(stdName);
+        const Library & library = projectModel->getLibraries().at(stdName);
         panelModel->addLibrary(library);
     } catch (ModelManipulatorError e) {
         QMessageBox::critical(this, tr("Dataflow Creator"), QString::fromUtf8(e.what()));
@@ -374,11 +382,11 @@ void MainWindow::createModulesList()
     panelView->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Ignored);
     panelView->setMinimumWidth(150);
     connect(panelView.data(), SIGNAL(clicked(const QModelIndex &)),
-        this, SLOT(panelViewClicked()));
+            this, SLOT(panelViewClicked()));
     connect(panelView.data(), SIGNAL(collapsed(const QModelIndex &)),
-        this, SLOT(panelViewCollapsedExpanded()));
+            this, SLOT(panelViewCollapsedExpanded()));
     connect(panelView.data(), SIGNAL(expanded(const QModelIndex &)),
-        this, SLOT(panelViewCollapsedExpanded()));
+            this, SLOT(panelViewCollapsedExpanded()));
     connect(panelView.data(), SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(openPanelMenu(const QPoint &)));
 }
@@ -396,7 +404,7 @@ void MainWindow::createActions()
     connect(openFileAction.data(), SIGNAL(triggered()), this, SLOT(openFile()));
 
     deleteAction.reset(new QAction(QIcon(":/images/delete.png"), tr("&Delete"), this));
-    deleteAction->setShortcuts(QList<QKeySequence>{ tr("Delete"), tr("Backspace") });
+    deleteAction->setShortcuts(QList<QKeySequence> { tr("Delete"), tr("Backspace") });
     deleteAction->setStatusTip(tr("Delete item from diagram"));
     connect(deleteAction.data(), SIGNAL(triggered()), this, SLOT(deleteItem()));
 
@@ -496,7 +504,7 @@ void MainWindow::updateInterfaceState()
     scene->setModels(panelModel.data(), projectModel.data(), manipulator.data());
     panelView->setModel(panelModel.data());
 
-    setWindowTitle( QString::fromStdString(projectModel->getName()) + " - Dataflow Creator" );
+    setWindowTitle(QString::fromStdString(projectModel->getName()) + " - Dataflow Creator");
 }
 
 void MainWindow::updateExecute()

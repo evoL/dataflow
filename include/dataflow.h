@@ -46,7 +46,7 @@ static_assert(sizeof(dString) == 8, "dString is not of size 8");
 #elif defined ENVIRONMENT32
 static_assert(sizeof(dString) == 4, "dString is not of size 4");
 #else
-#error 
+#error
 #endif
 
 

@@ -72,7 +72,7 @@ extern "C"
     {
         if (inputs == NULL) return false;
 
-        dInteger& value = *(dInteger *)(inputs[0]);
+        dInteger & value = *(dInteger *)(inputs[0]);
         std::cout << value << "\n";
         return true;
     }
@@ -81,7 +81,7 @@ extern "C"
     {
         if (inputs == NULL) return false;
 
-        dReal& value = *(dReal *)(inputs[0]);
+        dReal & value = *(dReal *)(inputs[0]);
         std::cout << value << "\n";
         return true;
     }
@@ -90,7 +90,7 @@ extern "C"
     {
         if (inputs == NULL) return false;
 
-        dComplex& value = *(dComplex *)(inputs[0]);
+        dComplex & value = *(dComplex *)(inputs[0]);
         std::cout << value.re << " " << value.im << "i\n";
         return true;
     }
@@ -99,7 +99,7 @@ extern "C"
     {
         if (inputs == NULL) return false;
 
-        dRational& value = *(dRational *)(inputs[0]);
+        dRational & value = *(dRational *)(inputs[0]);
         std::cout << value.numerator << " / " << value.denominator << "\n";
         return true;
     }
@@ -108,7 +108,7 @@ extern "C"
     {
         if (inputs == NULL) return false;
 
-        dString& value = *(dString *)(inputs[0]);
+        dString & value = *(dString *)(inputs[0]);
         std::cout << value << "\n";
         return true;
     }

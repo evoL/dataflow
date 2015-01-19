@@ -3,8 +3,8 @@
 
 BlockOut::BlockOut(int index, int outputId, QGraphicsItem * parent) : QGraphicsEllipseItem(parent)
 {
-	this->index = index;
-	this->outputId = outputId;
+    this->index = index;
+    this->outputId = outputId;
     //setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
 
@@ -12,15 +12,15 @@ void BlockOut::drawOut(QString text)
 {
     //index = i;
     setBrush(Qt::red);
-    qreal moduleNameRectHeight = static_cast< DiagramBlock* >(parentItem())->blockName->getHeight();
-    setRect( static_cast< DiagramBlock* >(parentItem())->getWidth() - 8 , moduleNameRectHeight + 5 + index*20, 15, 15);
+    qreal moduleNameRectHeight = static_cast< DiagramBlock * >(parentItem())->blockName->getHeight();
+    setRect(static_cast< DiagramBlock * >(parentItem())->getWidth() - 8 , moduleNameRectHeight + 5 + index * 20, 15, 15);
 
-	if (text == "") return;
+    if (text == "") return;
 
-    QGraphicsTextItem *outDesc=new QGraphicsTextItem(this);
+    QGraphicsTextItem * outDesc = new QGraphicsTextItem(this);
     outDesc->setPlainText(text);
-    outDesc->setX(static_cast< DiagramBlock* >(parentItem())->getWidth() - 80);
-    outDesc->setY(3+index*20+moduleNameRectHeight);
+    outDesc->setX(static_cast< DiagramBlock * >(parentItem())->getWidth() - 80);
+    outDesc->setY(3 + index * 20 + moduleNameRectHeight);
     outDesc->setTextWidth(70);
     QTextBlockFormat format;
     format.setAlignment(Qt::AlignRight);
@@ -37,9 +37,9 @@ void BlockOut::drawOut(QString text)
 
     bool is_selected = option->state & QStyle::State_Selected;
     //highlight(painter, is_selected);
-	setBrush(Qt::red);
-	qreal moduleNameRectHeight = static_cast< DiagramBlock* >(parentItem())->blockName->getBlockHeight();
-	setRect(static_cast< DiagramBlock* >(parentItem())->getWidth() - 8, moduleNameRectHeight + 10 + index * 20, 15, 15);
+    setBrush(Qt::red);
+    qreal moduleNameRectHeight = static_cast< DiagramBlock* >(parentItem())->blockName->getBlockHeight();
+    setRect(static_cast< DiagramBlock* >(parentItem())->getWidth() - 8, moduleNameRectHeight + 10 + index * 20, 15, 15);
 
     QGraphicsEllipseItem::paint(painter, option, widget);
 }
@@ -80,8 +80,8 @@ void BlockOut::addArrow(Arrow * arrow)
 
 QPointF BlockOut::pos() const
 {
-    qreal moduleNameRectHeight = static_cast< DiagramBlock* >(parentItem())->blockName->getHeight();
-    QPoint q(static_cast< DiagramBlock* >(parentItem())->getWidth() , moduleNameRectHeight + 12 + 20 * index);
+    qreal moduleNameRectHeight = static_cast< DiagramBlock * >(parentItem())->blockName->getHeight();
+    QPoint q(static_cast< DiagramBlock * >(parentItem())->getWidth() , moduleNameRectHeight + 12 + 20 * index);
     return parentItem()->pos() + q;
 }
 

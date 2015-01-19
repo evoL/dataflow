@@ -3,20 +3,20 @@
 
 BlockIn::BlockIn(int index, QGraphicsItem * parent) : QGraphicsEllipseItem(parent)
 {
-	this->index = index;
+    this->index = index;
     //setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
 
 void BlockIn::drawIn(QString text)
 {
     setBrush(Qt::red);
-    qreal moduleNameRectHeight = static_cast< DiagramBlock* >(parentItem())->blockName->getHeight();
-    setRect(-7, moduleNameRectHeight + 5 + index*20, 15, 15);
+    qreal moduleNameRectHeight = static_cast< DiagramBlock * >(parentItem())->blockName->getHeight();
+    setRect(-7, moduleNameRectHeight + 5 + index * 20, 15, 15);
 
-    QGraphicsTextItem *inDesc=new QGraphicsTextItem(this);
+    QGraphicsTextItem * inDesc = new QGraphicsTextItem(this);
     inDesc->setPlainText(text);
     inDesc->setX(7);
-    inDesc->setY(3+index*20+moduleNameRectHeight);
+    inDesc->setY(3 + index * 20 + moduleNameRectHeight);
 }
 
 /*void BlockIn::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
@@ -25,9 +25,9 @@ void BlockIn::drawIn(QString text)
 
     bool is_selected = option->state & QStyle::State_Selected;
     //highlight(painter, is_selected);
-	setBrush(Qt::red);
-	qreal moduleNameRectHeight = static_cast< DiagramBlock* >(parentItem())->blockName->getBlockHeight();
-	setRect(-7, moduleNameRectHeight + 10 + index * 20, 15, 15);
+    setBrush(Qt::red);
+    qreal moduleNameRectHeight = static_cast< DiagramBlock* >(parentItem())->blockName->getBlockHeight();
+    setRect(-7, moduleNameRectHeight + 10 + index * 20, 15, 15);
 
     QGraphicsEllipseItem::paint(painter, option, widget);
 }*/
@@ -68,7 +68,7 @@ void BlockIn::addArrow(Arrow * arrow)
 
 QPointF BlockIn::pos() const
 {
-    qreal moduleNameRectHeight = static_cast< DiagramBlock* >(parentItem())->blockName->getHeight();
+    qreal moduleNameRectHeight = static_cast< DiagramBlock * >(parentItem())->blockName->getHeight();
     QPoint q(0, moduleNameRectHeight + 12 + 20 * index); // y = moduleNameRectHeight + 5 + 7 + 20*index (centre of the circle)
     return parentItem()->pos() + q;
 }

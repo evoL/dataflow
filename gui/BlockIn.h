@@ -19,7 +19,7 @@ class BlockIn : public QGraphicsEllipseItem
 public:
     enum { Type = UserType + 1 };
     BlockIn(int index, QGraphicsItem * parent = 0);
-	int getIndex() { return index; }
+    int getIndex() { return index; }
     void drawIn(QString text);
     //void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
     //void highlight(QPainter * painter, bool isSelected);

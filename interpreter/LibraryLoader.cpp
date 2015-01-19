@@ -20,8 +20,8 @@ Library LibraryLoader::load(const std::string moduleName)
         throw LibraryLoadError("Function 'module' not found");
     }
 
-	library.name = moduleName;
-	library.nameToPrint = (*moduleFun)();
+    library.name = moduleName;
+    library.nameToPrint = (*moduleFun)();
 
     // Types
 

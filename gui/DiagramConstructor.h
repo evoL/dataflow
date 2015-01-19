@@ -59,7 +59,7 @@ private slots:
 
 private:
     const std::shared_ptr<Constructor> constructorPointer;
-    QLineEdit *inputBox;
+    QLineEdit * inputBox;
 };
 
 #endif

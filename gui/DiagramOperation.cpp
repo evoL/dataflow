@@ -59,7 +59,7 @@ QString DiagramOperation::moduleName()
     return QString::fromStdString(operationPointer->module);
 }
 
-void DiagramOperation::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+void DiagramOperation::contextMenuEvent(QGraphicsSceneContextMenuEvent * event)
 {
     // This code is super brittle, but the whole context menu handling is broken.
     // Seriously, normally you should avoid block-specific code in the MainWindow
@@ -67,7 +67,7 @@ void DiagramOperation::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     //
     // What follows is a hack that selects the "Entry point" menu item if the block
     // really is an entry point.
-    QAction *firstAction = myContextMenu->actions().first();
+    QAction * firstAction = myContextMenu->actions().first();
     firstAction->setChecked(isEntryPoint());
     firstAction->setEnabled(true);
 
@@ -84,6 +84,7 @@ bool DiagramOperation::isEntryPoint()
 void DiagramOperation::updateAppearance()
 {
     QPen pen;
+
     if (isEntryPoint()) {
         pen.setWidth(2);
         pen.setStyle(Qt::DashLine);

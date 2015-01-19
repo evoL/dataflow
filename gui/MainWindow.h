@@ -54,7 +54,7 @@ public slots:
 
 private slots:
     void splitterMovedEvent(int pos, int index);
-    void resizeEvent(QResizeEvent* event);
+    void resizeEvent(QResizeEvent * event);
     void panelViewClicked();
     void panelViewCollapsedExpanded();
     void newProject();

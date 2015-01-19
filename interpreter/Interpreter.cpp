@@ -34,7 +34,7 @@ void Interpreter::visit(const Constructor & constructor)
 
     try {
         library.constructType(constructor.type, constructor.data, allocatedSpace);
-    } catch (LibraryError& err) {
+    } catch (LibraryError & err) {
         throw InterpreterError(std::string("Library error: ") + err.what());
     }
 }
@@ -72,7 +72,7 @@ void Interpreter::allocateOutputs(const Operation & operation)
         std::string currentTypeName{ currentType->begin() + currentType->find_last_of('.') + 1, currentType->end() };
 
         auto currentTypeSize = library.getSizes().at(currentTypeName);
-        datastore.createEntry(currentOutput->id, currentTypeSize, [libraryPtr, currentTypeName](void * address){
+        datastore.createEntry(currentOutput->id, currentTypeSize, [libraryPtr, currentTypeName](void * address) {
             libraryPtr->destructType(currentTypeName, address);
         });
 
@@ -95,7 +95,7 @@ void Interpreter::executeOperation(const Operation & operation)
 
     try {
         library.execute(operation.name, inputLocations, outputLocations);
-    } catch (LibraryError& err) {
+    } catch (LibraryError & err) {
         throw InterpreterError(std::string("Library error: ") + err.what());
     }
 }

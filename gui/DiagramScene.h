@@ -38,16 +38,16 @@ class DiagramScene : public QGraphicsScene
 public:
     enum Mode { InsertItem, InsertLine, MoveItem };
     explicit DiagramScene(ModulesPanelModel * panelModel, QTreeView * panelView, QMenu * itemMenu, QObject * parent = 0);
-	void setSceneSizeAndGradient(QSize size);
+    void setSceneSizeAndGradient(QSize size);
     QSize getSizeHint();
 
-	void setModels(ModulesPanelModel * panelModel, ProjectModel * projectModel, ModelManipulator * modelManipulator) 
-		{ this->panelModel = panelModel; this->projectModel = projectModel; this->manipulator = modelManipulator; }
+    void setModels(ModulesPanelModel * panelModel, ProjectModel * projectModel, ModelManipulator * modelManipulator)
+    { this->panelModel = panelModel; this->projectModel = projectModel; this->manipulator = modelManipulator; }
 
     DiagramBlock * findBlockById(int id);
     BlockIn * findInput(DiagramOperation * block, int index);
     BlockOut * findOutput(DiagramBlock * block, int id);
-	bool paintConnectionWhenLoadingProject(int inputBlockId, int inputBlockInput, int outputBlockId, int outputBlockOutputId);
+    bool paintConnectionWhenLoadingProject(int inputBlockId, int inputBlockInput, int outputBlockId, int outputBlockOutputId);
 
 public slots:
     void setMode(Mode mode);
@@ -57,16 +57,16 @@ signals:
     void itemSelected(QGraphicsItem * item);
 
 protected:
-	void keyPressEvent(QKeyEvent * keyEvent);
-	void keyReleaseEvent(QKeyEvent * keyEvent);
+    void keyPressEvent(QKeyEvent * keyEvent);
+    void keyReleaseEvent(QKeyEvent * keyEvent);
     void mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent);
     void mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent);
 
 private:
-	//qreal minWidth, minHeight, width, height;
+    //qreal minWidth, minHeight, width, height;
 
-	MainWindow * mainWindow;
+    MainWindow * mainWindow;
     QMenu * myItemMenu;
     QTreeView * panelView;
     ModulesPanelModel * panelModel;
@@ -80,6 +80,6 @@ private:
     QColor myTextColor;
     QColor myLineColor;
 
-	bool shiftIsDown;
+    bool shiftIsDown;
 };
 #endif // DIAGRAMSCENE_H

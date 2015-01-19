@@ -27,7 +27,7 @@ extern "C"
     DSTRING_API bool DATAFLOW_MODULE String_construct(const char * data, void * output)
     {
         int len = strlen(data);
-        dString& s = *(dString *)output;
+        dString & s = *(dString *)output;
         s = (dString)malloc(len * sizeof(char));
         strcpy(s, data);
 
@@ -36,7 +36,7 @@ extern "C"
 
     DSTRING_API bool DATAFLOW_MODULE String_destruct(void * data)
     {
-        dString& s = *(dString *)data;
+        dString & s = *(dString *)data;
         free(s);
         return true;
     }

@@ -13,8 +13,7 @@
 class ModulesPanelItem
 {
 public:
-    enum ItemType
-    {
+    enum ItemType {
         RootT,
         LibraryT,
         OperationsLabelT,
@@ -47,7 +46,7 @@ private:
     ItemType itemType;
     std::string name;
     const void * dataPtr;
-    QList <ModulesPanelItem*> children;
+    QList <ModulesPanelItem *> children;
 };
 
 #endif

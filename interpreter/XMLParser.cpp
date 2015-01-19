@@ -47,7 +47,7 @@ void XMLParser::saveModelToFile(const ProjectModel & model, const std::string fi
     if (error < 0) {
         throw XMLParserError("Cannot save the file");
     }
-    
+
     xmlFreeTextWriter(writer);
 }
 

@@ -12,7 +12,7 @@ const std::string & Library::getName() const
 
 const std::string & Library::getNameToPrint() const
 {
-	return nameToPrint;
+    return nameToPrint;
 }
 
 const std::vector<std::string> & Library::getTypes() const
@@ -112,7 +112,7 @@ void Library::freeDll()
 void Library::moveFields(Library && other)
 {
     name = std::move(other.name);
-	nameToPrint = std::move(other.nameToPrint);
+    nameToPrint = std::move(other.nameToPrint);
     types = std::move(other.types);
     operations = std::move(other.operations);
     typeSizes = std::move(other.typeSizes);

@@ -15,8 +15,8 @@ class INTERPRETER_EXPORT Interpreter : private BlockVisitor
 public:
     Interpreter(ProjectModel & model);
     void interpret();
-    Interpreter& operator=(const Interpreter&) = delete;
-    
+    Interpreter & operator=(const Interpreter &) = delete;
+
 private:
     Datastore datastore;
     ProjectModel & model;

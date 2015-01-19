@@ -10,24 +10,28 @@ QColor DiagramBlock::myInputColor = QColor(255, 251, 160);
 
 BlockIn * DiagramBlock::findInputByIndex(int index)
 {
-	auto it = In.begin();
-	while (it != In.end())
-	{
-		if ( (*it)->getIndex() == index) return *it;
-		it++;
-	}
-	return NULL;
+    auto it = In.begin();
+
+    while (it != In.end()) {
+        if ((*it)->getIndex() == index) return *it;
+
+        it++;
+    }
+
+    return NULL;
 }
 
 BlockOut * DiagramBlock::findOutputById(int id)
 {
-	auto it = Out.begin();
-	while (it != Out.end())
-	{
-		if ((*it)->getId() == id) return *it;
-		it++;
-	}
-	return NULL;
+    auto it = Out.begin();
+
+    while (it != Out.end()) {
+        if ((*it)->getId() == id) return *it;
+
+        it++;
+    }
+
+    return NULL;
 }
 
 void DiagramBlock::removeArrow(Arrow * arrow)
@@ -41,6 +45,7 @@ void DiagramBlock::removeArrow(Arrow * arrow)
 void DiagramBlock::removeArrows()
 {
     foreach (BlockIn * in, In) in->removeArrows();
+
     foreach (BlockOut * out, Out) out->removeArrows();
 }
 
@@ -63,5 +68,6 @@ QVariant DiagramBlock::itemChange(GraphicsItemChange change, const QVariant & va
             arrow->updatePosition();
         }
     }
+
     return value;
 }

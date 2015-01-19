@@ -14,14 +14,14 @@ public:
 class INTERPRETER_EXPORT ModelManipulator
 {
 private:
-    ProjectModel& model;
+    ProjectModel & model;
     int maxOutputId;
     int maxBlockId;
 
 public:
-    ModelManipulator(ProjectModel& model);
-    ModelManipulator(const ModelManipulator&) = delete;
-    const ModelManipulator& operator=(const ModelManipulator&) = delete;
+    ModelManipulator(ProjectModel & model);
+    ModelManipulator(const ModelManipulator &) = delete;
+    const ModelManipulator & operator=(const ModelManipulator &) = delete;
 
     void setProjectName(const std::string & name);
 
